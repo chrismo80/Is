@@ -1,0 +1,17 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+/.DS_Store
+/.vscode
+TestResults/
+.idea/
+.vs/
+*.code-workspace
+*.user
+*.DS_Store
+
+Logs/
+*.txt
