@@ -12,6 +12,34 @@
 - ⚙️ Self-contained: No dependencies, no configuration, just drop it in.
 
 
+## 🔍 Available Methods
+
+All public methods in `Is` are:
+
+- ❗️ **Extension methods**, designed to be used fluently (`value.Is(...)`)
+- 🔤 **Named consistently**: Every method starts with `Is`, making them easy to discover with IntelliSense
+- ✂️ **Minimal and deliberate**: Only a small, opinionated set of assertions is exposed
+
+| Method                         | Description                                                                 |
+|-------------------------------|-----------------------------------------------------------------------------|
+| `Is(params object[] expected)`| Asserts that the value matches the expected value                           |
+| `Is<T>()`                     | Asserts that the value is of type `T`                                       |
+| `IsExactly(object expected)`  | Asserts strict value **and type** equality                                  |
+| `IsNull()`                    | Asserts that a value is `null`                                              |
+| `IsTrue()`                    | Asserts that a `bool` is `true`                                             |
+| `IsFalse()`                   | Asserts that a `bool` is `false`                                            |
+| `IsEmpty()`                   | Asserts that an `IEnumerable` is empty                                      |
+| `IsGreaterThan(T other)`     | Asserts that the value is greater than another (generic `IComparable<T>`)   |
+| `IsSmallerThan(T other)`     | Asserts that the value is smaller than another (generic `IComparable<T>`)   |
+| `IsThrowing<T>()`            | Asserts that an `Action` throws an exception of type `T`                    |
+
+> ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
+
+
+
+
+
+
 ## 🔧 Usage Examples
 
 ### Basic value checks
