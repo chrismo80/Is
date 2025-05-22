@@ -134,6 +134,16 @@ public class Tests
     }
 
     [Test]
+    public void DateTime()
+    {
+        var from = new DateTime(2025, 05, 24, 11, 11, 10);
+        var to = new DateTime(2025, 05, 24, 11, 11, 11);
+
+        from.IsSmallerThan(to);
+        to.IsGreaterThan(from);
+    }
+
+    [Test]
     public void Booleans()
     {
         true.IsTrue();
