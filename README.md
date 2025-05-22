@@ -72,8 +72,9 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 6.IsGreaterThan(5.0);       // ✅ passes
 5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) actually is not greater than 6 (System.Int32)
 
-(1.0 / 3.0).Is(0.333333);   // ✅ passes
-(1.0 / 3.0).Is(0.33333);    // ❌ throws IsNotException: 0,3333333333333333 (System.Double) actually is not close to 0,33333 (System.Double)
+
+0.333333.Is(1.0 / 3.0);     // ✅ passes
+0.33333.Is(1.0 / 3.0);      // ❌ throws IsNotException: 0,33333 (System.Double) actually is not close to 0,3333333333333333 (System.Double)
 ```
 
 ### Exception assertions
