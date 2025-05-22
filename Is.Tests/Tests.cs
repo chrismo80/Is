@@ -131,6 +131,9 @@ public class Tests
     {
         actual.IsSmallerThan(expected);
         expected.IsGreaterThan(actual);
+
+        Action act = () => actual.IsGreaterThan(expected);
+        act.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();
     }
 
     [Test]
