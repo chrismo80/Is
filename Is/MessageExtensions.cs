@@ -25,6 +25,6 @@ public static class MessageExtensions
     private static string FormatType(this object? value) =>
         value is null or Type ? "" : $" ({value.GetType()})";
 
-    private static string CreateMessage(string delimiter = "\n", params string[] content) =>
-        delimiter + string.Join(delimiter, content) + delimiter;
+    private static string CreateMessage(params string[] content) =>
+        "\n" + string.Join("\n", content) + "\n";
 }
