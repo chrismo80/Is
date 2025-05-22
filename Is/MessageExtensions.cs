@@ -5,7 +5,7 @@ using System.Collections;
 public static class MessageExtensions
 {
     internal static string Actually(this object? actual, string equality, object? expected) =>
-        "\n" + actual.Format() + "\n" + equality + "\n" + expected.Format() + "\n";
+        CreateMessage(actual.Format(), equality, expected.Format());
 
     internal static string Format(this object? value) =>
         value.FormatValue() + value.FormatType();
@@ -24,4 +24,7 @@ public static class MessageExtensions
 
     private static string FormatType(this object? value) =>
         value is null or Type ? "" : $" ({value.GetType()})";
+
+    private static string CreateMessage(string delimiter = "\n", params string[] content) =>
+        delimiter + string.Join(delimiter, content) + delimiter;
 }
