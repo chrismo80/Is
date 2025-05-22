@@ -23,6 +23,10 @@
 "test".Is("test");               // ✅ passes
 
 new[] { 1, 2, 3 }.Is(1, 2, 3);   // ✅ passes (enumerable values check)
+
+new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4, 6);     // ✅ passes
+new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 3 == 0).Is(3, 6);        // ✅ passes
+new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // ✅ passes
 ```
 
 ### Type checks
@@ -44,7 +48,7 @@ action.IsThrowing<DivideByZeroException>(); // ✅ passes
 
 5.IsSmallerThan(6);         // ✅ passes
 6.IsGreaterThan(5.0);       // ✅ passes
-6.IsGreaterThan(4);         // ❌ throws IsNotException: 5 (System.Int32) actually is not greater than 4 (System.Int32)
+5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) actually is not greater than 6 (System.Int32)
 ```
 
 ## ⚖️ Design Philosophy
