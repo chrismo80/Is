@@ -81,6 +81,14 @@ public class Tests
     }
 
     [Test]
+    public void IsThrowing_Action()
+    {
+        static int DivideByZero(int value) => value / 0;
+        Action action = () => _ = DivideByZero(1);
+        action.IsThrowing<DivideByZeroException>();
+    }
+
+    [Test]
     public void JaggedArrays_Equals_Expected() =>
         new object[] { new[] { 1, 2 }, 3 }.Is(new object[] { new[] { 1, 2 }, 3 });
 
