@@ -173,6 +173,7 @@ public class Tests
     [TestCase(1000000.1, 1000000.0)]
     [TestCase(1_000_000.0, 1_000_001.0)]
     [TestCase(783.0123, 783.0124)]
+    [TestCase(1.0 / 3.0, 0.333333)]
     public void IsCloseTo_Actual_Expected(object actual, object expected) =>
         actual.Is(expected);
 
