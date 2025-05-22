@@ -37,8 +37,9 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 
 ### Exception assertions
 ```csharp
-Action action = () => 1 / 0;
-action.IsThrowing<DivideByZeroException>(); // ✅ passes
+static int DivideByZero(int value) => value / 0;
+Action action = () => _ = DivideByZero(1);
+action.IsThrowing<DivideByZeroException>();  // ✅ passes
 ```
 
 ### Numeric comparisons
