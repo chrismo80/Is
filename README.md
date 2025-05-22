@@ -63,13 +63,6 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 "hello".Is<int>();          // ❌ throws IsNotException: "hello" (System.String) actually is no System.Int32
 ```
 
-### Exception assertions
-```csharp
-static int DivideByZero(int value) => value / 0;
-Action action = () => _ = DivideByZero(1);
-action.IsThrowing<DivideByZeroException>();  // ✅ passes
-```
-
 ### Numeric comparisons
 ```csharp
 2.999999f.Is(3f)            // ✅ passes
@@ -78,6 +71,16 @@ action.IsThrowing<DivideByZeroException>();  // ✅ passes
 5.IsSmallerThan(6);         // ✅ passes
 6.IsGreaterThan(5.0);       // ✅ passes
 5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) actually is not greater than 6 (System.Int32)
+```
+
+### Exception assertions
+```csharp
+static int DivideByZero(int value) => value / 0;
+Action action = () => _ = DivideByZero(1);
+action.IsThrowing<DivideByZeroException>();  // ✅ passes
+
+Action action = () => 5.IsGreaterThan(6);
+acttion.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();    // ✅ passes
 ```
 
 ## ⚖️ Design Philosophy
