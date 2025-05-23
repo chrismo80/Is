@@ -4,6 +4,7 @@
 
 `Is` is a lightweight assertion library for .NET that focuses on _readable_, _minimal_, and _fail-fast_ test expectations — no assertion clutter, no dependencies, no test framework lock-in.
 
+
 ## ✅ Why use Is?
 
 - 📘 Concise: One word. One assertion.
@@ -34,10 +35,6 @@ All public methods in `Is` are:
 | `IsFalse()`                   | Asserts that a `bool` is `false`                                            |
 
 > ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
-
-
-
-
 
 
 ## 🔧 Usage Examples
@@ -72,7 +69,6 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 6.IsGreaterThan(5.0);       // ✅ passes
 5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) is not greater than 6 (System.Int32)
 
-
 0.333333.Is(1.0 / 3.0);     // ✅ passes
 0.33333.Is(1.0 / 3.0);      // ❌ throws IsNotException: 0,33333 (System.Double) is not close to 0,3333333333333333 (System.Double)
 ```
@@ -86,6 +82,7 @@ action.IsThrowing<DivideByZeroException>();  // ✅ passes
 Action action = () => 5.IsGreaterThan(6);
 action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();    // ✅ passes
 ```
+
 
 ## ⚖️ Design Philosophy
 
