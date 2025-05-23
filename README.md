@@ -41,9 +41,9 @@ All public methods in `Is` are:
 
 ### Basic value checks
 ```csharp
-42.Is(42);                       // ✅ passes
-42.Is(41);                       // ❌ throws IsNotException: 42 (System.Int32) is not 41 (System.Int32)
-42.Is(42.0);                     // ❌ throws IsNotException: 42 (System.Int32) is not 42 (System.Double)
+42.Is(42);       // ✅ passes
+42.Is(41);       // ❌ throws IsNotException: 42 (System.Int32) is not 41 (System.Int32)
+42.Is(42.0);     // ❌ throws IsNotException: 42 (System.Int32) is not 42 (System.Double)
 
 "test".Is("test");               // ✅ passes
 
