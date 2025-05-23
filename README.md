@@ -25,7 +25,7 @@ All public methods in `Is` are:
 | `IsThrowing<T>()`            | Asserts that an `Action` throws an exception of type `T`                     |
 | `Is<T>()`                     | Asserts that the value is of type `T`                                       |
 | `Is(params object[] expected)`| Asserts that the value matches the expected value                           |
-| `IsExactly(object expected)`  | Asserts strict value **and type** equality                                  |
+| `IsExactly(object expected)`  | Asserts strict value equality                                               |
 | `IsEmpty()`                   | Asserts that an `IEnumerable` is empty                                      |
 | `IsGreaterThan(T other)`     | Asserts that the value is greater than another (generic `IComparable<T>`)    |
 | `IsSmallerThan(T other)`     | Asserts that the value is smaller than another (generic `IComparable<T>`)    |
@@ -45,8 +45,8 @@ All public methods in `Is` are:
 ### Basic value checks
 ```csharp
 42.Is(42);                       // ✅ passes
-42.Is(41);                       // ❌ throws IsNotException: 42 (System.Int32) actually is not 41 (System.Int32)
-42.Is(42.0);                     // ❌ throws IsNotException: 42 (System.Int32) actually is not 42 (System.Double)
+42.Is(41);                       // ❌ throws IsNotException: 42 (System.Int32) is not 41 (System.Int32)
+42.Is(42.0);                     // ❌ throws IsNotException: 42 (System.Int32) is not 42 (System.Double)
 
 "test".Is("test");               // ✅ passes
 
@@ -60,7 +60,7 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 ### Type checks
 ```csharp
 "hello".Is<string>();       // ✅ passes
-"hello".Is<int>();          // ❌ throws IsNotException: "hello" (System.String) actually is no System.Int32
+"hello".Is<int>();          // ❌ throws IsNotException: "hello" (System.String) is no System.Int32
 ```
 
 ### Numeric comparisons
@@ -70,11 +70,11 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 
 5.IsSmallerThan(6);         // ✅ passes
 6.IsGreaterThan(5.0);       // ✅ passes
-5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) actually is not greater than 6 (System.Int32)
+5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) is not greater than 6 (System.Int32)
 
 
 0.333333.Is(1.0 / 3.0);     // ✅ passes
-0.33333.Is(1.0 / 3.0);      // ❌ throws IsNotException: 0,33333 (System.Double) actually is not close to 0,3333333333333333 (System.Double)
+0.33333.Is(1.0 / 3.0);      // ❌ throws IsNotException: 0,33333 (System.Double) is not close to 0,3333333333333333 (System.Double)
 ```
 
 ### Exception assertions
@@ -90,8 +90,8 @@ action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTr
 ## ⚖️ Design Philosophy
 
 - ❌ No ```.Should()```, no fluent bloat
-- ✅ All positive assertions (Is, IsTrue, etc.)
-- 📢 Strong failure messages like: ```42 (System.Int32) actually is not 41 (System.Int32)```
+- ✅ All positive assertions (Is, IsNull, IsTrue, etc.)
+- 📢 Failure messages like: ```42 (System.Int32) is not 41 (System.Int32)```
 - 🧠 Designed to make tests read like intentions, not machinery
 
 
