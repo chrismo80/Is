@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using System.Collections;
+﻿using System.Collections;
+using System.Numerics;
 using System.Diagnostics;
 
 namespace Is;
@@ -189,18 +189,18 @@ file static class MessageExtensions
 
 	internal static string PrependCodeLine(this string text) =>
 #if DEBUG
-		"\n\n" + FindFrame()?.CodeLine() + "\n\n" +
+		"\n\n" + FindFrame()?.CodeLine() +
 #endif
-		text;
+		"\n\n" + text;
 
-	private static StackFrame? FindFrame() => new StackTrace(true).GetFrames()
-		.FirstOrDefault(f => !f.IsInSameNamespace() && f.GetFileName() != null);
+	private static StackFrame? FindFrame() =>
+		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
 
-	private static bool IsInSameNamespace(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Namespace == typeof(IsNotException).Namespace;
+	private static bool IsOtherNamespace(this StackFrame frame) =>
+		frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsNotException).Namespace;
 
-	private static string CodeLine(this StackFrame frame) =>
-		frame.GetFileName()?.GetLine(frame.GetFileLineNumber()) ?? "";
+	private static string? CodeLine(this StackFrame frame) =>
+		frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
 	private static string GetLine(this string? fileName, int lineNumber) => fileName == null ? ""
 		: "Line " + lineNumber + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim();
