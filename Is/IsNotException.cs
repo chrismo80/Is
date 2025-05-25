@@ -1,4 +1,5 @@
 ﻿namespace Is;
 
-public class IsNotException(string message) : Exception(message)
+public class IsNotException(string message)
+	: Exception(message.PrependCodeLine())
 { }
