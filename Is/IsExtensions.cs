@@ -4,8 +4,6 @@ using System.Diagnostics;
 
 namespace Is;
 
-public class IsNotException(string message) : Exception(message.PrependCodeLine());
-
 public static class IsExtensions
 {
 	/// <summary>
@@ -161,6 +159,8 @@ file static class InternalExtensions
 			: throw new IsNotException(actual.Actually("is not close enough to", expected));
 }
 
+public class IsNotException(string message) : Exception(message.PrependCodeLine());
+
 file static class MessageExtensions
 {
 	internal static string Actually(this object? actual, string equality, object? expected) =>
@@ -174,22 +174,22 @@ file static class MessageExtensions
 		{
 			null => "<NULL>",
 			string => $"\"{value}\"",
-			IEnumerable list => $"[{list.FormatArray()}]",
+			IEnumerable list => list.Cast<object>().Select(x => x.FormatValue()).Join("[", "|", "]"),
 			_ => $"{value}"
 		};
-
-	private static string FormatArray(this IEnumerable list) =>
-		string.Join("|", list.Cast<object>().Select(x => x.FormatValue()));
 
 	private static string FormatType(this object? value) =>
 		value is null or Type ? "" : $" ({value.GetType()})";
 
+	private static string Join(this IEnumerable<string> items, string start, string separator, string end) =>
+		start + string.Join(separator, items) + end;
+
 	private static string CreateMessage(params string[] content) =>
-		Environment.NewLine + string.Join(Environment.NewLine, content) + Environment.NewLine;
+		content.Join("\n", "\n\n", "\n");
 
 	internal static string PrependCodeLine(this string text) =>
 #if DEBUG
-		Environment.NewLine + FindFrame()?.CodeLine() + Environment.NewLine +
+		"\n\n" + FindFrame()?.CodeLine() + "\n\n" +
 #endif
 		text;
 
