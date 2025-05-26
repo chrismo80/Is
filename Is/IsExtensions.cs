@@ -209,7 +209,7 @@ file static class MessageExtensions
         value.FormatValue() + value.FormatType();
 
     internal static string AddCodeLine(this string text) =>
-        "\n\n" + text + "\n\n" + FindFrame()?.CodeLine();
+        "\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.AddLines();
 
     private static string FormatValue(this object? value) =>
         value switch
@@ -228,7 +228,7 @@ file static class MessageExtensions
         start + string.Join(separator, items) + end;
 
     private static string CreateMessage(params string[] content) =>
-        content.Join("\n", "\n\n", "\n");
+        content.Join("\n\t", "\n\n\t", "\n");
 
     private static StackFrame? FindFrame() =>
         new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
@@ -237,8 +237,11 @@ file static class MessageExtensions
         frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsNotException).Namespace;
 
     private static string? CodeLine(this StackFrame frame) =>
-        frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
+        "in " + frame.GetMethod()?.DeclaringType + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
     private static string GetLine(this string? fileName, int lineNumber) => fileName == null ? ""
-        : "in Line " + lineNumber + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault();
+        : " in line " + lineNumber + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim();
+
+    private static string AddLines(this string line, string prefix = "") =>
+        line + "\n" + prefix + string.Concat(Enumerable.Range(0, line.Length).Select(_ => "‾"));
 }
