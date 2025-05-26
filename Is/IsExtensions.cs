@@ -217,8 +217,6 @@ file static class MessageExtensions
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
-	internal static string AddCodeLine(this string text) =>
-		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.AddLines();
 
 	private static string FormatValue(this object? value) =>
 		value switch
@@ -238,6 +236,12 @@ file static class MessageExtensions
 
 	private static string CreateMessage(params string[] content) =>
 		content.Join("\n\t", "\n\n\t", "\n");
+}
+
+file static class CallStackExtensions
+{
+	internal static string AddCodeLine(this string text) =>
+		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.AddLines();
 
 	private static StackFrame? FindFrame() =>
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
