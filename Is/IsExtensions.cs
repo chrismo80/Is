@@ -67,7 +67,13 @@ public static class IsExtensions
 	/// <param name="expected">The expected value.</param>
 	/// <returns>True if values are equal.</returns>
 	/// <exception cref="IsNotException">Thrown if values are not equal.</exception>
-	public static bool IsExactly(this object actual, object expected) => actual.IsEqualTo(expected);
+	public static bool IsExactly<T>(this T actual, T expected)
+	{
+		if (actual.IsExactlyEqualTo(expected))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not", expected));
+	}
 
 	/// <summary>
 	/// Asserts that the actual object is <c>null</c>.
@@ -160,9 +166,12 @@ file static class InternalExtensions
 		return array;
 	}
 
+	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
+		EqualityComparer<T>.Default.Equals(actual, expected);
+
 	internal static bool IsEqualTo<T>(this T? actual, T? expected)
 	{
-		if (EqualityComparer<T>.Default.Equals(actual, expected))
+		if (actual.IsExactlyEqualTo(expected))
 			return true;
 
 		if (actual.IsCloseTo(expected))

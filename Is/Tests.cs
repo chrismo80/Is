@@ -10,8 +10,11 @@ public class Tests
 	[TestCase(2.2, 2.2)]
 	[TestCase(3f, 3f)]
 	[TestCase("4", "4")]
-	public void Is_Actual_Equals_Expected(object? actual, object? expected) =>
+	public void Is_Actual_Equals_Expected(object? actual, object? expected)
+	{
 		actual.Is(expected);
+		actual.IsExactly(expected);
+	}
 
 	[Test]
 	[TestCase(null, true)]
@@ -188,8 +191,13 @@ public class Tests
 	[TestCase(783.0123, 783.0124)]
 	[TestCase(1.0 / 3.0, 0.333333)]
 	[TestCase(0.1 + 0.2, 0.3)]
-	public void IsCloseTo_Actual_Expected(object actual, object expected) =>
+	public void IsCloseTo_Actual_Expected(object actual, object expected)
+	{
 		actual.Is(expected);
+
+		Action action = () => actual.IsExactly(expected);
+		action.IsThrowing<IsNotException>().Message.Contains("is not").IsTrue();
+	}
 
 	private static void VerifyEquality(IEnumerable<int> values)
 	{
