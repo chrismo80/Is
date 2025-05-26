@@ -34,8 +34,13 @@ public static class IsExtensions
 	/// <param name="actual">The actual object to check.</param>
 	/// <returns>The object cast to type <typeparamref name="T" />.</returns>
 	/// <exception cref="IsNotException">Thrown if the actual object is not of that type.</exception>
-	public static T Is<T>(this object actual) =>
-		actual is T cast ? cast : throw new IsNotException(actual.Actually("is no", typeof(T)));
+	public static T Is<T>(this object actual)
+	{
+		if (actual is T cast)
+			return cast;
+
+		throw new IsNotException(actual.Actually("is no", typeof(T)));
+	}
 
 	/// <summary>
 	/// Asserts that the actual object matches the expected value(s).
@@ -44,8 +49,7 @@ public static class IsExtensions
 	/// <param name="expected">The expected value(s) to match against.</param>
 	/// <returns>True if matching.</returns>
 	/// <exception cref="IsNotException">Thrown if not matching.</exception>
-	public static bool Is(this object actual, params object[]? expected) =>
-		actual.ShouldBe(expected?.Unwrap());
+	public static bool Is(this object actual, params object[]? expected) => actual.ShouldBe(expected?.Unwrap());
 
 	/// <summary>
 	/// Asserts that the actual object is equal to the expected value (exact match).
@@ -54,8 +58,7 @@ public static class IsExtensions
 	/// <param name="expected">The expected value.</param>
 	/// <returns>True if values are equal.</returns>
 	/// <exception cref="IsNotException">Thrown if values are not equal.</exception>
-	public static bool IsExactly(this object actual, object expected) =>
-		actual.IsEqualTo(expected);
+	public static bool IsExactly(this object actual, object expected) => actual.IsEqualTo(expected);
 
 	/// <summary>
 	/// Asserts that the actual object is <c>null</c>.
@@ -63,8 +66,7 @@ public static class IsExtensions
 	/// <param name="actual">The actual value.</param>
 	/// <returns>True if the object is null.</returns>
 	/// <exception cref="IsNotException">Thrown if the object is not null.</exception>
-	public static bool IsNull(this object actual) =>
-		actual.IsEqualTo(null);
+	public static bool IsNull(this object actual) => actual.IsEqualTo(null);
 
 	/// <summary>
 	/// Asserts that a boolean value is <c>true</c>.
@@ -72,8 +74,7 @@ public static class IsExtensions
 	/// <param name="actual">The actual boolean to check.</param>
 	/// <returns>True if the value is true.</returns>
 	/// <exception cref="IsNotException">Thrown if the value is false.</exception>
-	public static bool IsTrue(this bool actual) =>
-		actual.IsEqualTo(true);
+	public static bool IsTrue(this bool actual) => actual.IsEqualTo(true);
 
 	/// <summary>
 	/// Asserts that a boolean value is <c>false</c>.
@@ -81,8 +82,7 @@ public static class IsExtensions
 	/// <param name="actual">The actual boolean to check.</param>
 	/// <returns>True if the value is false.</returns>
 	/// <exception cref="IsNotException">Thrown if the value is true.</exception>
-	public static bool IsFalse(this bool actual) =>
-		actual.IsEqualTo(false);
+	public static bool IsFalse(this bool actual) => actual.IsEqualTo(false);
 
 	/// <summary>
 	/// Asserts that the sequence is empty.
@@ -90,9 +90,13 @@ public static class IsExtensions
 	/// <param name="actual">The enumerable to check.</param>
 	/// <returns>True if the enumerable is empty.</returns>
 	/// <exception cref="IsNotException">Thrown if the enumerable is not empty.</exception>
-	public static bool IsEmpty(this IEnumerable actual) =>
-		!actual.Cast<object>().Any() ? true
-			: throw new IsNotException($"\n{actual.Format()}\nactually is not empty\n");
+	public static bool IsEmpty(this IEnumerable actual)
+	{
+		if (!actual.Cast<object>().Any())
+			return true;
+
+		throw new IsNotException($"\n{actual.Format()}\nactually is not empty\n");
+	}
 
 	/// <summary>
 	/// Asserts that the actual value is greater than the given <paramref name="other" /> value.
@@ -102,9 +106,13 @@ public static class IsExtensions
 	/// <param name="other">The value to compare against.</param>
 	/// <returns>True if the actual value is greater than <paramref name="other" />.</returns>
 	/// <exception cref="IsNotException">Thrown if not greater.</exception>
-	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> =>
-		actual.CompareTo(other) > 0 ? true
-			: throw new IsNotException(actual.Actually("is not greater than", other));
+	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T>
+	{
+		if(actual.CompareTo(other) > 0)
+			return true;
+
+		throw new IsNotException(actual.Actually("is not greater than", other));
+	}
 
 	/// <summary>
 	/// Asserts that the actual value is smaller than the given <paramref name="other" /> value.
@@ -114,9 +122,13 @@ public static class IsExtensions
 	/// <param name="other">The value to compare against.</param>
 	/// <returns>True if the actual value is smaller than <paramref name="other" />.</returns>
 	/// <exception cref="IsNotException">Thrown if not smaller.</exception>
-	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> =>
-		actual.CompareTo(other) < 0 ? true
-			: throw new IsNotException(actual.Actually("is not smaller than", other));
+	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T>
+	{
+		if(actual.CompareTo(other) < 0)
+			return true;
+
+		throw new IsNotException(actual.Actually("is not smaller than", other));
+	}
 }
 
 file static class InternalExtensions
@@ -129,22 +141,36 @@ file static class InternalExtensions
 			_ => actual.ToArray().Are(expected)
 		};
 
-	internal static object[] Unwrap(this object[] array) =>
-		array.Length == 1 && array[0].IsEnumerable() ? array[0].ToArray() : array;
+	internal static object[] Unwrap(this object[] array)
+	{
+		if(array.Length == 1 && array[0].IsEnumerable())
+			return array[0].ToArray();
 
-	private static bool IsEnumerable(this object value) =>
-		value is IEnumerable and not string;
+		return array;
+	}
 
-	private static object[] ToArray(this object value) =>
-		Enumerable.ToArray(value.Is<IEnumerable>().Cast<object>());
+	private static bool IsEnumerable(this object value) => value is IEnumerable and not string;
 
-	private static bool Are(this object[] values, object[] expected) =>
-		values.Length == expected.Length ? Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]))
-			: throw new IsNotException(values.Actually("are not", expected));
+	private static object[] ToArray(this object value) => Enumerable.ToArray(value.Is<IEnumerable>().Cast<object>());
 
-	internal static bool IsEqualTo<T>(this T? actual, T? expected) =>
-		EqualityComparer<T>.Default.Equals(actual, expected) || actual.IsCloseTo(expected) ? true
-			: throw new IsNotException(actual.Actually("is not", expected));
+	private static bool Are(this object[] values, object[] expected)
+	{
+		if (values.Length == expected.Length)
+			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
+
+		throw new IsNotException(values.Actually("are not", expected));
+	}
+
+	internal static bool IsEqualTo<T>(this T? actual, T? expected)
+	{
+		if(EqualityComparer<T>.Default.Equals(actual, expected))
+			return true;
+
+		if(actual.IsCloseTo(expected))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not", expected));
+	}
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
 		(actual, expected) switch
@@ -154,9 +180,13 @@ file static class InternalExtensions
 			_ => false
 		};
 
-	private static bool IsInTolerance<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
-		T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)) ? true
-			: throw new IsNotException(actual.Actually("is not close enough to", expected));
+	private static bool IsInTolerance<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T>
+	{
+		if(T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not close enough to", expected));
+	}
 }
 
 public class IsNotException(string message) : Exception(message.PrependCodeLine());
