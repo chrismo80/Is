@@ -72,7 +72,7 @@ public static class IsExtensions
 		if (actual.IsExactlyEqualTo(expected))
 			return true;
 
-		throw new IsNotException(actual.Actually("is not", expected));
+		throw new IsNotException(actual.Actually("is not exactly", expected));
 	}
 
 	/// <summary>
