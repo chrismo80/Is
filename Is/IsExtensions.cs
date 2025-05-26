@@ -149,6 +149,17 @@ file static class InternalExtensions
 		return array;
 	}
 
+	internal static bool IsEqualTo<T>(this T? actual, T? expected)
+	{
+		if(EqualityComparer<T>.Default.Equals(actual, expected))
+			return true;
+
+		if(actual.IsCloseTo(expected))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not", expected));
+	}
+
 	private static bool IsEnumerable(this object value) => value is IEnumerable and not string;
 
 	private static object[] ToArray(this object value) => Enumerable.ToArray(value.Is<IEnumerable>().Cast<object>());
@@ -159,17 +170,6 @@ file static class InternalExtensions
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
 
 		throw new IsNotException(values.Actually("are not", expected));
-	}
-
-	internal static bool IsEqualTo<T>(this T? actual, T? expected)
-	{
-		if(EqualityComparer<T>.Default.Equals(actual, expected))
-			return true;
-
-		if(actual.IsCloseTo(expected))
-			return true;
-
-		throw new IsNotException(actual.Actually("is not", expected));
 	}
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
