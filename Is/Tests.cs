@@ -89,6 +89,19 @@ public class Tests
     }
 
     [Test]
+    public void IsThrowing_AwaitAction()
+    {
+        static async Task WaitAndThrow()
+        {
+            await Task.Delay(10);
+            throw new InvalidOperationException("nope");
+        }
+
+        var action = () => WaitAndThrow();
+        action.IsThrowing<InvalidOperationException>().Message.Is("nope");
+    }
+
+    [Test]
     public void JaggedArrays_Equals_Expected() =>
         new object[] { new[] { 1, 2 }, 3 }.Is(new object[] { new[] { 1, 2 }, 3 });
 
