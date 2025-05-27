@@ -76,6 +76,14 @@ public class Tests
 	}
 
 	[Test]
+	public void IsContaining()
+	{
+		new List<int> { 1, 2, 3, 4, 5, 6 }.IsContaining(2, 4);
+
+		"hello world".IsContaining("hello");
+	}
+
+	[Test]
 	public void IEnumerable_Equal_Params()
 	{
 		new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4, 6);
@@ -88,7 +96,7 @@ public class Tests
 	{
 		static int DivideByZero(int value) => value / 0;
 		Action action = () => _ = DivideByZero(1);
-		action.IsThrowing<DivideByZeroException>();
+		action.IsThrowing<DivideByZeroException>("Attempted to divide by zero.");
 	}
 
 	[Test]
@@ -101,7 +109,7 @@ public class Tests
 		}
 
 		var action = () => WaitAndThrow();
-		action.IsThrowing<InvalidOperationException>().Message.Is("nope");
+		action.IsThrowing<InvalidOperationException>("nope");
 	}
 
 	[Test]
@@ -150,6 +158,14 @@ public class Tests
 
 		Action act = () => actual.IsGreaterThan(expected);
 		act.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();
+	}
+
+	[Test]
+	[TestCase(1, 2, 3)]
+	[TestCase(-1.0, 0.0, 1.0)]
+	public void IsBetween<T>(T min, T actual, T max) where T : IComparable<T>
+	{
+		actual.IsBetween(min, max);
 	}
 
 	[Test]

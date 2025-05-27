@@ -58,7 +58,8 @@ public static class IsExtensions
 	/// <param name="expected">The expected value(s) to match against.</param>
 	/// <returns>True if matching.</returns>
 	/// <exception cref="IsNotException">Thrown if not matching.</exception>
-	public static bool Is(this object actual, params object[]? expected) => actual.ShouldBe(expected?.Unwrap());
+	public static bool Is(this object actual, params object[]? expected) =>
+		actual.ShouldBe(expected?.Unwrap());
 
 	/// <summary>
 	/// Asserts that the actual object is equal to the expected value (exact match).
@@ -76,38 +77,14 @@ public static class IsExtensions
 	}
 
 	/// <summary>
-	/// Asserts that the actual object is <c>null</c>.
-	/// </summary>
-	/// <param name="actual">The actual value.</param>
-	/// <returns>True if the object is null.</returns>
-	/// <exception cref="IsNotException">Thrown if the object is not null.</exception>
-	public static bool IsNull(this object actual) => actual.IsEqualTo(null);
-
-	/// <summary>
-	/// Asserts that a boolean value is <c>true</c>.
-	/// </summary>
-	/// <param name="actual">The actual boolean to check.</param>
-	/// <returns>True if the value is true.</returns>
-	/// <exception cref="IsNotException">Thrown if the value is false.</exception>
-	public static bool IsTrue(this bool actual) => actual.IsEqualTo(true);
-
-	/// <summary>
-	/// Asserts that a boolean value is <c>false</c>.
-	/// </summary>
-	/// <param name="actual">The actual boolean to check.</param>
-	/// <returns>True if the value is false.</returns>
-	/// <exception cref="IsNotException">Thrown if the value is true.</exception>
-	public static bool IsFalse(this bool actual) => actual.IsEqualTo(false);
-
-	/// <summary>
 	/// Asserts that the sequence is empty.
 	/// </summary>
 	/// <param name="actual">The enumerable to check.</param>
 	/// <returns>True if the enumerable is empty.</returns>
 	/// <exception cref="IsNotException">Thrown if the enumerable is not empty.</exception>
-	public static bool IsEmpty(this IEnumerable actual)
+	public static bool IsEmpty<T>(this IEnumerable<T> actual)
 	{
-		if (!actual.Cast<object>().Any())
+		if (!actual.Any())
 			return true;
 
 		throw new IsNotException($"\n{actual.Format().Color(1)}\nactually is not empty\n");
@@ -144,9 +121,104 @@ public static class IsExtensions
 
 		throw new IsNotException(actual.Actually("is not smaller than", other));
 	}
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> sequence contains all of the specified <paramref name="expected"/> elements.
+	/// Throws an <see cref="IsNotException"/> if any expected element is missing.
+	/// </summary>
+	/// <typeparam name="T">The type of elements in the collection.</typeparam>
+	/// <param name="actual">The collection to check.</param>
+	/// <param name="expected">The elements that must be present in <paramref name="actual"/>.</param>
+	/// <returns>True if all expected elements are found in the collection.</returns>
+	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
+	{
+		if (expected.All(actual.Contains))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not containing", expected));
+	}
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string contains the specified <paramref name="expected"/> substring.
+	/// Throws an <see cref="IsNotException"/> if <paramref name="expected"/> is not found.
+	/// </summary>
+	/// <param name="actual">The string to search in.</param>
+	/// <param name="expected">The substring expected to be found.</param>
+	/// <returns>True if <paramref name="expected"/> is found in <paramref name="actual"/>.</returns>
+	public static bool IsContaining(this string actual, string expected)
+	{
+		if (actual.Contains(expected))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not containing", expected));
+	}
+
+	/// <summary>
+	/// Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/>
+	/// and that the exception message contains the specified <paramref name="message"/> substring.
+	/// Throws an <see cref="IsNotException"/> if the assertion fails.
+	/// </summary>
+	/// <typeparam name="T">The expected exception type.</typeparam>
+	/// <param name="action">The action expected to throw the exception.</param>
+	/// <param name="message">A substring expected to be found in the exception message.</param>
+	/// <returns>True if the exception is thrown and its message contains <paramref name="message"/>.</returns>
+	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
+		action.IsThrowing<T>().Message.IsContaining(message);
+
+	/// <summary>
+	/// Asserts that the given asynchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/>
+	/// and that the exception message contains the specified <paramref name="message"/> substring.
+	/// Throws an <see cref="IsNotException"/> if the assertion fails.
+	/// </summary>
+	/// <typeparam name="T">The expected exception type.</typeparam>
+	/// <param name="action">The asynchronous function expected to throw the exception.</param>
+	/// <param name="message">A substring expected to be found in the exception message.</param>
+	/// <returns>True if the exception is thrown and its message contains <paramref name="message"/>.</returns>
+	public static bool IsThrowing<T>(this Func<Task> action, string message) where T : Exception =>
+		action.IsThrowing<T>().Message.IsContaining(message);
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> value is strictly between <paramref name="min"/> and <paramref name="max"/>.
+	/// Throws an <see cref="IsNotException"/> if the condition is not met.
+	/// </summary>
+	/// <typeparam name="T">A type that implements <see cref="IComparable{T}"/>.</typeparam>
+	/// <param name="actual">The value to check.</param>
+	/// <param name="min">The lower exclusive bound.</param>
+	/// <param name="max">The upper exclusive bound.</param>
+	/// <returns>True if <paramref name="actual"/> is greater than <paramref name="min"/> and less than <paramref name="max"/>.</returns>
+	public static bool IsBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
+		actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
+
+	/// <summary>
+	/// Asserts that the actual object is <c>null</c>.
+	/// </summary>
+	/// <param name="actual">The actual value.</param>
+	/// <returns>True if the object is null.</returns>
+	/// <exception cref="IsNotException">Thrown if the object is not null.</exception>
+	public static bool IsNull(this object actual) =>
+		actual.IsExactly(null);
+
+	/// <summary>
+	/// Asserts that a boolean value is <c>true</c>.
+	/// </summary>
+	/// <param name="actual">The actual boolean to check.</param>
+	/// <returns>True if the value is true.</returns>
+	/// <exception cref="IsNotException">Thrown if the value is false.</exception>
+	public static bool IsTrue(this bool actual) =>
+		actual.IsExactly(true);
+
+	/// <summary>
+	/// Asserts that a boolean value is <c>false</c>.
+	/// </summary>
+	/// <param name="actual">The actual boolean to check.</param>
+	/// <returns>True if the value is false.</returns>
+	/// <exception cref="IsNotException">Thrown if the value is true.</exception>
+	public static bool IsFalse(this bool actual) =>
+		actual.IsExactly(false);
 }
 
-public class IsNotException(string message) : Exception(message.AddCodeLine());
+public class IsNotException(string message) : Exception(message.AddCodeLine())
+{}
 
 file static class InternalExtensions
 {
