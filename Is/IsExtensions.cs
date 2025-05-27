@@ -218,7 +218,6 @@ file static class MessageExtensions
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
-
 	private static string FormatValue(this object? value) =>
 		value switch
 		{
