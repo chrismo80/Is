@@ -153,6 +153,13 @@ public class Tests
 	}
 
 	[Test]
+	public void IsThrowing_WithInnerException()
+	{
+		Action act = () => throw new InvalidOperationException("invalid", new ArgumentException("arg"));
+		act.IsThrowing<InvalidOperationException>().InnerException.Is<ArgumentException>().Message.Is("arg");
+	}
+
+	[Test]
 	public void DateTime()
 	{
 		var from = new DateTime(2025, 05, 24, 11, 11, 10);
