@@ -212,6 +212,7 @@ file static class InternalExtensions
 
 file static class MessageExtensions
 {
+	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 	internal static string Actually(this object? actual, string equality, object? expected) =>
 		CreateMessage(actual.Format().Colorize(1), "actually " + equality, expected.Format().Colorize(2));
 
@@ -238,7 +239,7 @@ file static class MessageExtensions
 		content.Join("\n\t", "\n\n\t", "\n");
 
 	internal static string? Colorize<T>(this T text, int color) =>
-		Console.IsOutputRedirected ? "\x1b[3" + color + "m" + text + "\x1b[0m" : text?.ToString();
+		ColorSupport ? "\x1b[3" + color + "m" + text + "\x1b[0m" : text?.ToString();
 }
 
 file static class CallStackExtensions
