@@ -192,7 +192,6 @@ file static class InternalExtensions
 	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
 		EqualityComparer<T>.Default.Equals(actual, expected);
 
-
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
 		(actual, expected) switch
 		{
@@ -213,6 +212,7 @@ file static class InternalExtensions
 file static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
+
 	internal static string Actually(this object? actual, string equality, object? expected) =>
 		CreateMessage(actual.Format().Colorize(1), "actually " + equality, expected.Format().Colorize(2));
 
