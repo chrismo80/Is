@@ -1,4 +1,4 @@
-namespace Is;
+namespace Is.Tests;
 
 public class Tests
 {

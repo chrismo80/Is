@@ -166,9 +166,6 @@ file static class InternalExtensions
 		return array;
 	}
 
-	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
-		EqualityComparer<T>.Default.Equals(actual, expected);
-
 	internal static bool IsEqualTo<T>(this T? actual, T? expected)
 	{
 		if (actual.IsExactlyEqualTo(expected))
@@ -191,6 +188,10 @@ file static class InternalExtensions
 
 		throw new IsNotException(values.Actually("are not", expected));
 	}
+
+	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
+		EqualityComparer<T>.Default.Equals(actual, expected);
+
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
 		(actual, expected) switch
@@ -255,6 +256,6 @@ file static class CallStackExtensions
 	private static string GetLine(this string? fileName, int lineNumber) => fileName == null ? ""
 		: " in line " + lineNumber + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim();
 
-	private static string AddLines(this string line, string prefix = "") =>
-		line + "\n" + prefix + string.Concat(Enumerable.Range(0, line.Length).Select(_ => "‾"));
+	private static string AddLines(this string line) =>
+		line + "\n" + string.Concat(Enumerable.Range(0, line.Length).Select(_ => "‾"));
 }
