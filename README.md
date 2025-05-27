@@ -13,6 +13,8 @@
 - ⚙️ Self-contained: No dependencies, no configuration, just drop it in.
 
 
+
+
 ## 🔍 Available Methods
 
 All public methods in `Is` are:
@@ -21,18 +23,25 @@ All public methods in `Is` are:
 - 🔤 **Named consistently**: Every method starts with `Is`, making them easy to discover with IntelliSense
 - ✂️ **Minimal and deliberate**: Only a small, opinionated set of assertions is exposed
 
-| Method                         | Description                                                                |
-|-------------------------------|-----------------------------------------------------------------------------|
-| `IsThrowing<T>()`            | Asserts that an `Action` throws an exception of type `T`                     |
-| `Is<T>()`                     | Asserts that the value is of type `T`                                       |
-| `Is(params object[] expected)`| Asserts that the value matches the expected value                           |
-| `IsExactly(object expected)`  | Asserts strict value equality                                               |
-| `IsEmpty()`                   | Asserts that an `IEnumerable` is empty                                      |
-| `IsGreaterThan(T other)`     | Asserts that the value is greater than another (generic `IComparable<T>`)    |
-| `IsSmallerThan(T other)`     | Asserts that the value is smaller than another (generic `IComparable<T>`)    |
-| `IsNull()`                    | Asserts that a value is `null`                                              |
-| `IsTrue()`                    | Asserts that a `bool` is `true`                                             |
-| `IsFalse()`                   | Asserts that a `bool` is `false`                                            |
+| Method                             | Description                                                                 |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| 🔥 `IsThrowing<T>()`               | Asserts that an `Action` throws an exception of type `T`                    |
+| 🔥 `IsThrowing<T>(string)`         | Asserts that an `Action` throws and the exception message contains a string |
+| 🔥 `IsThrowing<T>()` (async)       | Asserts that an async `Func<Task>` throws an exception of type `T`          |
+| 🔥 `IsThrowing<T>(string)` (async) | Asserts that an async `Func<Task>` throws and the message contains a string |
+| 🔠 `Is<T>()`                       | Asserts that the value is of type `T`                                       |
+| 🔠 `Is(params object[])`           | Asserts that the value matches any expected value                           |
+| 🔠 `IsExactly(object)`             | Asserts strict value equality                                               |
+| 📏 `IsGreaterThan(T)`              | Asserts that the value is greater than another                              |
+| 📏 `IsSmallerThan(T)`              | Asserts that the value is smaller than another                              |
+| 📏 `IsBetween(min, max)`           | Asserts that the value is between two bounds                                |
+| 📦 `IsEmpty()`                     | Asserts that an `IEnumerable` is empty                                      |
+| 📦 `IsContaining(params T[])`      | Asserts that an `IEnumerable` contains all specified elements               |
+| 📦 `IsContaining(string)`          | Asserts that a `string` contains a substring                                |
+| 🚫 `IsNull()`                      | Asserts that a value is `null`                                              |
+| ✅ `IsTrue()`                       | Asserts that a `bool` is `true`                                             |
+| ❌ `IsFalse()`                      | Asserts that a `bool` is `false`                                            |
+
 
 > ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
 
