@@ -18,7 +18,7 @@ public static class IsExtensions
 		try { action(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new IsNotException($"\n{typeof(T)}\nactually was not thrown");
+		throw new IsNotException($"\n{typeof(T).Colorize(1)}\nactually was not thrown");
 	}
 
 	/// <summary>
@@ -33,7 +33,7 @@ public static class IsExtensions
 		try { action().GetAwaiter().GetResult(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new IsNotException($"\n{typeof(T)}\nactually was not thrown");
+		throw new IsNotException($"\n{typeof(T).Colorize(1)}\nactually was not thrown");
 	}
 
 	/// <summary>
@@ -110,7 +110,7 @@ public static class IsExtensions
 		if (!actual.Cast<object>().Any())
 			return true;
 
-		throw new IsNotException($"\n{actual.Format()}\nactually is not empty\n");
+		throw new IsNotException($"\n{actual.Format().Colorize(1)}\nactually is not empty\n");
 	}
 
 	/// <summary>
@@ -213,7 +213,7 @@ file static class InternalExtensions
 file static class MessageExtensions
 {
 	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format(), "actually " + equality, expected.Format());
+		CreateMessage(actual.Format().Colorize(1), "actually " + equality, expected.Format().Colorize(2));
 
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
@@ -236,12 +236,15 @@ file static class MessageExtensions
 
 	private static string CreateMessage(params string[] content) =>
 		content.Join("\n\t", "\n\n\t", "\n");
+
+	internal static string? Colorize<T>(this T text, int color) =>
+		Console.IsOutputRedirected ? "\x1b[3" + color + "m" + text + "\x1b[0m" : text?.ToString();
 }
 
 file static class CallStackExtensions
 {
 	internal static string AddCodeLine(this string text) =>
-		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.AddLines();
+		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.Colorize(3)?.AddLines();
 
 	private static StackFrame? FindFrame() =>
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
