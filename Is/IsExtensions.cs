@@ -247,7 +247,7 @@ public static class OptionalExtensions
 public class IsNotException(string message) : Exception(message.AddCodeLine())
 { }
 
-internal static class InternalExtensions
+file static class InternalExtensions
 {
 	internal static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch
@@ -317,7 +317,7 @@ internal static class InternalExtensions
 	}
 }
 
-internal static class MessageExtensions
+file static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
@@ -350,7 +350,7 @@ internal static class MessageExtensions
 		content.Join("\n\t", "\n\n\t", "\n");
 }
 
-internal static class CallStackExtensions
+file static class CallStackExtensions
 {
 	internal static string AddCodeLine(this string text) =>
 		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.Color(3)?.AddLines();
