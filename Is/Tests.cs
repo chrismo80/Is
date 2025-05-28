@@ -2,6 +2,78 @@ namespace Is.Tests;
 
 public class Tests
 {
+	private static int DivideByZero(int value) => value / 0;
+
+	private static async Task<int> WaitAndDivide(int value)
+	{
+		await Task.Delay(10);
+
+		if (value < 5)
+			return DivideByZero(value);
+
+		throw new InvalidOperationException("nope, timeout");
+	}
+
+	[Test]
+	public void IsThrowing_Sync()
+	{
+		Action action = () => DivideByZero(1);
+
+		action.IsThrowing<DivideByZeroException>();
+		action.IsThrowing<DivideByZeroException>("by zero");
+	}
+
+	[Test]
+	public void IsThrowing_NotThrown_Sync()
+	{
+		var action = () => Task.Delay(10).Wait();
+		Action outerAction = () => action.IsThrowing<DivideByZeroException>();
+
+		outerAction.IsThrowing<IsNotException>("not thrown");
+	}
+
+	[Test]
+	public void IsThrowing_Async()
+	{
+		var action1 = () => WaitAndDivide(4);
+
+		action1.IsThrowing<DivideByZeroException>();
+		action1.IsThrowing<DivideByZeroException>("by zero");
+
+		var action2 = () => WaitAndDivide(7);
+
+		action2.IsThrowing<InvalidOperationException>();
+		action2.IsThrowing<InvalidOperationException>("timeout");
+	}
+
+	[Test]
+	public void IsThrowing_NotThrown_Async()
+	{
+		var action = () => Task.Delay(10);
+		Action outerAction = () => action.IsThrowing<DivideByZeroException>();
+
+		outerAction.IsThrowing<IsNotException>("not thrown");
+	}
+
+	[Test]
+	public void Is_Type_NotThrowing()
+	{
+		new List<int>().Is<IReadOnlyList<int>>();
+		"hello".Is<string>();
+		5.5.Is<double>();
+		5.Is<int>();
+
+		Action action = () => "hello".Is<int>();;
+		action.IsThrowing<IsNotException>();
+	}
+
+	[Test]
+	public void Is_Type_Throwing()
+	{
+		Action action = () => new List<int>().Is<IReadOnlyList<double>>();
+		action.IsThrowing<IsNotException>();
+	}
+
 	[Test]
 	[TestCase(null, null)]
 	[TestCase(false, false)]
@@ -10,10 +82,10 @@ public class Tests
 	[TestCase(2.2, 2.2)]
 	[TestCase(3f, 3f)]
 	[TestCase("4", "4")]
-	public void Is_Actual_Equals_Expected(object? actual, object? expected)
+	public void IsExactly_ActualEqualsExpected_NotThrowing(object? actual, object? expected)
 	{
-		actual.Is(expected);
 		actual.IsExactly(expected);
+		actual.Is(expected);
 	}
 
 	[Test]
@@ -29,50 +101,65 @@ public class Tests
 	[TestCase("ABC", false)]
 	[TestCase("ABC", null)]
 	[TestCase("ABC", "ABD")]
-	public void Actual_Not_Equals_Expected(object? actual, object? expected)
+	public void IsExactly_ActualNotEqualsExpected_Throwing(object? actual, object? expected)
 	{
-		Action act = () => actual.Is(expected);
-		act.IsThrowing<IsNotException>();
+		((Action)(() => actual.IsExactly(expected))).IsThrowing<IsNotException>();
+		((Action)(() => actual.Is(expected))).IsThrowing<IsNotException>();
 	}
 
 	[Test]
-	public void ListValues_Equal_Expected() =>
-		VerifyEquality(new List<int> { 1, 2, 3, 4 });
-
-	[Test]
-	public void ArrayValues_Equal_Expected() =>
-		VerifyEquality(new int[] { 1, 2, 3, 4 });
-
-	[Test]
-	public void ValuesWithNull_Equal_Expected() =>
-		new int?[] { 1, 2, null, 4 }.Is(1, 2, null, 4);
-
-	[Test]
-	public void List_Not_Equal_List()
+	public void Is_Array()
 	{
-		Action act = () => new List<int?> { 1, 2, null, 4 }.Is(new List<int?> { 1, 2, 3, 4 });
-		act.IsThrowing<IsNotException>();
+		int?[] array = [1, 2, null, 4];
+
+		array.Is(1, 2, null, 4);
+		array.Is((int?[]) [1, 2, null, 4]);
+		array.Is(new List<int?> { 1, 2, null, 4 });
+		array.Where(i => i % 2 == 0).Is(2, 4);
+
+		Action action = () => new List<int> { 1, 2, 3, 5 }.Is(new List<int> { 1, 2, 3, 4 });
+		action.IsThrowing<IsNotException>("is not");
 	}
 
 	[Test]
-	public void Array_Not_Equal_Params()
+	public void Is_List()
 	{
-		Action act = () => new List<int> { 1, 2, 3, 5 }.Is(new List<int> { 1, 2, 3, 4 });
-		act.IsThrowing<IsNotException>();
+		List<int?> list = [1, 2, null, 4];
+
+		list.Is(1, 2, null, 4);
+		list.Is((int?[]) [1, 2, null, 4]);
+		list.Is(new List<int?> { 1, 2, null, 4 });
+		list.Where(i => i % 2 == 0).Is(2, 4);
+
+		Action action = () => new List<int?> { 1, 2, null, 4 }.Is(new List<int?> { 1, 2, 3, 4 });
+		action.IsThrowing<IsNotException>();
+
+	}
+
+
+	[Test]
+	public void Is_DifferentArrayDepths()
+	{
+		new object[] { (int[]) [1, 2], 3 }.Is(new object[] { (int[]) [1, 2], 3 });
+
+		new List<object> { 1, 2 }.Is(new List<object> { 1, new List<object> { 2 } });
+
+		Action action = () => new List<object> { 1, 2 }.IsExactly(new List<object> { 1, new List<object> { 2 } });
+		action.IsThrowing<IsNotException>();
 	}
 
 	[Test]
-	public void IEnumerable_Not_Equal_Params_TooShort()
+	public void Is_IEnumerable_TooShort()
 	{
-		Action act = () => new List<int> { 1, 2, 3, 5 }.Where(i => i % 2 == 0).Is(2, 4);
-		act.IsThrowing<IsNotException>();
+		Action action = () => new List<int> { 1, 2, 3, 5 }.Where(i => i % 2 == 0).Is(2, 4);
+		action.IsThrowing<IsNotException>("are not");
 	}
 
 	[Test]
-	public void IEnumerable_Not_Equal_Params_TooLong()
+	public void Is_IEnumerable_TooLong()
 	{
-		Action act = () => new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4);
-		act.IsThrowing<IsNotException>();
+		Action action = () => new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4);
+		action.IsThrowing<IsNotException>("are not");
 	}
 
 	[Test]
@@ -84,8 +171,8 @@ public class Tests
 
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1);
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2);
-		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2, 3);
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 3);
+		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2, 3);
 	}
 
 	[Test]
@@ -96,10 +183,13 @@ public class Tests
 
 		groups[1].Value.Is("hello");
 		groups[2].Value.Is("world");
+
+		Action action = () => "hello".IsMatching("world");
+		action.IsThrowing<IsNotException>("IsMatching");
 	}
 
 	[Test]
-	public void IEnumerable_Equal_Params()
+	public void Is_IEnumerable()
 	{
 		new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4, 6);
 		new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 3 == 0).Is(3, 6);
@@ -107,57 +197,11 @@ public class Tests
 	}
 
 	[Test]
-	public void IsThrowing_Action()
+	public void Is_ValueNotEqualsList_Throwing()
 	{
-		static int DivideByZero(int value) => value / 0;
-		Action action = () => _ = DivideByZero(1);
-		action.IsThrowing<DivideByZeroException>("Attempted to divide by zero.");
-	}
+		Action action = () => 5.Is(new List<int> { 1, 2 });
 
-	[Test]
-	public void IsThrowing_AwaitAction()
-	{
-		static async Task WaitAndThrow()
-		{
-			await Task.Delay(10);
-			throw new InvalidOperationException("nope");
-		}
-
-		var action = () => WaitAndThrow();
-		action.IsThrowing<InvalidOperationException>("nope");
-	}
-
-	[Test]
-	public void JaggedArrays_Equals_Expected() =>
-		new object[] { new[] { 1, 2 }, 3 }.Is(new object[] { new[] { 1, 2 }, 3 });
-
-	[Test]
-	public void DifferentDepth_EqualsThough_Expected() =>
-		new List<object> { 1, 2 }.Is(new List<object> { 1, new List<object> { 2 } });
-
-	[Test]
-	public void DifferentDepth_EqualsExactly_Fails()
-	{
-		Action act = () => new List<object> { 1, 2 }.IsExactly(new List<object> { 1, new List<object> { 2 } });
-		act.IsThrowing<IsNotException>();
-	}
-
-	[Test]
-	public void Value_NotEquals_List()
-	{
-		Action act = () => 5.Is(new List<int> { 1, 2 });
-		act.IsThrowing<IsNotException>();
-	}
-
-	[Test]
-	public void Value_Is_Type() =>
-		new List<int>().Is<IReadOnlyList<int>>();
-
-	[Test]
-	public void Value_IsNot_Type()
-	{
-		Action act = () => new List<int>().Is<IReadOnlyList<double>>();
-		act.IsThrowing<IsNotException>();
+		action.IsThrowing<IsNotException>();
 	}
 
 	[Test]
@@ -171,14 +215,15 @@ public class Tests
 		actual.IsSmallerThan(expected);
 		expected.IsGreaterThan(actual);
 
-		Action act = () => actual.IsGreaterThan(expected);
-		act.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();
+		Action action = () => actual.IsGreaterThan(expected);
+		action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();
 	}
 
 	[Test]
 	[TestCase(1, 2, 3)]
 	[TestCase(-1.0, 0.0, 1.0)]
-	public void IsBetween<T>(T min, T actual, T max) where T : IComparable<T>
+	[TestCase("A", "B", "C")]
+	public void IsBetween_NotThrowing<T>(T min, T actual, T max) where T : IComparable<T>
 	{
 		actual.IsBetween(min, max);
 	}
@@ -186,8 +231,9 @@ public class Tests
 	[Test]
 	public void IsThrowing_WithInnerException()
 	{
-		Action act = () => throw new InvalidOperationException("invalid", new ArgumentException("arg"));
-		act.IsThrowing<InvalidOperationException>().InnerException.Is<ArgumentException>().Message.Is("arg");
+		Action action = () => throw new InvalidOperationException("invalid", new ArgumentException("arg"));
+
+		action.IsThrowing<InvalidOperationException>().InnerException.Is<ArgumentException>().Message.Is("arg");
 	}
 
 	[Test]
@@ -209,17 +255,21 @@ public class Tests
 	}
 
 	[Test]
-	public void Booleans()
+	public void IsTrue_IsFalse()
 	{
 		true.IsTrue();
 		false.IsFalse();
+
+		((Action)(() => true.IsFalse())).IsThrowing<IsNotException>("is not");
+		((Action)(() => false.IsTrue())).IsThrowing<IsNotException>("is not");
 	}
 
 	[Test]
 	public void IsEmpty()
 	{
-		var list = new List<int>();
-		list.IsEmpty();
+		new List<int>().IsEmpty();
+
+		((Action)(() => new List<int> {1, 2}.IsEmpty())).IsThrowing<IsNotException>("is not");
 	}
 
 	[Test]
@@ -241,16 +291,9 @@ public class Tests
 	{
 		actual.Is(expected);
 		actual.IsApproximately(expected);
+		((float)actual).IsApproximately((float)expected);
 
 		Action action = () => actual.IsExactly(expected);
 		action.IsThrowing<IsNotException>().Message.Contains("is not").IsTrue();
-	}
-
-	private static void VerifyEquality(IEnumerable<int> values)
-	{
-		values.Is(new int[] { 1, 2, 3, 4 });
-		values.Is(new List<int> { 1, 2, 3, 4 });
-		values.Is(1, 2, 3, 4);
-		values.Where(i => i % 2 == 0).Is(2, 4);
 	}
 }

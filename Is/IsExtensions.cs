@@ -109,7 +109,7 @@ public static class IsExtensions
 		(actual.CompareTo(other) < 0).ThrowIf(actual, "is not smaller than", other);
 
 	/// <summary>
-	/// Asserts that the <paramref name="actual"/> sequence contains all of the specified <paramref name="expected"/> elements.
+	/// Asserts that the <paramref name="actual"/> sequence contains all the specified <paramref name="expected"/> elements.
 	/// Throws an <see cref="IsNotException"/> if any expected element is missing.
 	/// </summary>
 	/// <typeparam name="T">The type of elements in the collection.</typeparam>
@@ -138,7 +138,7 @@ public static class IsExtensions
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	public static GroupCollection IsMatching(this string actual, string pattern)
 	{
-		if (Regex.Match(actual, pattern) is Match match && match.Success)
+		if (Regex.Match(actual, pattern) is { Success: true } match)
 			return match.Groups;
 
 		throw new IsNotException(actual.Actually("does not match", pattern));
@@ -265,18 +265,6 @@ file static class InternalExtensions
 		return array;
 	}
 
-	internal static bool IsEqualTo<T>(this T? actual, T? expected)
-
-	{
-		if (actual.IsExactlyEqualTo(expected))
-			return true;
-
-		if (actual.IsCloseTo(expected))
-			return true;
-
-		throw new IsNotException(actual.Actually("is not", expected));
-	}
-
 	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
 		EqualityComparer<T>.Default.Equals(actual, expected);
 
@@ -294,6 +282,17 @@ file static class InternalExtensions
 			return true;
 
 		throw new IsNotException(actual.Actually("is not close enough to", expected));
+	}
+
+	private static bool IsEqualTo<T>(this T? actual, T? expected)
+	{
+		if (actual.IsExactlyEqualTo(expected))
+			return true;
+
+		if (actual.IsCloseTo(expected))
+			return true;
+
+		throw new IsNotException(actual.Actually("is not", expected));
 	}
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
@@ -353,7 +352,7 @@ file static class MessageExtensions
 file static class CallStackExtensions
 {
 	internal static string AddCodeLine(this string text) =>
-		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.Color(3)?.AddLines();
+		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine().Color(3)?.AddLines();
 
 	private static StackFrame? FindFrame() =>
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
@@ -361,7 +360,7 @@ file static class CallStackExtensions
 	private static bool IsOtherNamespace(this StackFrame frame) =>
 		frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsNotException).Namespace;
 
-	private static string? CodeLine(this StackFrame frame) =>
+	private static string CodeLine(this StackFrame frame) =>
 		"in " + frame.GetMethod()?.DeclaringType + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
 	private static string GetLine(this string? fileName, int lineNumber) => fileName == null ? ""
