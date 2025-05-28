@@ -62,13 +62,21 @@ All public methods in `Is` are:
 42.Is(42.0);     // ❌ throws IsNotException: 42 (System.Int32) is not 42 (System.Double)
 
 "test".Is("test");               // ✅ passes
+```
 
+
+### Collection checks
+```csharp
 new[] { 1, 2, 3 }.Is(1, 2, 3);   // ✅ passes (enumerable values check)
 
 new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4, 6);     // ✅ passes
 new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 3 == 0).Is(3, 6);        // ✅ passes
 new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // ✅ passes
+
+new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2);    // ✅ passes
+new List<int> { 1, 2 }.IsIn(1, 2, 3, 4);            // ✅ passes
 ```
+
 
 ### Type checks
 ```csharp
@@ -104,6 +112,16 @@ Action action = () => 5.IsGreaterThan(6);
 action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();    // ✅ passes
 ```
 
+
+### String checks
+```csharp
+var groups = "hello world".IsMatching("(.*) (.*)");  // ✅ passes
+groups[1].Value.Is("hello");  // ✅ passes
+groups[2].Value.Is("world");  // ✅ passes
+
+"hello world".IsContaining("hello");    // ✅ passes
+```
+  
 
 ## ⚖️ Design Philosophy
 
