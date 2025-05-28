@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Text.RegularExpressions;
+using System.Collections;
 using System.Numerics;
 using System.Diagnostics;
 
@@ -68,13 +69,8 @@ public static class IsExtensions
 	/// <param name="expected">The expected value.</param>
 	/// <returns>True if values are equal.</returns>
 	/// <exception cref="IsNotException">Thrown if values are not equal.</exception>
-	public static bool IsExactly<T>(this T actual, T expected)
-	{
-		if (actual.IsExactlyEqualTo(expected))
-			return true;
-
-		throw new IsNotException(actual.Actually("is not exactly", expected));
-	}
+	public static bool IsExactly<T>(this T actual, T expected) =>
+		actual.IsExactlyEqualTo(expected).ThrowIf(actual, "is not exactly", expected);
 
 	/// <summary>
 	/// Asserts that the sequence is empty.
@@ -87,7 +83,7 @@ public static class IsExtensions
 		if (!actual.Any())
 			return true;
 
-		throw new IsNotException($"\n{actual.Format().Color(1)}\nactually is not empty\n");
+		throw new IsNotException($"\n{actual.Format().Color(1)}\nactually is not empty");
 	}
 
 	/// <summary>
@@ -98,13 +94,8 @@ public static class IsExtensions
 	/// <param name="other">The value to compare against.</param>
 	/// <returns>True if the actual value is greater than <paramref name="other" />.</returns>
 	/// <exception cref="IsNotException">Thrown if not greater.</exception>
-	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T>
-	{
-		if (actual.CompareTo(other) > 0)
-			return true;
-
-		throw new IsNotException(actual.Actually("is not greater than", other));
-	}
+	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> =>
+		(actual.CompareTo(other) > 0).ThrowIf(actual, "is not greater than", other);
 
 	/// <summary>
 	/// Asserts that the actual value is smaller than the given <paramref name="other" /> value.
@@ -114,13 +105,8 @@ public static class IsExtensions
 	/// <param name="other">The value to compare against.</param>
 	/// <returns>True if the actual value is smaller than <paramref name="other" />.</returns>
 	/// <exception cref="IsNotException">Thrown if not smaller.</exception>
-	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T>
-	{
-		if (actual.CompareTo(other) < 0)
-			return true;
-
-		throw new IsNotException(actual.Actually("is not smaller than", other));
-	}
+	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> =>
+		(actual.CompareTo(other) < 0).ThrowIf(actual, "is not smaller than", other);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> sequence contains all of the specified <paramref name="expected"/> elements.
@@ -130,13 +116,8 @@ public static class IsExtensions
 	/// <param name="actual">The collection to check.</param>
 	/// <param name="expected">The elements that must be present in <paramref name="actual"/>.</param>
 	/// <returns>True if all expected elements are found in the collection.</returns>
-	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
-	{
-		if (expected.All(actual.Contains))
-			return true;
-
-		throw new IsNotException(actual.Actually("is not containing", expected));
-	}
+	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected) =>
+		expected.All(actual.Contains).ThrowIf(actual, "is not containing", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string contains the specified <paramref name="expected"/> substring.
@@ -145,14 +126,27 @@ public static class IsExtensions
 	/// <param name="actual">The string to search in.</param>
 	/// <param name="expected">The substring expected to be found.</param>
 	/// <returns>True if <paramref name="expected"/> is found in <paramref name="actual"/>.</returns>
-	public static bool IsContaining(this string actual, string expected)
+	public static bool IsContaining(this string actual, string expected) =>
+		actual.Contains(expected).ThrowIf(actual, "is not containing", expected);
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string matches the specified <paramref name="pattern"/> regular expression.
+	/// Throws an <see cref="IsNotException"/> if the string does not match the pattern.
+	/// </summary>
+	/// <param name="actual">The string to check.</param>
+	/// <param name="pattern">The regular expression pattern to match.</param>
+	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
+	public static GroupCollection IsMatching(this string actual, string pattern)
 	{
-		if (actual.Contains(expected))
-			return true;
+		if (Regex.Match(actual, pattern) is Match match && match.Success)
+			return match.Groups;
 
-		throw new IsNotException(actual.Actually("is not containing", expected));
+		throw new IsNotException(actual.Actually("does not match", pattern));
 	}
+}
 
+public static class OptionalExtensions
+{
 	/// <summary>
 	/// Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/>
 	/// and that the exception message contains the specified <paramref name="message"/> substring.
@@ -176,6 +170,17 @@ public static class IsExtensions
 	/// <returns>True if the exception is thrown and its message contains <paramref name="message"/>.</returns>
 	public static bool IsThrowing<T>(this Func<Task> action, string message) where T : Exception =>
 		action.IsThrowing<T>().Message.IsContaining(message);
+
+	/// <summary>
+	/// Asserts that all elements in the <paramref name="actual"/> collection are present in the specified <paramref name="expected"/> collection.
+	/// Throws an <see cref="IsNotException"/> if any element is not found.
+	/// </summary>
+	/// <typeparam name="T">The type of elements in the collection.</typeparam>
+	/// <param name="actual">The collection to check.</param>
+	/// <param name="expected">The collection to search in.</param>
+	/// <returns>True if all elements in the actual collection are found in the expected collection.</returns>
+	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected) =>
+		expected.IsContaining(actual.ToArray());
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is strictly between <paramref name="min"/> and <paramref name="max"/>.
@@ -218,9 +223,9 @@ public static class IsExtensions
 }
 
 public class IsNotException(string message) : Exception(message.AddCodeLine())
-{}
+{ }
 
-file static class InternalExtensions
+internal static class InternalExtensions
 {
 	internal static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch
@@ -239,6 +244,7 @@ file static class InternalExtensions
 	}
 
 	internal static bool IsEqualTo<T>(this T? actual, T? expected)
+
 	{
 		if (actual.IsExactlyEqualTo(expected))
 			return true;
@@ -247,6 +253,17 @@ file static class InternalExtensions
 			return true;
 
 		throw new IsNotException(actual.Actually("is not", expected));
+	}
+
+	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
+		EqualityComparer<T>.Default.Equals(actual, expected);
+
+	internal static bool ThrowIf(this bool condition, object? actual, string text, object? expected)
+	{
+		if (condition)
+			return true;
+
+		throw new IsNotException(actual.Actually(text, expected));
 	}
 
 	private static bool IsEnumerable(this object value) => value is IEnumerable and not string;
@@ -260,9 +277,6 @@ file static class InternalExtensions
 
 		throw new IsNotException(values.Actually("are not", expected));
 	}
-
-	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
-		EqualityComparer<T>.Default.Equals(actual, expected);
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
 		(actual, expected) switch
@@ -281,7 +295,7 @@ file static class InternalExtensions
 	}
 }
 
-file static class MessageExtensions
+internal static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
@@ -290,6 +304,9 @@ file static class MessageExtensions
 
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
+
+	internal static string? Color<T>(this T text, int color) =>
+		ColorSupport ? "\x1b[3" + color + "m" + text + "\x1b[0m" : text?.ToString();
 
 	private static string FormatValue(this object? value) =>
 		value switch
@@ -309,12 +326,9 @@ file static class MessageExtensions
 
 	private static string CreateMessage(params string[] content) =>
 		content.Join("\n\t", "\n\n\t", "\n");
-
-	internal static string? Color<T>(this T text, int color) =>
-		ColorSupport ? "\x1b[3" + color + "m" + text + "\x1b[0m" : text?.ToString();
 }
 
-file static class CallStackExtensions
+internal static class CallStackExtensions
 {
 	internal static string AddCodeLine(this string text) =>
 		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine()?.Color(3)?.AddLines();

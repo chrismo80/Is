@@ -81,6 +81,21 @@ public class Tests
 		new List<int> { 1, 2, 3, 4, 5, 6 }.IsContaining(2, 4);
 
 		"hello world".IsContaining("hello");
+
+		new List<int> { 1, 2, 3, 4 }.IsContaining(1);
+		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2);
+		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2, 3);
+		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 3);
+	}
+
+	[Test]
+	public void IsMatching()
+	{
+		"hello world".IsMatching("hello");
+		var groups = "hello world".IsMatching("(.*) (.*)");
+
+		groups[1].Value.Is("hello");
+		groups[2].Value.Is("world");
 	}
 
 	[Test]
@@ -183,6 +198,14 @@ public class Tests
 
 		from.IsSmallerThan(to);
 		to.IsGreaterThan(from);
+	}
+
+	[Test]
+	public void IsIn()
+	{
+		new List<int> { 1 }.IsIn(1, 2, 3, 4);
+		new List<int> { 1, 2 }.IsIn(1, 2, 3, 4);
+		new List<int> { 1, 2, 3 }.IsIn(1, 2, 3, 4);
 	}
 
 	[Test]
