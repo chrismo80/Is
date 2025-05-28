@@ -109,6 +109,18 @@ action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTr
 - 🧠 Designed to make tests read like intentions, not machinery
 
 
+## 🔍 Key Advantages of Is
+
+- 🧠 Ultra-Concise Syntax with Natural Readability
+- 🧵 Minimal Dependencies / Fast Startup
+    - Lean and dependency-free — ideal for CI pipelines or constrained environments.
+- 🧪 Focused on Behavior, Not Chaining
+    - Prioritizes clarity over fluent DSL chaining.
+- 🔧 Extensible and Easy to Maintain
+    - Simple to audit, fork, and adapt for your team or test infrastructure.
+
+
+
 ## 📝 License
 
 MIT – use freely.
