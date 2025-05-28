@@ -72,20 +72,24 @@ new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // �
 
 ### Type checks
 ```csharp
-"hello".Is<string>();       // ✅ passes
-"hello".Is<int>();          // ❌ throws IsNotException: "hello" (System.String) is no System.Int32
+"hello".Is<string>();     // ✅ passes
+"hello".Is<int>();        // ❌ throws IsNotException: "hello" (System.String) is no System.Int32
 ```
 
 ### Numeric comparisons
 ```csharp
-2.999999f.Is(3f)            // ✅ passes
-783.0123.Is(783.0124)       // ✅ passes
+2.999999f.Is(3f)         // ✅ passes
+783.0123.Is(783.0124)    // ✅ passes
 
-5.IsSmallerThan(6);         // ✅ passes
-6.IsGreaterThan(5.0);       // ✅ passes
-5.IsGreaterThan(6);         // ❌ throws IsNotException: 5 (System.Int32) is not greater than 6 (System.Int32)
+5.IsSmallerThan(6);      // ✅ passes
+6.IsGreaterThan(5.0);    // ✅ passes
+5.IsGreaterThan(6);      // ❌ throws IsNotException: 5 (System.Int32) is not greater than 6 (System.Int32)
+2.IsBetween(1, 3);       // ✅ passes
 
-0.3.Is(0.1 + 0.2);          // ✅ passes
+0.3.Is(0.1 + 0.2);                // ✅ passes
+0.3.IsExactly(0.1 + 0.2);         // ❌ fails
+0.3.IsApproximately(0.1 + 0.2);   // ✅ passes
+
 0.333333.Is(1.0 / 3.0);     // ✅ passes
 0.33333.Is(1.0 / 3.0);      // ❌ throws IsNotException: 0,33333 (System.Double) is not close to 0,3333333333333333 (System.Double)
 ```
