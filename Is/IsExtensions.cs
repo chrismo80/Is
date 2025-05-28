@@ -220,6 +220,28 @@ public static class OptionalExtensions
 	/// <exception cref="IsNotException">Thrown if the value is true.</exception>
 	public static bool IsFalse(this bool actual) =>
 		actual.IsExactly(false);
+
+	/// <summary>
+	/// Determines whether the specified <paramref name="actual"/> value is approximately equal to <paramref name="expected"/>
+	/// within a specified <paramref name="epsilon"/> tolerance.
+	/// </summary>
+	/// <param name="actual">The actual value.</param>
+	/// <param name="expected">The expected value.</param>
+	/// <param name="epsilon">The maximum allowed difference. Defaults to 1e-6.</param>
+	/// <returns>True if the absolute difference is less than or equal to epsilon; otherwise, false.</returns>
+	public static bool IsApproximately(this double actual, double expected, double epsilon = 1e-6) =>
+		actual.IsInTolerance(expected, epsilon);
+
+	/// <summary>
+	/// Determines whether the specified <paramref name="actual"/> value is approximately equal to <paramref name="expected"/>
+	/// within a specified <paramref name="epsilon"/> tolerance.
+	/// </summary>
+	/// <param name="actual">The actual value.</param>
+	/// <param name="expected">The expected value.</param>
+	/// <param name="epsilon">The maximum allowed difference. Defaults to 1e-6.</param>
+	/// <returns>True if the absolute difference is less than or equal to epsilon; otherwise, false.</returns>
+	public static bool IsApproximately(this float actual, float expected, float epsilon = 1e-6f) =>
+		actual.IsInTolerance(expected, epsilon);
 }
 
 public class IsNotException(string message) : Exception(message.AddCodeLine())
@@ -266,16 +288,12 @@ internal static class InternalExtensions
 		throw new IsNotException(actual.Actually(text, expected));
 	}
 
-	private static bool IsEnumerable(this object value) => value is IEnumerable and not string;
-
-	private static object[] ToArray(this object value) => Enumerable.ToArray(value.Is<IEnumerable>().Cast<object>());
-
-	private static bool Are(this object[] values, object[] expected)
+	internal static bool IsInTolerance<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T>
 	{
-		if (values.Length == expected.Length)
-			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
+		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
+			return true;
 
-		throw new IsNotException(values.Actually("are not", expected));
+		throw new IsNotException(actual.Actually("is not close enough to", expected));
 	}
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
@@ -286,12 +304,16 @@ internal static class InternalExtensions
 			_ => false
 		};
 
-	private static bool IsInTolerance<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T>
-	{
-		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
-			return true;
+	private static bool IsEnumerable(this object value) => value is IEnumerable and not string;
 
-		throw new IsNotException(actual.Actually("is not close enough to", expected));
+	private static object[] ToArray(this object value) => Enumerable.ToArray(value.Is<IEnumerable>().Cast<object>());
+
+	private static bool Are(this object[] values, object[] expected)
+	{
+		if (values.Length == expected.Length)
+			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
+
+		throw new IsNotException(values.Actually("are not", expected));
 	}
 }
 

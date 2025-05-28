@@ -231,15 +231,16 @@ public class Tests
 
 	[Test]
 	[TestCase(1.000001, 1.0)]
-	[TestCase(2.999999f, 3f)]
+	[TestCase(2.999999, 3)]
 	[TestCase(1000000.1, 1000000.0)]
 	[TestCase(1_000_000.0, 1_000_001.0)]
 	[TestCase(783.0123, 783.0124)]
 	[TestCase(1.0 / 3.0, 0.333333)]
 	[TestCase(0.1 + 0.2, 0.3)]
-	public void IsCloseTo_Actual_Expected(object actual, object expected)
+	public void IsCloseTo_Actual_Expected(double actual, double expected)
 	{
 		actual.Is(expected);
+		actual.IsApproximately(expected);
 
 		Action action = () => actual.IsExactly(expected);
 		action.IsThrowing<IsNotException>().Message.Contains("is not").IsTrue();
