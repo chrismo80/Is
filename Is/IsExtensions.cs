@@ -113,7 +113,7 @@ public static class IsExtensions
 	}
 }
 
-public static class OptionalExtensions
+public static class DerivedExtensions
 {
 	/// <summary>
 	/// Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/>
