@@ -232,13 +232,13 @@ file static class MessageExtensions
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
 	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format().Color(1), "actually " + equality, expected.Format().Color(2));
+		CreateMessage(actual.Format().Color(31), "actually " + equality, expected.Format().Color(32));
 
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
 	internal static string? Color<T>(this T text, int color) =>
-		ColorSupport ? "\x1b[3" + color + "m" + text + "\x1b[0m" : text?.ToString();
+		ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
 
 	private static string FormatValue(this object? value) =>
 		value switch
@@ -263,20 +263,17 @@ file static class MessageExtensions
 file static class CallStackExtensions
 {
 	internal static string AddCodeLine(this string text) =>
-		"\n\n" + text + "\n\n" + FindFrame()?.CodeLine().Color(3)?.AddLines();
+		"\n" + text + "\n" + FindFrame()?.CodeLine() + "\n";
 
 	private static StackFrame? FindFrame() =>
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
 
 	private static bool IsOtherNamespace(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsNotException).Namespace;
+		frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsExtensions).Namespace;
 
-	private static string CodeLine(this StackFrame frame) =>
-		"in " + frame.GetMethod()?.DeclaringType + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
+	private static string CodeLine(this StackFrame frame) => "in " +
+		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
-	private static string GetLine(this string? fileName, int lineNumber) => fileName == null ? ""
-		: " in line " + lineNumber + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim();
-
-	private static string AddLines(this string line) =>
-		line + "\n" + string.Concat(Enumerable.Range(0, line.Length).Select(_ => "‾"));
+	private static string GetLine(this string fileName, int lineNumber) => " in line " +
+		lineNumber.Color(1) + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim().Color(33);
 }

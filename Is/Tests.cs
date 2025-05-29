@@ -288,8 +288,9 @@ public class Tests
 	[TestCase(0.1 + 0.2, 0.3)]
 	public void IsCloseTo_Actual_Expected(double actual, double expected)
 	{
-		actual.Is(expected);
 		actual.IsApproximately(expected);
+		actual.Is(expected);
+
 		((float)actual).IsApproximately((float)expected);
 
 		Action action = () => actual.IsExactly(expected);
