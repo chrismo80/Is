@@ -121,7 +121,15 @@ groups[2].Value.Is("world");  // ✅ passes
 
 "hello world".IsContaining("hello");    // ✅ passes
 ```
-  
+
+## ❌ Error messages
+
+Exception messages
+- uses colors to highlight important parts
+- displays the source of the error (line number and code)
+
+![plot](ErrorMessage.png)
+
 
 ## ⚖️ Design Philosophy
 
