@@ -109,7 +109,7 @@ Action action = () => _ = DivideByZero(1);
 action.IsThrowing<DivideByZeroException>();  // ✅ passes
 
 Action action = () => 5.IsGreaterThan(6);
-action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();    // ✅ passes
+action.IsThrowing<IsNotException>("is not greater than");    // ✅ passes
 ```
 
 
