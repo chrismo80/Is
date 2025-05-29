@@ -161,9 +161,6 @@ public static class DerivedExtensions
 		actual.IsApproximately(expected, T.CreateChecked(1e-6));
 }
 
-public class IsNotException(string message) : Exception(message.AddCodeLine())
-{ }
-
 file static class InternalExtensions
 {
 	internal static bool ShouldBe(this object actual, object[]? expected) =>
@@ -226,6 +223,9 @@ file static class InternalExtensions
 		throw new IsNotException(values.Actually("are not", expected));
 	}
 }
+
+public class IsNotException(string message) : Exception(message.AddCodeLine())
+{ }
 
 file static class MessageExtensions
 {
