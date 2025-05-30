@@ -72,6 +72,11 @@ public static class IsExtensions
 	public static bool IsContaining(this string actual, string expected) =>
 		actual.Contains(expected).ThrowIf(actual, "is not containing", expected);
 
+	/// <summary>Asserts that the <paramref name="actual"/> floating point is approximately equal to <paramref name="expected"/>.</summary>
+	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint"/>.</typeparam>
+	public static bool IsApproximately<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
+		actual.IsNear(expected, epsilon).ThrowIf(actual, "is not close enough to", expected);
+
 	/// <summary>Asserts that the <paramref name="actual"/> string matches the specified <paramref name="pattern"/> regular expression.</summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	public static GroupCollection IsMatching(this string actual, string pattern)
@@ -80,16 +85,6 @@ public static class IsExtensions
 			return match.Groups;
 
 		throw new IsNotException(actual.Actually("does not match", pattern));
-	}
-
-	/// <summary>Asserts that the <paramref name="actual"/> floating point is approximately equal to <paramref name="expected"/>.</summary>
-	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint"/>.</typeparam>
-	public static bool IsApproximately<T>(this T actual, T expected, T epsilon)  where T : IFloatingPoint<T>
-	{
-		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
-			return true;
-
-		throw new IsNotException(actual.Actually("is not close enough to", expected));
 	}
 }
 
@@ -157,6 +152,9 @@ file static class InternalExtensions
 
 		throw new IsNotException(actual.Actually(text, expected));
 	}
+
+	internal static bool IsNear<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
+		T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected));
 
 	private static bool IsEqualTo<T>(this T? actual, T? expected)
 	{
@@ -245,6 +243,6 @@ file static class CallStackExtensions
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
-	private static string GetLine(this string fileName, int lineNumber) => " in line " +
-		lineNumber.Color(1) + ": " + File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim().Color(33);
+	private static string GetLine(this string fileName, int lineNumber) => " in line " + lineNumber.Color(1) + ": " +
+		File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim().Color(33);
 }
