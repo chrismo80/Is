@@ -62,6 +62,10 @@ public static class Assertions
 	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected) =>
 		expected.All(actual.Contains).ThrowIf(actual, "is not containing", expected);
 
+	/// <summary>Asserts that all elements in the <paramref name="actual"/> collection are present in the <paramref name="expected"/> collection.</summary>
+	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected) =>
+		actual.All(expected.Contains).ThrowIf(actual, "is not in", expected);
+
 	/// <summary>Asserts that the <paramref name="actual"/> string contains the specified <paramref name="expected"/> substring.</summary>
 	public static bool IsContaining(this string actual, string expected) =>
 		actual.Contains(expected).ThrowIf(actual, "is not containing", expected);
@@ -88,10 +92,6 @@ public static class Assertions
 	/// <summary>Asserts that the given asynchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/> and that the exception message contains the specified <paramref name="message"/> substring.</summary>
 	public static bool IsThrowing<T>(this Func<Task> action, string message) where T : Exception =>
 		action.IsThrowing<T>().Message.IsContaining(message);
-
-	/// <summary>Asserts that all elements in the <paramref name="actual"/> collection are present in the <paramref name="expected"/> collection.</summary>
-	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected) =>
-		expected.IsContaining(actual.ToArray());
 
 	/// <summary>Asserts that the <paramref name="actual"/> value is between <paramref name="min"/> and <paramref name="max"/> exclusive bounds.</summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
