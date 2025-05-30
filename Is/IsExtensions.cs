@@ -52,7 +52,7 @@ public static class IsExtensions
 	/// Asserts that the actual object is equal to the expected value. (no array unwrapping, exact match for floating points)
 	/// </summary>
 	public static bool IsExactly<T>(this T actual, T expected) =>
-		actual.IsExactlyEqualTo(expected).ThrowIf(actual, "is not exactly", expected);
+		actual.IsExactlyEqualTo(expected).ThrowIf(actual, "is not", expected);
 
 	/// <summary>Asserts that the sequence is empty.</summary>
 	public static bool IsEmpty<T>(this IEnumerable<T> actual)
@@ -237,7 +237,7 @@ file static class MessageExtensions
 	internal static string Actually(this object? actual, string equality) =>
 		CreateMessage(actual.Format().Color(31), "actually " + equality);
 
-	internal static string Format(this object? value) =>
+	private static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
 	internal static string? Color<T>(this T text, int color) =>
@@ -256,10 +256,10 @@ file static class MessageExtensions
 	private static string FormatType(this object? value) =>
 		value is null or Type ? "" : $" ({value.GetType()})";
 
-	private static string Join(this IEnumerable<string> items, string start, string separator, string end) =>
+	private static string Join(this IEnumerable<string?> items, string start, string separator, string end) =>
 		start + string.Join(separator, items) + end;
 
-	private static string CreateMessage(params string[] content) =>
+	private static string CreateMessage(params string?[] content) =>
 		content.Join("\n\t", "\n\n\t", "\n");
 }
 
