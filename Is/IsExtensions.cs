@@ -16,7 +16,7 @@ public static class IsExtensions
 		try { action(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new IsNotException($"\n{typeof(T).Color(1)}\nactually was not thrown");
+		throw new IsNotException(typeof(T).Actually("was not thrown"));
 	}
 
 	/// <summary>
@@ -28,7 +28,7 @@ public static class IsExtensions
 		try { action().GetAwaiter().GetResult(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new IsNotException($"\n{typeof(T).Color(1)}\nactually was not thrown");
+		throw new IsNotException(typeof(T).Actually("was not thrown"));
 	}
 
 	/// <summary>
@@ -60,7 +60,7 @@ public static class IsExtensions
 		if (!actual.Any())
 			return true;
 
-		throw new IsNotException($"\n{actual.Format().Color(1)}\nactually is not empty");
+		throw new IsNotException(actual.Actually("is not empty"));
 	}
 
 	/// <summary>
@@ -233,6 +233,9 @@ file static class MessageExtensions
 
 	internal static string Actually(this object? actual, string equality, object? expected) =>
 		CreateMessage(actual.Format().Color(31), "actually " + equality, expected.Format().Color(32));
+
+	internal static string Actually(this object? actual, string equality) =>
+		CreateMessage(actual.Format().Color(31), "actually " + equality);
 
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
