@@ -9,6 +9,7 @@ public class NotException : Exception
 	public NotException(object? actual, string equality, object? expected)
 		: base(actual.Actually(equality, expected).AddCodeLine())
 	{ }
+	
 	public NotException(object? actual, string equality)
 		: base(actual.Actually(equality).AddCodeLine())
 	{ }

@@ -195,6 +195,22 @@ public class Assertions
 		new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);
 	}
 
+
+	[Test]
+	public void IsUnordered()
+	{
+		List<int> list1 = [1, 2, 3, 4];
+		List<int> list2 = [3, 2, 4, 1];
+		List<int> list3 = [3, 5, 4, 1];
+
+		list1.IsUnordered(list2);
+		list2.IsUnordered(list1);
+
+		Action action = () => list2.IsUnordered(list3);
+
+		action.IsThrowing<NotException>();
+	}
+
 	[Test]
 	public void Is_ValueNotEqualsList_Throwing()
 	{
@@ -288,6 +304,7 @@ public class Assertions
 	[TestCase(0.1 + 0.2, 0.3)]
 	public void IsCloseTo_Actual_Expected(double actual, double expected)
 	{
+		actual.IsApproximately(expected, 1e-4);
 		actual.IsApproximately(expected);
 		actual.Is(expected);
 
