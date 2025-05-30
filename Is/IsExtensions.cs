@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Collections;
 using System.Numerics;
-using System.Diagnostics;
 
 namespace Is;
 
@@ -14,7 +13,7 @@ public static class IsExtensions
 		try { action(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new NotException(typeof(T).Actually("was not thrown"));
+		throw new NotException(typeof(T), "was not thrown");
 	}
 
 	/// <summary>Asserts that the given async <paramref name="action" /> throws an exception of type <typeparamref name="T" />.</summary>
@@ -24,7 +23,7 @@ public static class IsExtensions
 		try { action().GetAwaiter().GetResult(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new NotException(typeof(T).Actually("was not thrown"));
+		throw new NotException(typeof(T), "was not thrown");
 	}
 
 	/// <summary>Asserts that the actual object is of type <typeparamref name="T" />.</summary>
@@ -34,7 +33,7 @@ public static class IsExtensions
 		if (actual is T cast)
 			return cast;
 
-		throw new NotException(actual.Actually("is no", typeof(T)));
+		throw new NotException(actual, "is no", typeof(T));
 	}
 
 	/// <summary>Asserts that the actual object matches the expected value(s). (array unwrapping, approximately for floating points)</summary>
@@ -79,12 +78,9 @@ public static class IsExtensions
 		if (Regex.Match(actual, pattern) is { Success: true } match)
 			return match.Groups;
 
-		throw new NotException(actual.Actually("does not match", pattern));
+		throw new NotException(actual, "does not match", pattern);
 	}
-}
 
-public static class DerivedExtensions
-{
 	/// <summary>Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/> and that the exception message contains the specified <paramref name="message"/> substring.</summary>
 	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
 		action.IsThrowing<T>().Message.IsContaining(message);
@@ -145,7 +141,7 @@ file static class InternalExtensions
 		if (condition)
 			return true;
 
-		throw new NotException(actual.Actually(text, expected));
+		throw new NotException(actual, text, expected);
 	}
 
 	internal static bool ThrowIf(this bool condition, object? actual, string text)
@@ -153,7 +149,7 @@ file static class InternalExtensions
 		if (condition)
 			return true;
 
-		throw new NotException(actual.Actually(text));
+		throw new NotException(actual, text);
 	}
 
 	internal static bool IsNear<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
@@ -167,7 +163,7 @@ file static class InternalExtensions
 		if (actual.IsCloseTo(expected))
 			return true;
 
-		throw new NotException(actual.Actually("is not", expected));
+		throw new NotException(actual, "is not", expected);
 	}
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
@@ -189,63 +185,6 @@ file static class InternalExtensions
 		if (values.Length == expected.Length)
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
 
-		throw new NotException(values.Actually("are not", expected));
+		throw new NotException(values, "are not", expected);
 	}
-}
-
-public class NotException(string message) : Exception(message.AddCodeLine())
-{ }
-
-file static class MessageExtensions
-{
-	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
-
-	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format().Color(31), "actually " + equality, expected.Format().Color(32));
-
-	internal static string Actually(this object? actual, string equality) =>
-		CreateMessage(actual.Format().Color(31), "actually " + equality);
-
-	private static string Format(this object? value) =>
-		value.FormatValue() + value.FormatType();
-
-	internal static string? Color<T>(this T text, int color) =>
-		ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
-
-	private static string FormatValue(this object? value) =>
-		value switch
-		{
-			null => "<NULL>",
-			string => $"\"{value}\"",
-			IEnumerable list => list.Cast<object>().Select(x => x.FormatValue()).Join("[", "|", "]"),
-			Exception ex => ex.Message,
-			_ => $"{value}"
-		};
-
-	private static string FormatType(this object? value) =>
-		value is null or Type ? "" : $" ({value.GetType()})";
-
-	private static string Join(this IEnumerable<string?> items, string start, string separator, string end) =>
-		start + string.Join(separator, items) + end;
-
-	private static string CreateMessage(params string?[] content) =>
-		content.Join("\n\t", "\n\n\t", "\n");
-}
-
-file static class CallStackExtensions
-{
-	internal static string AddCodeLine(this string text) =>
-		"\n" + text + "\n" + FindFrame()?.CodeLine() + "\n";
-
-	private static StackFrame? FindFrame() =>
-		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
-
-	private static bool IsOtherNamespace(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsExtensions).Namespace;
-
-	private static string CodeLine(this StackFrame frame) => "in " +
-		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
-
-	private static string GetLine(this string fileName, int lineNumber) => " in line " + lineNumber.Color(1) + ": " +
-		File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim().Color(33);
 }
