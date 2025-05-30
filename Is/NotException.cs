@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 
 namespace Is;
@@ -51,6 +52,8 @@ file static class MessageExtensions
 
 file static class CallStackExtensions
 {
+	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
+
 	internal static string AddCodeLine(this string text) =>
 		"\n" + text + "\n" + FindFrame()?.CodeLine() + "\n";
 
@@ -64,5 +67,5 @@ file static class CallStackExtensions
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
 	private static string GetLine(this string fileName, int lineNumber) => " in line " + lineNumber.Color(1) + ": " +
-		File.ReadLines(fileName).Skip(lineNumber - 1).FirstOrDefault()?.Trim().Color(33);
+		SourceCache.GetOrAdd(fileName, File.ReadAllLines)[lineNumber - 1].Trim().Color(33);
 }
