@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Is;
 
-public static class IsExtensions
+public static class Assertions
 {
 	/// <summary>Asserts that the given <paramref name="action" /> throws an exception of type <typeparamref name="T" />.</summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
@@ -67,7 +67,7 @@ public static class IsExtensions
 		actual.Contains(expected).ThrowIf(actual, "is not containing", expected);
 
 	/// <summary>Asserts that the <paramref name="actual"/> floating point is approximately equal to <paramref name="expected"/>.</summary>
-	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint"/>.</typeparam>
+	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	public static bool IsApproximately<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
 		actual.IsNear(expected, epsilon).ThrowIf(actual, "is not close enough to", expected);
 
@@ -115,7 +115,7 @@ public static class IsExtensions
 		actual.IsApproximately(expected, T.CreateChecked(1e-6));
 }
 
-file static class InternalExtensions
+file static class Internals
 {
 	internal static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch

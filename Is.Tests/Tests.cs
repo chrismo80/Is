@@ -1,6 +1,6 @@
 namespace Is.Tests;
 
-public class Tests
+public class Assertions
 {
 	private static int DivideByZero(int value) => value / 0;
 

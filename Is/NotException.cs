@@ -58,7 +58,7 @@ file static class CallStackExtensions
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
 
 	private static bool IsOtherNamespace(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Namespace != typeof(IsExtensions).Namespace;
+		frame.GetMethod()?.DeclaringType?.Namespace != typeof(Assertions).Namespace;
 
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
