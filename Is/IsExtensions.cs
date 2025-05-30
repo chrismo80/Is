@@ -46,13 +46,8 @@ public static class IsExtensions
 		actual.IsExactlyEqualTo(expected).ThrowIf(actual, "is not", expected);
 
 	/// <summary>Asserts that the sequence is empty.</summary>
-	public static bool IsEmpty<T>(this IEnumerable<T> actual)
-	{
-		if (!actual.Any())
-			return true;
-
-		throw new IsNotException(actual.Actually("is not empty"));
-	}
+	public static bool IsEmpty<T>(this IEnumerable<T> actual) =>
+		(!actual.Any()).ThrowIf(actual, "is not empty");
 
 	/// <summary>Asserts that the actual value is greater than the given <paramref name="other" /> value.</summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
@@ -151,6 +146,14 @@ file static class InternalExtensions
 			return true;
 
 		throw new IsNotException(actual.Actually(text, expected));
+	}
+
+	internal static bool ThrowIf(this bool condition, object? actual, string text)
+	{
+		if (condition)
+			return true;
+
+		throw new IsNotException(actual.Actually(text));
 	}
 
 	internal static bool IsNear<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
