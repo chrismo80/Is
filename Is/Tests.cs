@@ -29,7 +29,7 @@ public class Tests
 		var action = () => Task.Delay(10).Wait();
 		Action outerAction = () => action.IsThrowing<DivideByZeroException>();
 
-		outerAction.IsThrowing<IsNotException>("not thrown");
+		outerAction.IsThrowing<NotException>("not thrown");
 	}
 
 	[Test]
@@ -52,7 +52,7 @@ public class Tests
 		var action = () => Task.Delay(10);
 		Action outerAction = () => action.IsThrowing<DivideByZeroException>();
 
-		outerAction.IsThrowing<IsNotException>("not thrown");
+		outerAction.IsThrowing<NotException>("not thrown");
 	}
 
 	[Test]
@@ -64,14 +64,14 @@ public class Tests
 		5.Is<int>();
 
 		Action action = () => "hello".Is<int>();;
-		action.IsThrowing<IsNotException>();
+		action.IsThrowing<NotException>();
 	}
 
 	[Test]
 	public void Is_Type_Throwing()
 	{
 		Action action = () => new List<int>().Is<IReadOnlyList<double>>();
-		action.IsThrowing<IsNotException>();
+		action.IsThrowing<NotException>();
 	}
 
 	[Test]
@@ -103,8 +103,8 @@ public class Tests
 	[TestCase("ABC", "ABD")]
 	public void IsExactly_ActualNotEqualsExpected_Throwing(object? actual, object? expected)
 	{
-		((Action)(() => actual.IsExactly(expected))).IsThrowing<IsNotException>();
-		((Action)(() => actual.Is(expected))).IsThrowing<IsNotException>();
+		((Action)(() => actual.IsExactly(expected))).IsThrowing<NotException>();
+		((Action)(() => actual.Is(expected))).IsThrowing<NotException>();
 	}
 
 	[Test]
@@ -118,7 +118,7 @@ public class Tests
 		array.Where(i => i % 2 == 0).Is(2, 4);
 
 		Action action = () => new List<int> { 1, 2, 3, 5 }.Is(new List<int> { 1, 2, 3, 4 });
-		action.IsThrowing<IsNotException>("is not");
+		action.IsThrowing<NotException>("is not");
 	}
 
 	[Test]
@@ -132,7 +132,7 @@ public class Tests
 		list.Where(i => i % 2 == 0).Is(2, 4);
 
 		Action action = () => new List<int?> { 1, 2, null, 4 }.Is(new List<int?> { 1, 2, 3, 4 });
-		action.IsThrowing<IsNotException>();
+		action.IsThrowing<NotException>();
 
 	}
 
@@ -144,21 +144,21 @@ public class Tests
 		new List<object> { 1, 2 }.Is(new List<object> { 1, new List<object> { 2 } });
 
 		Action action = () => new List<object> { 1, 2 }.IsExactly(new List<object> { 1, new List<object> { 2 } });
-		action.IsThrowing<IsNotException>();
+		action.IsThrowing<NotException>();
 	}
 
 	[Test]
 	public void Is_IEnumerable_TooShort()
 	{
 		Action action = () => new List<int> { 1, 2, 3, 5 }.Where(i => i % 2 == 0).Is(2, 4);
-		action.IsThrowing<IsNotException>("are not");
+		action.IsThrowing<NotException>("are not");
 	}
 
 	[Test]
 	public void Is_IEnumerable_TooLong()
 	{
 		Action action = () => new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4);
-		action.IsThrowing<IsNotException>("are not");
+		action.IsThrowing<NotException>("are not");
 	}
 
 	[Test]
@@ -184,7 +184,7 @@ public class Tests
 		groups[2].Value.Is("world");
 
 		Action action = () => "hello".IsMatching("world");
-		action.IsThrowing<IsNotException>("IsMatching");
+		action.IsThrowing<NotException>("IsMatching");
 	}
 
 	[Test]
@@ -200,7 +200,7 @@ public class Tests
 	{
 		Action action = () => 5.Is(new List<int> { 1, 2 });
 
-		action.IsThrowing<IsNotException>();
+		action.IsThrowing<NotException>();
 	}
 
 	[Test]
@@ -215,7 +215,7 @@ public class Tests
 		expected.IsGreaterThan(actual);
 
 		Action action = () => actual.IsGreaterThan(expected);
-		action.IsThrowing<IsNotException>().Message.Contains("is not greater than").IsTrue();
+		action.IsThrowing<NotException>().Message.Contains("is not greater than").IsTrue();
 	}
 
 	[Test]
@@ -259,8 +259,8 @@ public class Tests
 		true.IsTrue();
 		false.IsFalse();
 
-		((Action)(() => true.IsFalse())).IsThrowing<IsNotException>("is not");
-		((Action)(() => false.IsTrue())).IsThrowing<IsNotException>("is not");
+		((Action)(() => true.IsFalse())).IsThrowing<NotException>("is not");
+		((Action)(() => false.IsTrue())).IsThrowing<NotException>("is not");
 	}
 
 	[Test]
@@ -268,7 +268,7 @@ public class Tests
 	{
 		new List<int>().IsEmpty();
 
-		((Action)(() => new List<int> {1, 2}.IsEmpty())).IsThrowing<IsNotException>("is not");
+		((Action)(() => new List<int> {1, 2}.IsEmpty())).IsThrowing<NotException>("is not");
 	}
 
 	[Test]
@@ -294,6 +294,6 @@ public class Tests
 		((float)actual).IsApproximately((float)expected);
 
 		Action action = () => actual.IsExactly(expected);
-		action.IsThrowing<IsNotException>().Message.Contains("is not").IsTrue();
+		action.IsThrowing<NotException>().Message.Contains("is not").IsTrue();
 	}
 }

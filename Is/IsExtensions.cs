@@ -14,7 +14,7 @@ public static class IsExtensions
 		try { action(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new IsNotException(typeof(T).Actually("was not thrown"));
+		throw new NotException(typeof(T).Actually("was not thrown"));
 	}
 
 	/// <summary>Asserts that the given async <paramref name="action" /> throws an exception of type <typeparamref name="T" />.</summary>
@@ -24,7 +24,7 @@ public static class IsExtensions
 		try { action().GetAwaiter().GetResult(); }
 		catch (Exception ex) { return ex.Is<T>(); }
 
-		throw new IsNotException(typeof(T).Actually("was not thrown"));
+		throw new NotException(typeof(T).Actually("was not thrown"));
 	}
 
 	/// <summary>Asserts that the actual object is of type <typeparamref name="T" />.</summary>
@@ -34,7 +34,7 @@ public static class IsExtensions
 		if (actual is T cast)
 			return cast;
 
-		throw new IsNotException(actual.Actually("is no", typeof(T)));
+		throw new NotException(actual.Actually("is no", typeof(T)));
 	}
 
 	/// <summary>Asserts that the actual object matches the expected value(s). (array unwrapping, approximately for floating points)</summary>
@@ -79,7 +79,7 @@ public static class IsExtensions
 		if (Regex.Match(actual, pattern) is { Success: true } match)
 			return match.Groups;
 
-		throw new IsNotException(actual.Actually("does not match", pattern));
+		throw new NotException(actual.Actually("does not match", pattern));
 	}
 }
 
@@ -145,7 +145,7 @@ file static class InternalExtensions
 		if (condition)
 			return true;
 
-		throw new IsNotException(actual.Actually(text, expected));
+		throw new NotException(actual.Actually(text, expected));
 	}
 
 	internal static bool ThrowIf(this bool condition, object? actual, string text)
@@ -153,7 +153,7 @@ file static class InternalExtensions
 		if (condition)
 			return true;
 
-		throw new IsNotException(actual.Actually(text));
+		throw new NotException(actual.Actually(text));
 	}
 
 	internal static bool IsNear<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
@@ -167,7 +167,7 @@ file static class InternalExtensions
 		if (actual.IsCloseTo(expected))
 			return true;
 
-		throw new IsNotException(actual.Actually("is not", expected));
+		throw new NotException(actual.Actually("is not", expected));
 	}
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
@@ -189,11 +189,11 @@ file static class InternalExtensions
 		if (values.Length == expected.Length)
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
 
-		throw new IsNotException(values.Actually("are not", expected));
+		throw new NotException(values.Actually("are not", expected));
 	}
 }
 
-public class IsNotException(string message) : Exception(message.AddCodeLine())
+public class NotException(string message) : Exception(message.AddCodeLine())
 { }
 
 file static class MessageExtensions
