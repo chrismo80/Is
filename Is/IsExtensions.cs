@@ -7,9 +7,7 @@ namespace Is;
 
 public static class IsExtensions
 {
-	/// <summary>
-	/// Asserts that the given <paramref name="action" /> throws an exception of type <typeparamref name="T" />.
-	/// </summary>
+	/// <summary>Asserts that the given <paramref name="action" /> throws an exception of type <typeparamref name="T" />.</summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	public static T IsThrowing<T>(this Action action) where T : Exception
 	{
@@ -19,9 +17,7 @@ public static class IsExtensions
 		throw new IsNotException(typeof(T).Actually("was not thrown"));
 	}
 
-	/// <summary>
-	/// Asserts that the given async <paramref name="action" /> throws an exception of type <typeparamref name="T" />.
-	/// </summary>
+	/// <summary>Asserts that the given async <paramref name="action" /> throws an exception of type <typeparamref name="T" />.</summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	public static T IsThrowing<T>(this Func<Task> action) where T : Exception
 	{
@@ -31,9 +27,8 @@ public static class IsExtensions
 		throw new IsNotException(typeof(T).Actually("was not thrown"));
 	}
 
-	/// <summary>
-	/// Asserts that the actual object is of type <typeparamref name="T" /> and returns its cast.
-	/// </summary>
+	/// <summary>Asserts that the actual object is of type <typeparamref name="T" />.</summary>
+	/// <returns>The cast object to the type <typeparamref name="T" />.</returns>
 	public static T Is<T>(this object actual)
 	{
 		if (actual is T cast)
@@ -42,15 +37,11 @@ public static class IsExtensions
 		throw new IsNotException(actual.Actually("is no", typeof(T)));
 	}
 
-	/// <summary>
-	/// Asserts that the actual object matches the expected value(s). (array unwrapping, approximately for floating points)
-	/// </summary>
+	/// <summary>Asserts that the actual object matches the expected value(s). (array unwrapping, approximately for floating points)</summary>
 	public static bool Is(this object actual, params object[]? expected) =>
 		actual.ShouldBe(expected?.Unwrap());
 
-	/// <summary>
-	/// Asserts that the actual object is equal to the expected value. (no array unwrapping, exact match for floating points)
-	/// </summary>
+	/// <summary>Asserts that the actual object is equal to the expected value. (no array unwrapping, exact match for floating points)</summary>
 	public static bool IsExactly<T>(this T actual, T expected) =>
 		actual.IsExactlyEqualTo(expected).ThrowIf(actual, "is not", expected);
 
@@ -63,35 +54,25 @@ public static class IsExtensions
 		throw new IsNotException(actual.Actually("is not empty"));
 	}
 
-	/// <summary>
-	/// Asserts that the actual value is greater than the given <paramref name="other" /> value.
-	/// </summary>
+	/// <summary>Asserts that the actual value is greater than the given <paramref name="other" /> value.</summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> =>
 		(actual.CompareTo(other) > 0).ThrowIf(actual, "is not greater than", other);
 
-	/// <summary>
-	/// Asserts that the actual value is smaller than the given <paramref name="other" /> value.
-	/// </summary>
+	/// <summary>Asserts that the actual value is smaller than the given <paramref name="other" /> value.</summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> =>
 		(actual.CompareTo(other) < 0).ThrowIf(actual, "is not smaller than", other);
 
-	/// <summary>
-	/// Asserts that the <paramref name="actual"/> sequence contains all the specified <paramref name="expected"/> elements.
-	/// </summary>
+	/// <summary>Asserts that the <paramref name="actual"/> sequence contains all the specified <paramref name="expected"/> elements.</summary>
 	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected) =>
 		expected.All(actual.Contains).ThrowIf(actual, "is not containing", expected);
 
-	/// <summary>
-	/// Asserts that the <paramref name="actual"/> string contains the specified <paramref name="expected"/> substring.
-	/// </summary>
+	/// <summary>Asserts that the <paramref name="actual"/> string contains the specified <paramref name="expected"/> substring.</summary>
 	public static bool IsContaining(this string actual, string expected) =>
 		actual.Contains(expected).ThrowIf(actual, "is not containing", expected);
 
-	/// <summary>
-	/// Asserts that the <paramref name="actual"/> string matches the specified <paramref name="pattern"/> regular expression.
-	/// </summary>
+	/// <summary>Asserts that the <paramref name="actual"/> string matches the specified <paramref name="pattern"/> regular expression.</summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	public static GroupCollection IsMatching(this string actual, string pattern)
 	{
@@ -101,9 +82,8 @@ public static class IsExtensions
 		throw new IsNotException(actual.Actually("does not match", pattern));
 	}
 
-	/// <summary>
-	/// Asserts that the <paramref name="actual"/> floating point is approximately equal to <paramref name="expected"/>.
-	/// </summary>
+	/// <summary>Asserts that the <paramref name="actual"/> floating point is approximately equal to <paramref name="expected"/>.</summary>
+	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint"/>.</typeparam>
 	public static bool IsApproximately<T>(this T actual, T expected, T epsilon)  where T : IFloatingPoint<T>
 	{
 		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
@@ -115,29 +95,19 @@ public static class IsExtensions
 
 public static class DerivedExtensions
 {
-	/// <summary>
-	/// Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/>
-	/// and that the exception message contains the specified <paramref name="message"/> substring.
-	/// </summary>
+	/// <summary>Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/> and that the exception message contains the specified <paramref name="message"/> substring.</summary>
 	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
 		action.IsThrowing<T>().Message.IsContaining(message);
 
-	/// <summary>
-	/// Asserts that the given asynchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/>
-	/// and that the exception message contains the specified <paramref name="message"/> substring.
-	/// </summary>
+	/// <summary>Asserts that the given asynchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/> and that the exception message contains the specified <paramref name="message"/> substring.</summary>
 	public static bool IsThrowing<T>(this Func<Task> action, string message) where T : Exception =>
 		action.IsThrowing<T>().Message.IsContaining(message);
 
-	/// <summary>
-	/// Asserts that all elements in the <paramref name="actual"/> collection are present in the <paramref name="expected"/> collection.
-	/// </summary>
+	/// <summary>Asserts that all elements in the <paramref name="actual"/> collection are present in the <paramref name="expected"/> collection.</summary>
 	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected) =>
 		expected.IsContaining(actual.ToArray());
 
-	/// <summary>
-	/// Asserts that the <paramref name="actual"/> value is between <paramref name="min"/> and <paramref name="max"/> exclusive bounds.
-	/// </summary>
+	/// <summary>Asserts that the <paramref name="actual"/> value is between <paramref name="min"/> and <paramref name="max"/> exclusive bounds.</summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	public static bool IsBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
 		actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
