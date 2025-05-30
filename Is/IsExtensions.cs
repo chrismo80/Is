@@ -136,11 +136,9 @@ public static class DerivedExtensions
 		expected.IsContaining(actual.ToArray());
 
 	/// <summary>
-	/// Asserts that the <paramref name="actual"/> value is strictly between <paramref name="min"/> and <paramref name="max"/>.
+	/// Asserts that the <paramref name="actual"/> value is between <paramref name="min"/> and <paramref name="max"/> exclusive bounds.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
-	/// <param name="min">The lower exclusive bound.</param>
-	/// <param name="max">The upper exclusive bound.</param>
 	public static bool IsBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
 		actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
 
