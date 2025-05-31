@@ -64,7 +64,7 @@ public static class Assertions
 
 	/// <summary>Asserts that all elements in the <paramref name="actual"/> collection are present in the <paramref name="expected"/> collection.</summary>
 	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected) where T : notnull =>
-		expected.CountDiff(actual).All(c => c >= 0).ThrowIf(actual, "is not containing", expected);
+		actual.CountDiff(expected).All(c => c <= 0).ThrowIf(actual, "is not in", expected);
 
 	/// <summary>Asserts that the <paramref name="actual"/> string contains the specified <paramref name="expected"/> substring.</summary>
 	public static bool IsContaining(this string actual, string expected) =>
@@ -88,6 +88,10 @@ public static class Assertions
 	/// <summary>Asserts that the <paramref name="actual"/> sequence matches the <paramref name="expected"/> sequence ignoring item order.</summary>
 	public static bool IsUnordered<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull =>
 		actual.CountDiff(expected).All(c => c == 0).ThrowIf(actual, "is not unordered", expected);
+
+	/// <summary>default epsilon is 1e-6.</summary>
+	public static bool IsApproximately<T>(this T actual, T expected)  where T : IFloatingPoint<T> =>
+		actual.IsApproximately(expected, T.CreateChecked(1e-6));
 
 	/// <summary>Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/> and that the exception message contains the specified <paramref name="message"/> substring.</summary>
 	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
@@ -113,10 +117,6 @@ public static class Assertions
 	/// <summary>Asserts that a boolean value is <c>true</c>.</summary>
 	public static bool IsFalse(this bool actual) =>
 		actual.IsExactly(false);
-
-	/// <summary>default epsilon is 1e-6.</summary>
-	public static bool IsApproximately<T>(this T actual, T expected)  where T : IFloatingPoint<T> =>
-		actual.IsApproximately(expected, T.CreateChecked(1e-6));
 }
 
 file static class Internals
