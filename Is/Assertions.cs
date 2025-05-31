@@ -85,20 +85,15 @@ public static class Assertions
 		throw new NotException(actual, "does not match", pattern);
 	}
 
+	/// <summary>Asserts that the <paramref name="actual"/> sequence matches the <paramref name="expected"/> sequence ignoring item order.</summary>
 	public static bool IsUnordered<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
 	{
 		var counts = new Dictionary<T, int>();
 
-		foreach (var item in actual)
-			counts[item] = counts.GetValueOrDefault(item) + 1;
+		counts.CountItems(expected, 1);
+		counts.CountItems(actual, -1);
 
-		foreach (var item in expected)
-			counts[item] = counts.GetValueOrDefault(item) - 1;
-
-		if (counts.Values.All(c => c == 0))
-			return true;
-
-		throw new NotException(actual, "is not unordered", expected);
+		return counts.Values.All(c => c == 0).ThrowIf(actual, "is not unordered", expected);
 	}
 
 	/// <summary>Asserts that the given synchronous <paramref name="action"/> throws an exception of type <typeparamref name="T"/> and that the exception message contains the specified <paramref name="message"/> substring.</summary>
@@ -170,6 +165,12 @@ file static class Internals
 
 	internal static bool IsNear<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
 		T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected));
+
+	internal static void CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment) where T : notnull
+	{
+		foreach (var item in source)
+			dict[item] = dict.GetValueOrDefault(item) + increment;
+	}
 
 	private static bool IsEqualTo<T>(this T? actual, T? expected)
 	{
