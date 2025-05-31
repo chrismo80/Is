@@ -33,7 +33,7 @@ All public methods in `Is` are:
 | `IsEmpty()`                       | Asserts that the sequence is empty.                                                                                        |
 | `IsGreaterThan(other)`            | Asserts that `actual` is greater than `other`.                                                                             |
 | `IsSmallerThan(other)`            | Asserts that `actual` is smaller than `other`.                                                                             |
-| `IsIn(values)`                    | Asserts that the sequence is in the specified values.                                                                      |
+| `IsEquivalentTo(values)`          | Asserts that the sequence equals the specified values ignoring item order.                                                 |
 | `IsContaining(values)`            | Asserts that the sequence contains all specified values.                                                                   |
 | `IsContaining(substring)`         | Asserts that the string contains the specified substring.                                                                  |
 | `IsMatching(pattern)`             | Asserts that the string matches the given regular expression pattern. Returns the match groups.                            |

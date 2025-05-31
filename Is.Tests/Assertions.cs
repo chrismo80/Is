@@ -197,7 +197,7 @@ public class Assertions
 
 
 	[Test]
-	public void IsUnordered()
+	public void IsEquivalentTo()
 	{
 		List<int> list1 = [1, 2, 3, 4];
 		List<int> list2 = [3, 2, 4, 1];
@@ -205,14 +205,14 @@ public class Assertions
 		List<int> list4 = [1, 2, 3];
 		List<int> list5 = [1, 2, 3, 4, 5];
 
-		list1.IsUnordered(list2);
-		list2.IsUnordered(list1);
+		list1.IsEquivalentTo(list2);
+		list2.IsEquivalentTo(list1);
 
 		var actions = new List<Action>
 		{
-			() => list2.IsUnordered(list3),
-			() => list1.IsUnordered(list4),
-			() => list1.IsUnordered(list5),
+			() => list2.IsEquivalentTo(list3),
+			() => list1.IsEquivalentTo(list4),
+			() => list1.IsEquivalentTo(list5),
 		};
 
 		foreach(var action in actions)

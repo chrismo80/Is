@@ -86,7 +86,7 @@ public static class Assertions
 	}
 
 	/// <summary>Asserts that the <paramref name="actual"/> sequence matches the <paramref name="expected"/> sequence ignoring item order.</summary>
-	public static bool IsUnordered<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull =>
+	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull =>
 		actual.CountDiff(expected).All(c => c == 0).ThrowIf(actual, "is not unordered", expected);
 
 	/// <summary>default epsilon is 1e-6.</summary>
