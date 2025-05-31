@@ -9,7 +9,7 @@ public class NotException : Exception
 	public NotException(object? actual, string equality, object? expected)
 		: base(actual.Actually(equality, expected).AddCodeLine())
 	{ }
-	
+
 	public NotException(object? actual, string equality)
 		: base(actual.Actually(equality).AddCodeLine())
 	{ }
@@ -62,7 +62,7 @@ file static class CallStackExtensions
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
 
 	private static bool IsOtherNamespace(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Namespace != typeof(Assertions).Namespace;
+		frame.GetMethod()?.DeclaringType?.Namespace != typeof(NotException).Namespace;
 
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());

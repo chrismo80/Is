@@ -21,36 +21,82 @@ All public methods in `Is` are:
 - 🔤 **Named consistently**: Every method starts with `Is`, making them easy to discover with IntelliSense
 - ✂️ **Minimal and deliberate**: Only a small, opinionated set of assertions is exposed
 
-| Method                            | Description                                                                                                                                         |
-|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `IsThrowing<T>()`                 | Asserts that the given synchronous action or asynchronous function throws an exception of type `T`. Returns the exception.                          |
-| `IsThrowing<T>(message)`          | Asserts that the synchronous action or asynchronous function throws an exception of type `T` and that the message contains the specified substring. |
-| `Is<T>()`                         | Asserts that the object is of type `T` and returns its cast.                                                                                        |
-| `Is(expected)`                    | Asserts that the object matches one or more expected values.                                                                                        |
-| `IsExactly(expected)`             | Asserts that the object is exactly equal to the expected value.                                                                                     |
-| `IsEmpty()`                       | Asserts that the sequence is empty.                                                                                                                 |
-| `IsGreaterThan(other)`            | Asserts that `actual` is greater than `other`.                                                                                                      |
-| `IsSmallerThan(other)`            | Asserts that `actual` is smaller than `other`.                                                                                                      |
-| `IsEquivalentTo(values)`          | Asserts that the sequence equals the specified values ignoring item order.                                                                          |
-| `IsContaining(values)`            | Asserts that the sequence contains all specified values.                                                                                            |
-| `IsContaining(substring)`         | Asserts that the string contains the specified substring.                                                                                           |
-| `IsMatching(pattern)`             | Asserts that the string matches the given regular expression pattern. Returns the match groups.                                                     |
-| `IsIn(values)`                    | Asserts that all elements in `actual` exist at least once in the provided values.                                                                   |
-| `IsBetween(min, max)`             | Asserts that `actual` is strictly between `min` and `max`.                                                                                          |
-| `IsApproximately(other, epsilon)` | Asserts that two values are approximately equal within a specified tolerance (default epsilon is `1e-6`).                                           |
-| `IsNull()`                        | Asserts that the object is `null`.                                                                                                                  |
-| `IsTrue()`                        | Asserts that a boolean is `true`.                                                                                                                   |
-| `IsFalse()`                       | Asserts that a boolean is `false`.                                                                                                                  |
+## Method Categories
 
-> Although I encourage to only use positive assertions, some basic negative assertions are added to the library for basic use cases.
+### Exception Assertions
+Methods that assert conditions related to exceptions.
 
-| Method                   | Description                                                                  |
-|--------------------------|------------------------------------------------------------------------------|
-| `IsNot<T>()`             | Asserts that the object is not of type `T`.                                  |
-| `IsNot(expected)`        | Asserts that the object does not match the expected value.                   |
-| `IsNotMatching(pattern)` | Asserts that the string does not match the given regular expression pattern. |
-| `IsNotBetween(min, max)` | Asserts that `actual` is strictly not between `min` and `max`.               |
-| `IsNotNull()`            | Asserts that the object is not `null`.                                       |
+| Method | Description |
+|--------|-------------|
+| `IsThrowing<T>(Action action)` | Asserts that the given synchronous action throws an exception of type `T`. Returns the exception. |
+| `IsThrowing<T>(Func<Task> action)` | Asserts that the given asynchronous function throws an exception of type `T`. Returns the exception. |
+| `IsThrowing<T>(Action action, string message)` | Asserts that the given synchronous action throws an exception of type `T` and that the exception message contains the specified substring. |
+| `IsThrowing<T>(Func<Task> action, string message)` | Asserts that the given asynchronous function throws an exception of type `T` and that the exception message contains the specified substring. |
+
+### Type Assertions
+Methods that assert conditions related to the type of an object.
+
+| Method | Description |
+|--------|-------------|
+| `Is<T>(object actual)` | Asserts that the actual object is of type `T`. Returns the cast object to the type `T`. |
+| `IsNot<T>(object actual)` | Asserts that the actual object is not of type `T`. |
+
+### Equality Assertions
+Methods that assert conditions related to equality.
+
+| Method | Description |
+|--------|-------------|
+| `IsExactly<T>(T actual, T expected)` | Asserts that the actual object is exactly equal to the expected value. |
+| `Is(object actual, params object[] expected)` | Asserts that the actual object matches the expected value(s). |
+| `IsNot<T>(T actual, T expected)` | Asserts that the actual value is not equal to the expected value. |
+
+### Collection Assertions
+Methods that assert conditions related to collections and sequences.
+
+| Method | Description |
+|--------|-------------|
+| `IsEmpty<T>(IEnumerable<T> actual)` | Asserts that the sequence is empty. |
+| `IsContaining<T>(IEnumerable<T> actual, params T[] expected)` | Asserts that the sequence contains all the specified elements. |
+| `IsIn<T>(IEnumerable<T> actual, params T[] expected)` | Asserts that all elements in the actual collection are present in the expected collection. |
+| `IsEquivalentTo<T>(IEnumerable<T> actual, IEnumerable<T> expected)` | Asserts that the sequence matches the specified values ignoring item order. |
+
+### Comparison Assertions
+Methods that assert conditions related to comparisons.
+
+| Method | Description |
+|--------|-------------|
+| `IsApproximately<T>(T actual, T expected, T epsilon)` | Asserts that the actual floating point is approximately equal to the expected value within a specified epsilon. |
+| `IsApproximately<T>(T actual, T expected)` | Asserts that the actual floating point is approximately equal to the expected value with a default epsilon of `1e-6`. |
+| `IsGreaterThan<T>(T actual, T other)` | Asserts that the actual value is greater than the given other value. |
+| `IsSmallerThan<T>(T actual, T other)` | Asserts that the actual value is smaller than the given other value. |
+| `IsBetween<T>(T actual, T min, T max)` | Asserts that the actual value is between the specified min and max exclusive bounds. |
+| `IsNotBetween<T>(T actual, T min, T max)` | Asserts that the actual value is not between the specified min and max exclusive bounds. |
+
+### String Assertions
+Methods that assert conditions related to strings.
+
+| Method | Description |
+|--------|-------------|
+| `IsContaining(string actual, string expected)` | Asserts that the actual string contains the specified substring. |
+| `IsMatching(string actual, string pattern)` | Asserts that the actual string matches the specified regular expression pattern. Returns the match groups. |
+| `IsNotMatching(string actual, string pattern)` | Asserts that the actual string does not match the specified regular expression pattern. |
+
+### Boolean Assertions
+Methods that assert conditions related to boolean values.
+
+| Method | Description |
+|--------|-------------|
+| `IsTrue(bool actual)` | Asserts that a boolean value is `true`. |
+| `IsFalse(bool actual)` | Asserts that a boolean value is `false`. |
+
+### Null Assertions
+Methods that assert conditions related to null values.
+
+| Method | Description |
+|--------|-------------|
+| `IsNull(object actual)` | Asserts that an object is `null`. |
+| `IsNotNull(object actual)` | Asserts that an object is not `null`. |
+
 
 > ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
 
