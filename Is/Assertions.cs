@@ -117,6 +117,27 @@ public static class Assertions
 	/// <summary>Asserts that a boolean value is <c>false</c>.</summary>
 	public static bool IsFalse(this bool actual) =>
 		actual.IsExactly(false);
+
+	/// <summary>Asserts that the actual value is not equal to the expected value.</summary>
+	public static bool IsNot<T>(this T actual, T expected) =>
+		(!actual.IsExactlyEqualTo(expected)).ThrowIf(actual, "is", expected);
+
+	/// <summary>Asserts that the object is not <c>null</c>.</summary>
+	public static bool IsNotNull(this object actual) =>
+		(!actual.IsExactlyEqualTo(null)).ThrowIf(actual, "is null");
+
+	/// <summary>Asserts that the actual value is not between the specified <paramref name="min"/> and <paramref name="max"/> exclusive bounds.</summary>
+	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
+	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
+		(actual.CompareTo(max) > 0) || (actual.CompareTo(min) < 0).ThrowIf(actual, $"is between {min} and {max}");
+
+	/// <summary>Asserts that the actual object is not of type <typeparamref name="T"/>.</summary>
+	public static bool IsNot<T>(this object actual) =>
+		(actual is not T).ThrowIf(actual, "is", typeof(T));
+
+	/// <summary>Asserts that the <paramref name="actual"/> string does not match the specified <paramref name="pattern"/> regular expression.</summary>
+	public static bool IsNotMatching(this string actual, string pattern) =>
+		(!Regex.Match(actual, pattern).Success).ThrowIf(actual, "is matching", pattern);
 }
 
 file static class Internals

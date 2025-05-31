@@ -56,20 +56,24 @@ public class Assertions
 	}
 
 	[Test]
-	public void Is_Type_NotThrowing()
+	public void Is_Type()
 	{
 		new List<int>().Is<IReadOnlyList<int>>();
 		"hello".Is<string>();
 		5.5.Is<double>();
 		5.Is<int>();
 
-		Action action = () => "hello".Is<int>();;
+		Action action = () => "hello".Is<int>();
 		action.IsThrowing<NotException>();
+
+		"hello".IsNot<int>();
 	}
 
 	[Test]
-	public void Is_Type_Throwing()
+	public void Is_NotType()
 	{
+		new List<int>().IsNot<IReadOnlyList<double>>();
+
 		Action action = () => new List<int>().Is<IReadOnlyList<double>>();
 		action.IsThrowing<NotException>();
 	}
@@ -89,8 +93,8 @@ public class Assertions
 	}
 
 	[Test]
-	[TestCase(null, true)]
-	[TestCase(null, false)]
+	[TestCase(true, null)]
+	[TestCase(false, null)]
 	[TestCase(true, false)]
 	[TestCase(5, null)]
 	[TestCase(6, 6d)]
@@ -103,6 +107,9 @@ public class Assertions
 	[TestCase("ABC", "ABD")]
 	public void IsExactly_ActualNotEqualsExpected_Throwing(object? actual, object? expected)
 	{
+		actual.IsNot(expected);
+		actual.IsNotNull();
+
 		((Action)(() => actual.IsExactly(expected))).IsThrowing<NotException>();
 		((Action)(() => actual.Is(expected))).IsThrowing<NotException>();
 	}
@@ -183,6 +190,8 @@ public class Assertions
 		groups[1].Value.Is("hello");
 		groups[2].Value.Is("world");
 
+		"hello".IsNotMatching("world");
+
 		Action action = () => "hello".IsMatching("world");
 		action.IsThrowing<NotException>("IsMatching");
 	}
@@ -249,6 +258,9 @@ public class Assertions
 	public void IsBetween_NotThrowing<T>(T min, T actual, T max) where T : IComparable<T>
 	{
 		actual.IsBetween(min, max);
+
+		min.IsNotBetween(actual, max);
+		max.IsNotBetween(actual, min);
 	}
 
 	[Test]
