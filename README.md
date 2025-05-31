@@ -42,6 +42,16 @@ All public methods in `Is` are:
 | `IsTrue()`                        | Asserts that a boolean is `true`.                                                                                                                   |
 | `IsFalse()`                       | Asserts that a boolean is `false`.                                                                                                                  |
 
+> Although I encourage to only use positive assertions, some basic negative assertions are added to the library for basic use cases.
+
+| Method                   | Description                                                                  |
+|--------------------------|------------------------------------------------------------------------------|
+| `IsNot<T>()`             | Asserts that the object is not of type `T`.                                  |
+| `IsNot(expected)`        | Asserts that the object does not match the expected value.                   |
+| `IsNotMatching(pattern)` | Asserts that the string does not match the given regular expression pattern. |
+| `IsNotBetween(min, max)` | Asserts that `actual` is strictly not between `min` and `max`.               |
+| `IsNotNull()`            | Asserts that the object is not `null`.                                       |
+
 > ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
 
 
