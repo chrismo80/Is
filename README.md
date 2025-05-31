@@ -37,7 +37,7 @@ All public methods in `Is` are:
 | `IsMatching(pattern)`             | Asserts that the string matches the given regular expression pattern. Returns the match groups.                                                     |
 | `IsIn(values)`                    | Asserts that all elements in `actual` exist at least once in the provided values.                                                                   |
 | `IsBetween(min, max)`             | Asserts that `actual` is strictly between `min` and `max`.                                                                                          |
-| `IsApproximately(other, epsilon)` | Checks if two values are approximately equal within a specified tolerance.                                                                          |
+| `IsApproximately(other, epsilon)` | Asserts that two values are approximately equal within a specified tolerance (default epsilon is `1e-6`).                                           |
 | `IsNull()`                        | Asserts that the object is `null`.                                                                                                                  |
 | `IsTrue()`                        | Asserts that a boolean is `true`.                                                                                                                   |
 | `IsFalse()`                       | Asserts that a boolean is `false`.                                                                                                                  |
