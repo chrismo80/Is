@@ -106,15 +106,15 @@ public static class Assertions
 	public static bool IsBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
 		actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
 
-	/// <summary>Asserts that a boolean value is <c>null</c>.</summary>
+	/// <summary>Asserts that an object is <c>null</c>.</summary>
 	public static bool IsNull(this object actual) =>
 		actual.IsExactly(null);
 
-	/// <summary>Asserts that a boolean value is <c>false</c>.</summary>
+	/// <summary>Asserts that a boolean value is <c>true</c>.</summary>
 	public static bool IsTrue(this bool actual) =>
 		actual.IsExactly(true);
 
-	/// <summary>Asserts that a boolean value is <c>true</c>.</summary>
+	/// <summary>Asserts that a boolean value is <c>false</c>.</summary>
 	public static bool IsFalse(this bool actual) =>
 		actual.IsExactly(false);
 }
