@@ -49,4 +49,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
 		(actual.CompareTo(max) > 0) || (actual.CompareTo(min) < 0).ThrowIf(actual, $"is between {min} and {max}");
+
+	private static bool IsNear<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T> =>
+		T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected));
 }

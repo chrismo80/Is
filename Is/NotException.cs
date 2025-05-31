@@ -16,6 +16,25 @@ public class NotException : Exception
 	{ }
 }
 
+internal static class Helper
+{
+	internal static bool ThrowIf(this bool condition, object? actual, string text, object? expected)
+	{
+		if (condition)
+			return true;
+
+		throw new NotException(actual, text, expected);
+	}
+
+	internal static bool ThrowIf(this bool condition, object? actual, string text)
+	{
+		if (condition)
+			return true;
+
+		throw new NotException(actual, text);
+	}
+}
+
 file static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();

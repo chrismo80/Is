@@ -9,8 +9,14 @@ public static class Exceptions
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	public static T IsThrowing<T>(this Action action) where T : Exception
 	{
-		try { action(); }
-		catch (Exception ex) { return ex.Is<T>(); }
+		try
+		{
+			action();
+		}
+		catch (Exception ex)
+		{
+			return ex.Is<T>();
+		}
 
 		throw new NotException(typeof(T), "was not thrown");
 	}
@@ -22,8 +28,14 @@ public static class Exceptions
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	public static T IsThrowing<T>(this Func<Task> action) where T : Exception
 	{
-		try { action().GetAwaiter().GetResult(); }
-		catch (Exception ex) { return ex.Is<T>(); }
+		try
+		{
+			action().GetAwaiter().GetResult();
+		}
+		catch (Exception ex)
+		{
+			return ex.Is<T>();
+		}
 
 		throw new NotException(typeof(T), "was not thrown");
 	}

@@ -28,4 +28,15 @@ public static class Collections
 	/// </summary>
 	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull =>
 		actual.CountDiff(expected).All(c => c == 0).ThrowIf(actual, "is not unordered", expected);
+
+	private static List<int> CountDiff<T>(this IEnumerable<T> left, IEnumerable<T> right) where T : notnull =>
+		new Dictionary<T, int>().CountItems(left, 1).CountItems(right, -1).Values.ToList();
+
+	private static Dictionary<T, int> CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment) where T : notnull
+	{
+		foreach (var item in source)
+			dict[item] = dict.GetValueOrDefault(item) + increment;
+
+		return dict;
+	}
 }
