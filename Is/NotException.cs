@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Is;
 
@@ -59,10 +60,10 @@ file static class CallStackExtensions
 		"\n" + text + "\n" + FindFrame()?.CodeLine() + "\n";
 
 	private static StackFrame? FindFrame() =>
-		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsOtherNamespace() && f.GetFileName() != null);
+		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsForeignAssembly() && f.GetFileName() != null);
 
-	private static bool IsOtherNamespace(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Namespace != typeof(NotException).Namespace;
+	private static bool IsForeignAssembly(this StackFrame frame) =>
+		frame.GetMethod()?.DeclaringType?.Assembly != Assembly.GetExecutingAssembly();
 
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
