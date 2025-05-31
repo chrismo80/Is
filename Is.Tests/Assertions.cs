@@ -1,3 +1,5 @@
+using Is.Assertions;
+
 namespace Is.Tests;
 
 public class Assertions
