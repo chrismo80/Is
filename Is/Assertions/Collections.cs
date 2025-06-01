@@ -1,10 +1,15 @@
-﻿namespace Is.Assertions;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
+namespace Is.Assertions;
+
+[DebuggerStepThrough]
 public static class Collections
 {
 	/// <summary>
 	/// Asserts that the sequence is empty.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEmpty<T>(this IEnumerable<T> actual)
 	{
 		if(!actual.Any())
@@ -17,6 +22,7 @@ public static class Collections
 	/// Asserts that the <paramref name="actual"/> sequence contains
 	/// all the specified <paramref name="expected"/> elements.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
@@ -30,6 +36,7 @@ public static class Collections
 	/// Asserts that all elements in the <paramref name="actual"/> collection
 	/// are present in the <paramref name="expected"/> collection.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
@@ -43,6 +50,7 @@ public static class Collections
 	/// Asserts that the <paramref name="actual"/> sequence matches
 	/// the <paramref name="expected"/> sequence ignoring item order.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{

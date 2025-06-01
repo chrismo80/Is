@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace Is;
 
+[DebuggerStepThrough]
 public class NotException : Exception
 {
 	public NotException(object? actual, string equality, object? expected)
@@ -16,6 +17,7 @@ public class NotException : Exception
 	{ }
 }
 
+[DebuggerStepThrough]
 file static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
@@ -52,6 +54,7 @@ file static class MessageExtensions
 		content.Join("\n\t", "\n\n\t", "\n");
 }
 
+[DebuggerStepThrough]
 file static class CallStackExtensions
 {
 	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
