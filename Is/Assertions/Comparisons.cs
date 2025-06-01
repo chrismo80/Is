@@ -82,4 +82,43 @@ public static class Comparisons
 
 		throw new NotException(actual, $"is between {min} and {max}");
 	}
+
+	/// <summary>
+	/// Asserts that the actual value is greater or equal
+	/// the given <paramref name="other" /> value.
+	/// </summary>
+	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsAtLeast<T>(this T actual, T other)
+		where T : IComparable<T>
+	{
+		if(actual.CompareTo(other) >= 0)
+			return true;
+
+		throw new NotException(actual, "is smaller than", other);
+	}
+
+	/// <summary>
+	/// Asserts that the actual value is smaller or equal
+	/// the given <paramref name="other" /> value.
+	/// </summary>
+	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsAtMost<T>(this T actual, T other)
+		where T : IComparable<T>
+	{
+		if(actual.CompareTo(other) <= 0)
+			return true;
+
+		throw new NotException(actual, "is greater than", other);
+	}
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> value
+	/// is between <paramref name="min"/> and <paramref name="max"/> inclusive bounds.
+	/// </summary>
+	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsInRange<T>(this T actual, T min, T max) where T : IComparable<T> =>
+		actual.IsAtLeast(min) && actual.IsAtMost(max);
 }
