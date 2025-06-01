@@ -176,11 +176,22 @@ public class Assertions
 		new List<int> { 1, 2, 3, 4, 5, 6 }.IsContaining(2, 4);
 
 		"hello world".IsContaining("hello");
+		"hello world".IsStartingWith("hello");
+		"hello world".IsEndingWith("world");
 
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1);
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2);
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 3);
 		new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2, 3);
+	}
+
+	[Test]
+	public void IsUnique()
+	{
+		new List<int> { 1, 2, 3, 4, 5, 6 }.IsUnique();
+
+		Action action = () => new List<int> { 1, 2, 3, 2, 5, 6 }.IsUnique();
+		action.IsThrowing<NotException>("contains duplicate");
 	}
 
 	[Test]
@@ -195,7 +206,7 @@ public class Assertions
 		"hello".IsNotMatching("world");
 
 		Action action1 = () => "hello".IsMatching("world");
-		action1.IsThrowing<NotException>("does not match");
+		action1.IsThrowing<NotException>("is not matching");
 
 		Action action2 = () => "hello".IsNotMatching("hello");
 		action2.IsThrowing<NotException>("is matching");
@@ -210,13 +221,15 @@ public class Assertions
 	}
 
 	[Test]
-	public void IsEquivalentTo()
+	public void IsEquivalentTo_IsSatisfying()
 	{
 		List<int> list1 = [1, 2, 3, 4];
 		List<int> list2 = [3, 2, 4, 1];
 		List<int> list3 = [3, 5, 4, 1];
 		List<int> list4 = [1, 2, 3];
 		List<int> list5 = [1, 2, 3, 4, 5];
+
+		list1.IsSatisfying(l => l.All(x => x.IsPositive()));
 
 		list1.IsEquivalentTo(list2);
 		list2.IsEquivalentTo(list1);
@@ -255,6 +268,28 @@ public class Assertions
 
 		Action action2 = () => actual.IsGreaterThan(expected);
 		action2.IsThrowing<NotException>("is not greater than");
+	}
+
+
+	[Test]
+	[TestCase(1, 6)]
+	[TestCase(2, 7)]
+	[TestCase(3, 8)]
+	public void IsAtLeast_IsAtMost(int min, int max)
+	{
+		min.IsAtLeast(1);
+		min.IsAtMost(3);
+
+		max.IsAtLeast(6);
+		max.IsAtMost(8);
+
+		3.IsInRange(min, max);
+		4.IsInRange(min, max);
+		5.IsInRange(min, max);
+		6.IsInRange(min, max);
+
+		4.IsBetween(min, max);
+		5.IsBetween(min, max);
 	}
 
 	[Test]
@@ -317,17 +352,32 @@ public class Assertions
 	}
 
 	[Test]
-	public void IsNull()
+	public void IsNull_IsDefault_IsSame()
 	{
 		List<int>? list = null;
 		list.IsNull();
+		list.IsDefault();
 
-		((Action)(() => list.IsNotNull())).IsThrowing<NotException>("is null");
+		Action action = () => list.IsNotNull();
+		action.IsThrowing<NotException>("is null");
 
-		list = new List<int>();
+		list = new List<int>() {1, 2};
 		list.IsNotNull();
 
-		((Action)(() => list.IsNull())).IsThrowing<NotException>("is not null");
+		action = () => list.IsNull();
+		action.IsThrowing<NotException>("is not");
+
+		action = () => list.IsDefault();
+		action.IsThrowing<NotException>("is not");
+
+		var list2 = new List<int>() { 1, 2 };
+		var list3 = list;
+
+		list.Is(list2);
+		list.IsSameAs(list3);
+
+		action = () => list.IsSameAs(list2);
+		action.IsThrowing<NotException>("is not the same");
 	}
 
 	[Test]
@@ -343,10 +393,14 @@ public class Assertions
 		actual.IsApproximately(expected, 1e-4);
 		actual.IsApproximately(expected);
 		actual.Is(expected);
+		actual.IsPositive();
 
 		((float)actual).IsApproximately((float)expected);
 
 		Action action = () => actual.IsExactly(expected);
 		action.IsThrowing<NotException>().Message.Contains("is not").IsTrue();
+
+		action = () => actual.IsNegative();
+		action.IsThrowing<NotException>("is not negative");
 	}
 }
