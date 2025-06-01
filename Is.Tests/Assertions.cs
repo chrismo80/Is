@@ -239,6 +239,7 @@ public class Assertions
 			() => list2.IsEquivalentTo(list3),
 			() => list1.IsEquivalentTo(list4),
 			() => list1.IsEquivalentTo(list5),
+			() => list1.IsSatisfying(l => l.All(x => x.IsNegative()))
 		};
 
 		foreach(var action in actions)
