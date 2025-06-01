@@ -60,6 +60,23 @@ public static class Collections
 		throw new NotException(actual, "is not equivalent to", expected);
 	}
 
+	/// <summary>
+	/// Asserts that all elements in the sequence are unique.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsUnique<T>(this IEnumerable<T> actual)
+	{
+		var set = new HashSet<T>();
+
+		foreach (var item in actual)
+		{
+			if (!set.Add(item))
+				throw new NotException(actual, "contains duplicate", item);
+		}
+
+		return true;
+	}
+
 	private static List<int> CountDiff<T>(this IEnumerable<T> left, IEnumerable<T> right)
 		where T : notnull
 	{
