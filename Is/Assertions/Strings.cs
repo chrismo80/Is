@@ -22,6 +22,32 @@ public static class Strings
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
+	/// starts with the specified <paramref name="expected"/> string.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsStartingWith(this string actual, string expected)
+	{
+		if(actual.StartsWith(expected))
+			return true;
+
+		throw new NotException(actual, "is not starting with", expected);
+	}
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string
+	/// ends with the specified <paramref name="expected"/> string.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsEndingWith(this string actual, string expected)
+	{
+		if(actual.EndsWith(expected))
+			return true;
+
+		throw new NotException(actual, "is not ending with", expected);
+	}
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string
 	/// matches the specified <paramref name="pattern"/> regular expression.
 	/// </summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
