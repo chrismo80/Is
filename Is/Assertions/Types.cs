@@ -28,6 +28,6 @@ public static class Types
 		if (actual is not T)
 			return true;
 
-		throw new NotException(actual, "is", typeof(T));
+		throw new NotException(actual, "is a", typeof(T));
 	}
 }

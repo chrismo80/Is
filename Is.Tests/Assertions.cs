@@ -209,7 +209,6 @@ public class Assertions
 		new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);
 	}
 
-
 	[Test]
 	public void IsEquivalentTo()
 	{
@@ -237,7 +236,6 @@ public class Assertions
 	public void Is_ValueNotEqualsList_Throwing()
 	{
 		Action action = () => 5.Is(new List<int> { 1, 2 });
-
 		action.IsThrowing<NotException>();
 	}
 
@@ -272,7 +270,6 @@ public class Assertions
 
 		Action action = () => actual.IsNotBetween(min, max);
 		action.IsThrowing<NotException>("is between");
-
 	}
 
 	[Test]

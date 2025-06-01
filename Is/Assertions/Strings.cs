@@ -57,7 +57,7 @@ public static class Strings
 		if (Regex.Match(actual, pattern) is { Success: true } match)
 			return match.Groups;
 
-		throw new NotException(actual, "does not match", pattern);
+		throw new NotException(actual, "is not matching", pattern);
 	}
 
 	/// <summary>
