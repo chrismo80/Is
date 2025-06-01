@@ -194,8 +194,11 @@ public class Assertions
 
 		"hello".IsNotMatching("world");
 
-		Action action = () => "hello".IsMatching("world");
-		action.IsThrowing<NotException>("IsMatching");
+		Action action1 = () => "hello".IsMatching("world");
+		action1.IsThrowing<NotException>("does not match");
+
+		Action action2 = () => "hello".IsNotMatching("hello");
+		action2.IsThrowing<NotException>("is matching");
 	}
 
 	[Test]
@@ -249,8 +252,11 @@ public class Assertions
 		actual.IsSmallerThan(expected);
 		expected.IsGreaterThan(actual);
 
-		Action action = () => actual.IsGreaterThan(expected);
-		action.IsThrowing<NotException>().Message.Contains("is not greater than").IsTrue();
+		Action action1 = () => expected.IsSmallerThan(actual);
+		action1.IsThrowing<NotException>("is not smaller than");
+
+		Action action2 = () => actual.IsGreaterThan(expected);
+		action2.IsThrowing<NotException>("is not greater than");
 	}
 
 	[Test]
@@ -263,6 +269,10 @@ public class Assertions
 
 		min.IsNotBetween(actual, max);
 		max.IsNotBetween(actual, min);
+
+		Action action = () => actual.IsNotBetween(min, max);
+		action.IsThrowing<NotException>("is between");
+
 	}
 
 	[Test]
@@ -314,6 +324,13 @@ public class Assertions
 	{
 		List<int>? list = null;
 		list.IsNull();
+
+		((Action)(() => list.IsNotNull())).IsThrowing<NotException>("is null");
+
+		list = new List<int>();
+		list.IsNotNull();
+
+		((Action)(() => list.IsNull())).IsThrowing<NotException>("is not null");
 	}
 
 	[Test]
