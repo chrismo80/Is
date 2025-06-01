@@ -24,7 +24,7 @@ public static class Exceptions
 			return ex.Is<T>();
 		}
 
-		throw new NotException(typeof(T), "was not thrown");
+		throw new NotException(typeof(T), "is not thrown");
 	}
 
 	/// <summary>
@@ -45,7 +45,7 @@ public static class Exceptions
 			return ex.Is<T>();
 		}
 
-		throw new NotException(typeof(T), "was not thrown");
+		throw new NotException(typeof(T), "is not thrown");
 	}
 
 	/// <summary>

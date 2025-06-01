@@ -22,6 +22,6 @@ public static class Null
 		if(actual is not null)
 			return true;
 
-		throw new NotException(actual, "is null");
+		throw new NotException(actual, "is", null);
 	}
 }

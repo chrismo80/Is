@@ -19,7 +19,7 @@ public static class Comparisons
 		if(T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
 			return true;
 
-		throw new NotException(actual, "is not close enough to", expected);
+		throw new NotException(actual, "is not approximately", expected);
 	}
 
 	/// <summary>

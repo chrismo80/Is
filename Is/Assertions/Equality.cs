@@ -35,7 +35,7 @@ public static class Equality
 		if (predicate(actual))
 			return true;
 
-		throw new NotException(actual, "does not satisfy the predicate");
+		throw new NotException(actual, "is not satisfying the predicate");
 	}
 
 

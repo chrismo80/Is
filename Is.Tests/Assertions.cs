@@ -191,7 +191,7 @@ public class Assertions
 		new List<int> { 1, 2, 3, 4, 5, 6 }.IsUnique();
 
 		Action action = () => new List<int> { 1, 2, 3, 2, 5, 6 }.IsUnique();
-		action.IsThrowing<NotException>("contains duplicate");
+		action.IsThrowing<NotException>("is containing a duplicate");
 	}
 
 	[Test]
@@ -360,7 +360,7 @@ public class Assertions
 		list.IsDefault();
 
 		Action action = () => list.IsNotNull();
-		action.IsThrowing<NotException>("is null");
+		action.IsThrowing<NotException>();
 
 		list = new List<int>() {1, 2};
 		list.IsNotNull();

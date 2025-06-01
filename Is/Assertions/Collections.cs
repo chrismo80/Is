@@ -71,7 +71,7 @@ public static class Collections
 		foreach (var item in actual)
 		{
 			if (!set.Add(item))
-				throw new NotException(actual, "contains duplicate", item);
+				throw new NotException(actual, "is containing a duplicate", item);
 		}
 
 		return true;
