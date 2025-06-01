@@ -8,6 +8,38 @@ namespace Is.Assertions;
 public static class Equality
 {
 	/// <summary>
+	/// Asserts that the actual object is the same instance as the expected object.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsSameAs<T>(this T actual, T expected) where T : class?
+	{
+		if (ReferenceEquals(actual, expected))
+			return true;
+
+		throw new NotException(actual, "is not the same instance as", expected);
+	}
+
+	/// <summary>
+	/// Asserts that the actual value is the default value of its type.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsDefault<T>(this T actual) =>
+		actual.IsExactly(default);
+
+	/// <summary>
+	/// Asserts that the actual object satisfies the specified predicate.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsSatisfying<T>(this T actual, Func<T, bool> predicate)
+	{
+		if (predicate(actual))
+			return true;
+
+		throw new NotException(actual, "does not satisfy", predicate);
+	}
+
+
+	/// <summary>
 	/// Asserts that the actual object is equal to the expected value.
 	/// (no array unwrapping, exact match for floating points)
 	/// </summary>
