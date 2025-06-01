@@ -8,8 +8,13 @@ public static class Strings
 	/// Asserts that the <paramref name="actual"/> string
 	/// contains the specified <paramref name="expected"/> substring.
 	/// </summary>
-	public static bool IsContaining(this string actual, string expected) =>
-		actual.Contains(expected).ThrowIf(actual, "is not containing", expected);
+	public static bool IsContaining(this string actual, string expected)
+	{
+		if(actual.Contains(expected))
+			return true;
+
+		throw new NotException(actual, "is not containing", expected);
+	}
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -28,6 +33,11 @@ public static class Strings
 	/// Asserts that the <paramref name="actual"/> string
 	/// does not match the specified <paramref name="pattern"/> regular expression.
 	/// </summary>
-	public static bool IsNotMatching(this string actual, string pattern) =>
-		(!Regex.Match(actual, pattern).Success).ThrowIf(actual, "is matching", pattern);
+	public static bool IsNotMatching(this string actual, string pattern)
+	{
+		if(!Regex.Match(actual, pattern).Success)
+			return true;
+
+		throw new NotException(actual, "is matching", pattern);
+	}
 }

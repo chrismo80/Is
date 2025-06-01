@@ -7,7 +7,8 @@ public static class Exceptions
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
-	public static T IsThrowing<T>(this Action action) where T : Exception
+	public static T IsThrowing<T>(this Action action)
+		where T : Exception
 	{
 		try
 		{
@@ -26,7 +27,8 @@ public static class Exceptions
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
-	public static T IsThrowing<T>(this Func<Task> action) where T : Exception
+	public static T IsThrowing<T>(this Func<Task> action)
+		where T : Exception
 	{
 		try
 		{

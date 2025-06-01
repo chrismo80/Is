@@ -17,6 +17,11 @@ public static class Types
 	/// <summary>
 	/// Asserts that the actual object is not of type <typeparamref name="T"/>.
 	/// </summary>
-	public static bool IsNot<T>(this object actual) =>
-		(actual is not T).ThrowIf(actual, "is", typeof(T));
+	public static bool IsNot<T>(this object actual)
+	{
+		if (actual is not T)
+			return true;
+
+		throw new NotException(actual, "is", typeof(T));
+	}
 }

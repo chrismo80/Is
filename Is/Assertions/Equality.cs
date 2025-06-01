@@ -8,8 +8,13 @@ public static class Equality
 	/// Asserts that the actual object is equal to the expected value.
 	/// (no array unwrapping, exact match for floating points)
 	/// </summary>
-	public static bool IsExactly<T>(this T actual, T expected) =>
-		actual.IsExactlyEqualTo(expected).ThrowIf(actual, "is not", expected);
+	public static bool IsExactly<T>(this T actual, T expected)
+	{
+		if(actual.IsExactlyEqualTo(expected))
+			return true;
+
+		throw new NotException(actual, "is not", expected);
+	}
 
 	/// <summary>
 	/// Asserts that the actual object matches the expected value(s).
@@ -21,8 +26,13 @@ public static class Equality
 	/// <summary>
 	/// Asserts that the actual value is not equal to the expected value.
 	/// </summary>
-	public static bool IsNot<T>(this T actual, T expected) =>
-		(!actual.IsExactlyEqualTo(expected)).ThrowIf(actual, "is", expected);
+	public static bool IsNot<T>(this T actual, T expected)
+	{
+		if(!actual.IsExactlyEqualTo(expected))
+			return true;
+
+		throw new NotException(actual, "is", expected);
+	}
 
 	private static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch
