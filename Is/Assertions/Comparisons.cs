@@ -121,4 +121,30 @@ public static class Comparisons
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsInRange<T>(this T actual, T min, T max) where T : IComparable<T> =>
 		actual.IsAtLeast(min) && actual.IsAtMost(max);
+
+	/// <summary>
+	/// Asserts that the actual numeric value is positive (greater than zero).
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsPositive<T>(this T actual)
+		where T : IComparable<T>
+	{
+		if (actual.CompareTo(default) > 0)
+			return true;
+
+		throw new NotException(actual, "is not positive");
+	}
+
+	/// <summary>
+	/// Asserts that the actual numeric value is negative (less than zero).
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNegative<T>(this T actual)
+		where T : IComparable<T>
+	{
+		if (actual.CompareTo(default) < 0)
+			return true;
+
+		throw new NotException(actual, "is not negative");
+	}
 }
