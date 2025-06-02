@@ -66,7 +66,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
-		max.IsAtLeast(min) && actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
+		actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
 
 	/// <summary>
 	/// Asserts that the actual value is not between
@@ -120,7 +120,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsInRange<T>(this T actual, T min, T max) where T : IComparable<T> =>
-		max.IsAtLeast(min) && actual.IsAtLeast(min) && actual.IsAtMost(max);
+		actual.IsAtLeast(min) && actual.IsAtMost(max);
 
 
 	/// <summary>
