@@ -87,6 +87,7 @@ Methods that assert conditions related to comparisons.
 | `IsAtLeast<T>(T actual, T other)` | Asserts that the actual value is greater or equal than the given other value. |
 | `IsAtMost<T>(T actual, T other)` | Asserts that the actual value is smaller or equal than the given other value. |
 | `IsInRange<T>(T actual, T min, T max)` | Asserts that the actual value is between the specified min and max inclusive bounds. |
+| `IsOutOfRange<T>(T actual, T min, T max)` | Asserts that the actual value is smaller than specified min or greater than max. |
 | `IsPositive<T>(T actual)` | Asserts that the actual value is greater than zero. |
 | `IsNegative<T>(T actual)` | Asserts that the actual value is smaller than zero. |
 
