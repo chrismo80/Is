@@ -1,4 +1,4 @@
-# 📦 Is – Minimalistic Assertion Extensions for .NET
+# ![plot](Is/icon.png) – Minimalistic Assertion Extensions for .NET
 
 **Simple. Readable. Opinionated.**
 
@@ -11,6 +11,13 @@
 - 💥 Opinionated: No "IsNot", only assert what you expect, not what you not expect, just fast failure and clarity.
 - 🧪 Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
 - ⚙️ Self-contained: No dependencies, no configuration, just drop it in.
+
+## 📦 Get It on NuGet
+
+[![NuGet](https://img.shields.io/nuget/v/AssertWithIs.svg)](https://www.nuget.org/packages/AssertWithIs/)
+
+The package is published on NuGet under the name [`AssertWithIs`](https://www.nuget.org/packages/AssertWithIs/) because shorter IDs like `Is` or `Is.Assertions` were already taken or reserved.  
+Despite the package name, the library itself uses the concise `Is` namespace and generates a single `Is.dll`, so your code stays clean and expressive:
 
 
 ## 🔍 Available Methods
