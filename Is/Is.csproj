@@ -4,6 +4,44 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+      <!-- Enable packing -->
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <IncludeSymbols>true</IncludeSymbols>
+      <IncludeSource>true</IncludeSource>
+      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+      <!-- Required NuGet.org metadata -->
+      <PackageId>AssertWithIs</PackageId>
+      <Version>1.0.0</Version>
+      <Authors>chrismo80</Authors>
+      <Description>Minimalistic Assertion Extensions for .NET</Description>
+
+      <!-- Optional but recommended metadata -->
+      <PackageTags>dotnet8;test;assertions;fluent</PackageTags>
+      <RepositoryUrl>https://github.com/chrismo80/Is</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+
+      <!-- License and icon -->
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageIcon>icon.png</PackageIcon>
+
+      <!-- Documentation -->
+      <GenerateDocumentationFile>true</GenerateDocumentationFile>
+      <NoWarn>1591</NoWarn> <!-- Ignore missing XML comments warning -->
+
+      <!-- Set output folder -->
+      <PackageOutputPath>$(OutputPath)</PackageOutputPath>
+
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+      
     </PropertyGroup>
+
+  <ItemGroup>
+    
+    <None Include="icon.png" Pack="true" PackagePath="" />
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    
+  </ItemGroup>
 
 </Project>
