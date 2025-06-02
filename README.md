@@ -9,7 +9,7 @@
 ## ✅ Why use Is?
 
 - 📘 Concise: One word. One assertion.
-- 💥 Opinionated: No "IsNot", only assert what you expect, not what you not expect, just fast failure and clarity.
+- 💥 Opinionated: Less is more. Only core assertions relevant for real-world use cases, just fast failure and clarity.
 - 🧪 Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
 - ⚙️ Self-contained: No dependencies, no configuration, just drop it in.
 
