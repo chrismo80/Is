@@ -17,11 +17,6 @@ public static class Null
 	/// Asserts that the object is not <c>null</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotNull(this object? actual)
-	{
-		if(actual is not null)
-			return true;
-
-		throw new NotException(actual, "is", null);
-	}
+	public static bool IsNotNull(this object? actual) =>
+		actual.IsNot(null);
 }
