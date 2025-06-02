@@ -297,14 +297,17 @@ public class Assertions
 	[TestCase(1, 2, 3)]
 	[TestCase(-1.0, 0.0, 1.0)]
 	[TestCase("A", "B", "C")]
-	public void IsBetween_NotThrowing<T>(T min, T actual, T max) where T : IComparable<T>
+	public void IsBetween_NotThrowing<T>(T min, T mid, T max) where T : IComparable<T>
 	{
-		actual.IsBetween(min, max);
+		mid.IsBetween(min, max);
 
-		min.IsNotBetween(actual, max);
-		max.IsNotBetween(actual, min);
+		min.IsNotBetween(mid, max);
+		max.IsNotBetween(min, mid);
 
-		Action action = () => actual.IsNotBetween(min, max);
+		min.IsOutOfRange(mid, max);
+		max.IsOutOfRange(min, mid);
+
+		Action action = () => mid.IsNotBetween(min, max);
 		action.IsThrowing<NotException>("is between");
 	}
 

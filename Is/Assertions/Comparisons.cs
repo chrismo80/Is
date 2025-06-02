@@ -66,7 +66,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsBetween<T>(this T actual, T min, T max) where T : IComparable<T> =>
-		actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
+		max.IsAtLeast(min) && actual.IsGreaterThan(min) && actual.IsSmallerThan(max);
 
 	/// <summary>
 	/// Asserts that the actual value is not between
@@ -77,7 +77,7 @@ public static class Comparisons
 	public static bool IsNotBetween<T>(this T actual, T min, T max)
 		where T : IComparable<T>
 	{
-		if(actual.CompareTo(max) > 0 || actual.CompareTo(min) < 0)
+		if(max.IsAtLeast(min) && (actual.CompareTo(max) > 0 || actual.CompareTo(min) < 0))
 			return true;
 
 		throw new NotException(actual, $"is between {min} and {max}");
@@ -120,7 +120,22 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsInRange<T>(this T actual, T min, T max) where T : IComparable<T> =>
-		actual.IsAtLeast(min) && actual.IsAtMost(max);
+		max.IsAtLeast(min) && actual.IsAtLeast(min) && actual.IsAtMost(max);
+
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> value
+	/// is smaller than <paramref name="min"/> or greater than <paramref name="max"/>.
+	/// </summary>
+	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T>
+	{
+		if(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
+			return true;
+
+		throw new NotException(actual, $"is in range of {min} and {max}");
+	}
 
 	/// <summary>
 	/// Asserts that the actual numeric value is positive (greater than zero).

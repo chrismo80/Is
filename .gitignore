@@ -15,3 +15,5 @@ TestResults/
 
 Logs/
 *.txt
+
+nuget.config
