@@ -71,7 +71,7 @@ Methods that assert conditions related to collections and sequences.
 | `IsContaining<T>(IEnumerable<T> actual, params T[] expected)` | Asserts that the sequence contains all the specified elements. |
 | `IsIn<T>(IEnumerable<T> actual, params T[] expected)` | Asserts that all elements in the actual collection are present in the expected collection. |
 | `IsEquivalentTo<T>(IEnumerable<T> actual, IEnumerable<T> expected)` | Asserts that the sequence matches the specified values ignoring item order. |
-| `IsUnique<T>(IEnumerable<T> actual, IEnumerable<T> expected)` | Asserts that all elements in the sequence are unique. |
+| `IsUnique<T>(IEnumerable<T> actual)` | Asserts that all elements in the sequence are unique. |
 
 ### Comparison Assertions
 Methods that assert conditions related to comparisons.
