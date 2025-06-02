@@ -49,6 +49,9 @@ Methods that assert conditions related to equality.
 | `IsExactly<T>(T actual, T expected)` | Asserts that the actual object is exactly equal to the expected value. |
 | `Is(object actual, params object[] expected)` | Asserts that the actual object matches the expected value(s). |
 | `IsNot<T>(T actual, T expected)` | Asserts that the actual value is not equal to the expected value. |
+| `IsSameAs<T>(T actual, T expected)` | Asserts that the actual object is the same instance as the expected object. |
+| `IsDefault<T>(T actual)` | Asserts that the actual value is the default value of its type. |
+| `IsSatisfying<T>(T actual, Func<T, bool> predicate)` | Asserts that the actual object satisfies the specified predicate. |
 
 ### Collection Assertions
 Methods that assert conditions related to collections and sequences.
@@ -59,6 +62,7 @@ Methods that assert conditions related to collections and sequences.
 | `IsContaining<T>(IEnumerable<T> actual, params T[] expected)` | Asserts that the sequence contains all the specified elements. |
 | `IsIn<T>(IEnumerable<T> actual, params T[] expected)` | Asserts that all elements in the actual collection are present in the expected collection. |
 | `IsEquivalentTo<T>(IEnumerable<T> actual, IEnumerable<T> expected)` | Asserts that the sequence matches the specified values ignoring item order. |
+| `IsUnique<T>(IEnumerable<T> actual, IEnumerable<T> expected)` | Asserts that all elements in the sequence are unique. |
 
 ### Comparison Assertions
 Methods that assert conditions related to comparisons.
@@ -71,6 +75,11 @@ Methods that assert conditions related to comparisons.
 | `IsSmallerThan<T>(T actual, T other)` | Asserts that the actual value is smaller than the given other value. |
 | `IsBetween<T>(T actual, T min, T max)` | Asserts that the actual value is between the specified min and max exclusive bounds. |
 | `IsNotBetween<T>(T actual, T min, T max)` | Asserts that the actual value is not between the specified min and max exclusive bounds. |
+| `IsAtLeast<T>(T actual, T other)` | Asserts that the actual value is greater or equal than the given other value. |
+| `IsAtMost<T>(T actual, T other)` | Asserts that the actual value is smaller or equal than the given other value. |
+| `IsInRange<T>(T actual, T min, T max)` | Asserts that the actual value is between the specified min and max inclusive bounds. |
+| `IsPositive<T>(T actual)` | Asserts that the actual value is greater than zero. |
+| `IsNegative<T>(T actual)` | Asserts that the actual value is smaller than zero. |
 
 ### String Assertions
 Methods that assert conditions related to strings.
@@ -78,6 +87,8 @@ Methods that assert conditions related to strings.
 | Method | Description |
 |--------|-------------|
 | `IsContaining(string actual, string expected)` | Asserts that the actual string contains the specified substring. |
+| `IsStartingWith(string actual, string expected)` | Asserts that the actual string starts with the specified substring. |
+| `IsEndingWith(string actual, string expected)` | Asserts that the actual string ends with the specified substring. |
 | `IsMatching(string actual, string pattern)` | Asserts that the actual string matches the specified regular expression pattern. Returns the match groups. |
 | `IsNotMatching(string actual, string pattern)` | Asserts that the actual string does not match the specified regular expression pattern. |
 
