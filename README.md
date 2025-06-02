@@ -1,4 +1,5 @@
-# ![plot](Is/icon.png) – Minimalistic Assertion Extensions for .NET
+![plot](Is/icon.png)
+# Minimalistic Assertion Extensions for .NET
 
 **Simple. Readable. Opinionated.**
 
