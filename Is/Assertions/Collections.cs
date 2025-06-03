@@ -26,10 +26,12 @@ public static class Collections
 	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
-		if(actual.CountDiff(expected).All(c => c >= 0))
+		var diff = actual.CountDiff(expected);
+
+		if (diff.Missing.Length == 0)
 			return true;
 
-		throw new NotException(actual, "is not containing", expected);
+		throw new NotException(actual, "is not containing", diff.Missing);
 	}
 
 	/// <summary>
@@ -40,10 +42,12 @@ public static class Collections
 	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
-		if(actual.CountDiff(expected).All(c => c <= 0))
+		var diff = actual.CountDiff(expected);
+
+		if (diff.Unexpected.Length == 0)
 			return true;
 
-		throw new NotException(actual, "is not in", expected);
+		throw new NotException(diff.Unexpected, "is not in", expected);
 	}
 
 	/// <summary>
@@ -54,10 +58,12 @@ public static class Collections
 	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{
-		if(actual.CountDiff(expected).All(c => c == 0))
+		var diff = actual.CountDiff(expected);
+
+		if (diff.Missing.Length == 0 && diff.Unexpected.Length == 0)
 			return true;
 
-		throw new NotException(actual, "is not equivalent to", expected);
+		throw new NotException(actual, $"is missing {diff.Missing.FormatValue()} and having {diff.Unexpected.FormatValue()}");
 	}
 
 	/// <summary>
@@ -77,15 +83,18 @@ public static class Collections
 		return true;
 	}
 
-	private static List<int> CountDiff<T>(this IEnumerable<T> left, IEnumerable<T> right)
+	private static (T[] Missing, T[] Unexpected) CountDiff<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{
 		var histogram = new Dictionary<T, int>();
 
-		histogram.CountItems(left, 1);
-		histogram.CountItems(right, -1);
+		histogram.CountItems(actual, 1);
+		histogram.CountItems(expected, -1);
 
-		return histogram.Values.ToList();
+		var missing = histogram.Where(kvp => kvp.Value < 0).Select(kvp => kvp.Key).ToArray();
+		var unexpected = histogram.Where(kvp => kvp.Value > 0).Select(kvp => kvp.Key).ToArray();
+
+		return (missing, unexpected);
 	}
 
 	private static void CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment)
