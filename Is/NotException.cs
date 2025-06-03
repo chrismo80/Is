@@ -18,7 +18,7 @@ public class NotException : Exception
 }
 
 [DebuggerStepThrough]
-file static class MessageExtensions
+internal static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
@@ -34,12 +34,12 @@ file static class MessageExtensions
 	internal static string? Color<T>(this T text, int color) =>
 		ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
 
-	private static string FormatValue(this object? value) =>
+	internal static string FormatValue(this object? value) =>
 		value switch
 		{
 			null => "<NULL>",
 			string => $"\"{value}\"",
-			IEnumerable list => list.Cast<object>().Select(x => x.FormatValue()).Join("[", "|", "]"),
+			IEnumerable list => list.Cast<object>().Select(x => x.FormatValue()).Join("[", "|", "]").Strip(),
 			Exception ex => ex.Message,
 			_ => $"{value}"
 		};
@@ -52,6 +52,10 @@ file static class MessageExtensions
 
 	private static string CreateMessage(params string?[] content) =>
 		content.Join("\n\t", "\n\n\t", "\n");
+
+	private static string Strip(this string text, int length = 50) =>
+		text.Length <= length ? text : text[..length];
+
 }
 
 [DebuggerStepThrough]
