@@ -26,7 +26,7 @@ public static class Collections
 	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
-		var diff = actual.CountDiff(expected);
+		var diff = actual.Diff(expected);
 
 		if (diff.Missing.Length == 0)
 			return true;
@@ -42,7 +42,7 @@ public static class Collections
 	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
-		var diff = actual.CountDiff(expected);
+		var diff = actual.Diff(expected);
 
 		if (diff.Unexpected.Length == 0)
 			return true;
@@ -58,7 +58,7 @@ public static class Collections
 	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{
-		var diff = actual.CountDiff(expected);
+		var diff = actual.Diff(expected);
 
 		if (diff.Missing.Length == 0 && diff.Unexpected.Length == 0)
 			return true;
@@ -83,7 +83,7 @@ public static class Collections
 		return true;
 	}
 
-	private static (T[] Missing, T[] Unexpected) CountDiff<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{
 		var histogram = new Dictionary<T, int>();
