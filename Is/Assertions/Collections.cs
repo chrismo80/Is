@@ -40,8 +40,7 @@ public static class Collections
 	/// all the specified <paramref name="expected"/> elements.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
-		where T : notnull
+	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected) where T : notnull
 	{
 		var (missing, _) = actual.Diff(expected);
 
@@ -56,8 +55,7 @@ public static class Collections
 	/// are present in the <paramref name="expected"/> collection.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected)
-		where T : notnull
+	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected) where T : notnull
 	{
 		var (_, unexpected) = actual.Diff(expected);
 
@@ -72,8 +70,7 @@ public static class Collections
 	/// the <paramref name="expected"/> sequence ignoring item order.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
-		where T : notnull
+	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
 	{
 		var (missing, unexpected) = actual.Diff(expected);
 
@@ -83,8 +80,7 @@ public static class Collections
 		throw new NotException(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
 	}
 
-	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
-		where T : notnull
+	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
 	{
 		var histogram = new Dictionary<T, int>();
 
@@ -94,8 +90,7 @@ public static class Collections
 		return (histogram.Filter(c => c < 0), histogram.Filter(c => c > 0));
 	}
 
-	private static void CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment)
-		where T : notnull
+	private static void CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment) where T : notnull
 	{
 		foreach (var item in source)
 			dict[item] = dict.GetValueOrDefault(item) + increment;

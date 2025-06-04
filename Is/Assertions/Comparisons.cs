@@ -13,8 +13,7 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsApproximately<T>(this T actual, T expected, T epsilon)
-		where T : IFloatingPoint<T>
+	public static bool IsApproximately<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T>
 	{
 		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
 			return true;
@@ -33,8 +32,7 @@ public static class Comparisons
 	/// Asserts that the actual numeric value is positive (greater than zero).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsPositive<T>(this T actual)
-		where T : IComparable<T>
+	public static bool IsPositive<T>(this T actual) where T : IComparable<T>
 	{
 		if (actual.CompareTo(default) > 0)
 			return true;
@@ -46,8 +44,7 @@ public static class Comparisons
 	/// Asserts that the actual numeric value is negative (less than zero).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNegative<T>(this T actual)
-		where T : IComparable<T>
+	public static bool IsNegative<T>(this T actual) where T : IComparable<T>
 	{
 		if (actual.CompareTo(default) < 0)
 			return true;
@@ -61,8 +58,7 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsGreaterThan<T>(this T actual, T other)
-		where T : IComparable<T>
+	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) > 0)
 			return true;
@@ -76,8 +72,7 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSmallerThan<T>(this T actual, T other)
-		where T : IComparable<T>
+	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) < 0)
 			return true;
@@ -91,8 +86,7 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAtLeast<T>(this T actual, T other)
-		where T : IComparable<T>
+	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) >= 0)
 			return true;
@@ -106,8 +100,7 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAtMost<T>(this T actual, T other)
-		where T : IComparable<T>
+	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) <= 0)
 			return true;
@@ -139,8 +132,7 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotBetween<T>(this T actual, T min, T max)
-		where T : IComparable<T>
+	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T>
 	{
 		if (max.IsAtLeast(min) && (actual.CompareTo(max) > 0 || actual.CompareTo(min) < 0))
 			return true;
