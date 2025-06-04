@@ -12,7 +12,7 @@ public static class Collections
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEmpty<T>(this IEnumerable<T> actual)
 	{
-		if(!actual.Any())
+		if (!actual.Any())
 			return true;
 
 		throw new NotException(actual, "is not empty");

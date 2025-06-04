@@ -14,7 +14,7 @@ public static class Equality
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsExactly<T>(this T actual, T expected)
 	{
-		if(actual.IsExactlyEqualTo(expected))
+		if (actual.IsExactlyEqualTo(expected))
 			return true;
 
 		throw new NotException(actual, "is not", expected);
@@ -34,7 +34,7 @@ public static class Equality
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNot<T>(this T actual, T expected)
 	{
-		if(!actual.IsExactlyEqualTo(expected))
+		if (!actual.IsExactlyEqualTo(expected))
 			return true;
 
 		throw new NotException(actual, "is", expected);
