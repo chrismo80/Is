@@ -43,12 +43,12 @@ public static class Collections
 	public static bool IsContaining<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
-		var diff = actual.Diff(expected);
+		var (missing, _) = actual.Diff(expected);
 
-		if (diff.Missing.Length == 0)
+		if (missing.Length == 0)
 			return true;
 
-		throw new NotException(actual, "is not containing", diff.Missing);
+		throw new NotException(actual, "is not containing", missing);
 	}
 
 	/// <summary>
@@ -59,12 +59,12 @@ public static class Collections
 	public static bool IsIn<T>(this IEnumerable<T> actual, params T[] expected)
 		where T : notnull
 	{
-		var diff = actual.Diff(expected);
+		var (_, unexpected) = actual.Diff(expected);
 
-		if (diff.Unexpected.Length == 0)
+		if (unexpected.Length == 0)
 			return true;
 
-		throw new NotException(diff.Unexpected, "is not in", expected);
+		throw new NotException(unexpected, "is not in", expected);
 	}
 
 	/// <summary>
@@ -75,12 +75,12 @@ public static class Collections
 	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{
-		var diff = actual.Diff(expected);
+		var (missing, unexpected) = actual.Diff(expected);
 
-		if (diff.Missing.Length == 0 && diff.Unexpected.Length == 0)
+		if (missing.Length == 0 && unexpected.Length == 0)
 			return true;
 
-		throw new NotException(actual, $"is missing {diff.Missing.FormatValue()} and having {diff.Unexpected.FormatValue()}");
+		throw new NotException(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
 	}
 
 	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
