@@ -19,6 +19,23 @@ public static class Collections
 	}
 
 	/// <summary>
+	/// Asserts that all elements in the sequence are unique.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsUnique<T>(this IEnumerable<T> actual)
+	{
+		var set = new HashSet<T>();
+
+		foreach (var item in actual)
+		{
+			if (!set.Add(item))
+				throw new NotException(actual, "is containing a duplicate", item);
+		}
+
+		return true;
+	}
+
+	/// <summary>
 	/// Asserts that the <paramref name="actual"/> sequence contains
 	/// all the specified <paramref name="expected"/> elements.
 	/// </summary>
@@ -66,23 +83,6 @@ public static class Collections
 		throw new NotException(actual, $"is missing {diff.Missing.FormatValue()} and having {diff.Unexpected.FormatValue()}");
 	}
 
-	/// <summary>
-	/// Asserts that all elements in the sequence are unique.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsUnique<T>(this IEnumerable<T> actual)
-	{
-		var set = new HashSet<T>();
-
-		foreach (var item in actual)
-		{
-			if (!set.Add(item))
-				throw new NotException(actual, "is containing a duplicate", item);
-		}
-
-		return true;
-	}
-
 	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
 		where T : notnull
 	{
@@ -91,10 +91,7 @@ public static class Collections
 		histogram.CountItems(actual, 1);
 		histogram.CountItems(expected, -1);
 
-		var missing = histogram.Where(kvp => kvp.Value < 0).Select(kvp => kvp.Key).ToArray();
-		var unexpected = histogram.Where(kvp => kvp.Value > 0).Select(kvp => kvp.Key).ToArray();
-
-		return (missing, unexpected);
+		return (histogram.Filter(c => c < 0), histogram.Filter(c => c > 0));
 	}
 
 	private static void CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment)
@@ -103,4 +100,7 @@ public static class Collections
 		foreach (var item in source)
 			dict[item] = dict.GetValueOrDefault(item) + increment;
 	}
+
+	private static T[] Filter<T>(this Dictionary<T, int> dict, Func<int, bool> predicate) where T : notnull =>
+		dict.Where(kvp => predicate(kvp.Value)).Select(kvp => kvp.Key).ToArray();
 }
