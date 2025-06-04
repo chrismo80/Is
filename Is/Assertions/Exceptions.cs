@@ -28,24 +28,17 @@ public static class Exceptions
 	}
 
 	/// <summary>
-	/// Asserts that the given async <paramref name="action" /> throws
+	/// Asserts that the given async <paramref name="function" /> throws
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsThrowing<T>(this Func<Task> action)
+	public static T IsThrowing<T>(this Func<Task> function)
 		where T : Exception
 	{
-		try
-		{
-			action().GetAwaiter().GetResult();
-		}
-		catch (Exception ex)
-		{
-			return ex.Is<T>();
-		}
+		var action = () => function().GetAwaiter().GetResult();
 
-		throw new NotException(typeof(T), "is not thrown");
+		return action.IsThrowing<T>();
 	}
 
 	/// <summary>
@@ -59,12 +52,12 @@ public static class Exceptions
 		action.IsThrowing<T>().Message.IsContaining(message);
 
 	/// <summary>
-	/// Asserts that the given asynchronous <paramref name="action"/> throws
+	/// Asserts that the given asynchronous <paramref name="function"/> throws
 	/// an exception of type <typeparamref name="T"/>
 	/// and that the exception message contains
 	/// the specified <paramref name="message"/> substring.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsThrowing<T>(this Func<Task> action, string message) where T : Exception =>
-		action.IsThrowing<T>().Message.IsContaining(message);
+	public static bool IsThrowing<T>(this Func<Task> function, string message) where T : Exception =>
+		function.IsThrowing<T>().Message.IsContaining(message);
 }
