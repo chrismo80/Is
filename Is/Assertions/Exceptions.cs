@@ -12,8 +12,7 @@ public static class Exceptions
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsThrowing<T>(this Action action)
-		where T : Exception
+	public static T IsThrowing<T>(this Action action) where T : Exception
 	{
 		try
 		{
@@ -33,8 +32,7 @@ public static class Exceptions
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsThrowing<T>(this Func<Task> function)
-		where T : Exception
+	public static T IsThrowing<T>(this Func<Task> function) where T : Exception
 	{
 		var action = () => function().GetAwaiter().GetResult();
 
