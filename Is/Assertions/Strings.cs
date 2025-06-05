@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
-namespace Is.Assertions;
+namespace Is;
 
 [DebuggerStepThrough]
 public static class Strings

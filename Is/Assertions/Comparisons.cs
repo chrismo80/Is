@@ -1,8 +1,8 @@
-﻿using System.Numerics;
+﻿using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Numerics;
 
-namespace Is.Assertions;
+namespace Is;
 
 [DebuggerStepThrough]
 public static class Comparisons

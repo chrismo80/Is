@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Collections;
 
-namespace Is.Assertions;
+namespace Is;
 
 [DebuggerStepThrough]
 public static class Equality

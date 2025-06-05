@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
-namespace Is.Assertions;
+namespace Is;
 
 [DebuggerStepThrough]
 public static class Types
