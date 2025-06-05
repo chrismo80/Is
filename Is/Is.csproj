@@ -13,7 +13,7 @@
 
       <!-- Required NuGet.org metadata -->
       <PackageId>AssertWithIs</PackageId>
-      <Version>1.1.0</Version>
+      <Version>1.2.0</Version>
       <Authors>chrismo80</Authors>
       <Description>Minimalistic Assertion Extensions for .NET</Description>
 
