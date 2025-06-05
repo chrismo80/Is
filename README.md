@@ -12,6 +12,7 @@
 - 💥 Opinionated: Less is more. Only core assertions relevant for real-world use cases, just fast failure and clarity.
 - 🧪 Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
 - ⚙️ Self-contained: No dependencies, no configuration, just drop it in.
+- 🔧 Useful for unit tests, guard clauses or validation checks
 
 ## 📦 Get It on NuGet
 
