@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace Is.Tests;
 
 public class Assertions
@@ -370,6 +368,21 @@ public class Assertions
 
 		((Action)(() => true.IsFalse())).IsThrowing<NotException>("is not");
 		((Action)(() => false.IsTrue())).IsThrowing<NotException>("is not");
+	}
+
+
+
+	[Test]
+	public void DateTimes_TimeSpans()
+	{
+		var from = new DateTime(2025, 05, 24, 11, 11, 10);
+		var to = new DateTime(2025, 05, 25, 11, 10, 10);
+
+		from.IsApproximately(to, TimeSpan.FromDays(1));
+
+		var duration = to - from;
+
+		duration.IsApproximately(TimeSpan.FromDays(1), TimeSpan.FromMinutes(1));
 	}
 
 	[Test]
