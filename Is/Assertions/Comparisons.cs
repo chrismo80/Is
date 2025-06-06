@@ -124,7 +124,7 @@ public static class Comparisons
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T>
 	{
-		if (max.IsAtLeast(min) && (actual.CompareTo(max) > 0 || actual.CompareTo(min) < 0))
+		if (max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
 			return true;
 
 		throw new NotException(actual, $"is between {min} and {max}");

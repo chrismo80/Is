@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Is.Tests;
 
 public class Assertions
@@ -250,6 +252,31 @@ public class Assertions
 		Action action = () => 5.Is(new List<int> { 1, 2 });
 		action.IsThrowing<NotException>();
 	}
+
+
+	[Test]
+	public void Comparisons()
+	{
+		var (min, max) = (-11, 33);
+
+		min.IsNegative();
+		max.IsPositive();
+
+		(-11).IsInRange(min, max);
+		(33).IsInRange(min, max);
+		(0).IsInRange(min, max);
+
+		(-11).IsNotBetween(min, max);
+		(33).IsNotBetween(min, max);
+		(0).IsBetween(min, max);
+
+		(-12).IsOutOfRange(min, max);
+		(34).IsOutOfRange(min, max);
+
+
+	}
+
+
 
 	[Test]
 	[TestCase(3, 4)]
