@@ -403,6 +403,6 @@ public class Assertions
 		action.IsThrowing<NotException>().Message.Contains("is not").IsTrue();
 
 		action = () => actual.IsNegative();
-		action.IsThrowing<NotException>("is not negative");
+		action.IsThrowing<NotException>("is not smaller");
 	}
 }

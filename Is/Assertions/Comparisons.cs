@@ -32,25 +32,15 @@ public static class Comparisons
 	/// Asserts that the actual numeric value is positive (greater than zero).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsPositive<T>(this T actual) where T : IComparable<T>
-	{
-		if (actual.CompareTo(default) > 0)
-			return true;
-
-		throw new NotException(actual, "is not positive");
-	}
+	public static bool IsPositive<T>(this T actual) where T : INumber<T> =>
+		actual.IsGreaterThan(T.Zero);
 
 	/// <summary>
 	/// Asserts that the actual numeric value is negative (less than zero).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNegative<T>(this T actual) where T : IComparable<T>
-	{
-		if (actual.CompareTo(default) < 0)
-			return true;
-
-		throw new NotException(actual, "is not negative");
-	}
+	public static bool IsNegative<T>(this T actual) where T : INumber<T> =>
+		actual.IsSmallerThan(T.Zero);
 
 	/// <summary>
 	/// Asserts that the actual value is greater
