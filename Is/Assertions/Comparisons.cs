@@ -8,20 +8,6 @@ namespace Is;
 public static class Comparisons
 {
 	/// <summary>
-	/// Asserts that the difference between the actual and expected <see cref="DateTime"/>
-	/// is within the specified <paramref name="tolerance"/>.
-	/// </summary>
-	public static bool IsApproximately(this DateTime actual, DateTime expected, TimeSpan tolerance) =>
-		(actual - expected).Duration().IsAtMost(tolerance);
-
-	/// <summary>
-	/// Asserts that the difference between the actual and expected <see cref="TimeSpan"/>
-	/// is within the specified <paramref name="tolerance"/>.
-	/// </summary>
-	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance) =>
-		(actual - expected).Duration().IsAtMost(tolerance);
-
-	/// <summary>
 	/// Asserts that the <paramref name="actual"/> floating point
 	/// is approximately equal to <paramref name="expected"/>.
 	/// </summary>
@@ -158,6 +144,17 @@ public static class Comparisons
 		throw new NotException(actual, $"is in range of {min} and {max}");
 	}
 
-	private static bool IsCloseTo(this TimeSpan diff, TimeSpan tolerance) =>
-		Math.Abs(diff.Ticks) <= tolerance.Ticks;
+	/// <summary>
+	/// Asserts that the difference between the actual and expected <see cref="DateTime"/>
+	/// is within the specified <paramref name="tolerance"/>.
+	/// </summary>
+	public static bool IsApproximately(this DateTime actual, DateTime expected, TimeSpan tolerance) =>
+		(actual - expected).Duration().IsAtMost(tolerance);
+
+	/// <summary>
+	/// Asserts that the difference between the actual and expected <see cref="TimeSpan"/>
+	/// is within the specified <paramref name="tolerance"/>.
+	/// </summary>
+	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance) =>
+		(actual - expected).Duration().IsAtMost(tolerance);
 }
