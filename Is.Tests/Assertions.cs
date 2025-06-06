@@ -270,11 +270,7 @@ public class Assertions
 
 		(-12).IsOutOfRange(min, max);
 		(34).IsOutOfRange(min, max);
-
-
 	}
-
-
 
 	[Test]
 	[TestCase(3, 4)]
@@ -369,8 +365,6 @@ public class Assertions
 		((Action)(() => true.IsFalse())).IsThrowing<NotException>("is not");
 		((Action)(() => false.IsTrue())).IsThrowing<NotException>("is not");
 	}
-
-
 
 	[Test]
 	public void DateTimes_TimeSpans()

@@ -11,25 +11,15 @@ public static class Comparisons
 	/// Asserts that the difference between the actual and expected <see cref="DateTime"/>
 	/// is within the specified <paramref name="tolerance"/>.
 	/// </summary>
-	public static bool IsApproximately(this DateTime actual, DateTime expected, TimeSpan tolerance)
-	{
-		if ((actual - expected).IsCloseTo(tolerance))
-			return true;
-
-		throw new NotException(actual, "is not approximately", expected);
-	}
+	public static bool IsApproximately(this DateTime actual, DateTime expected, TimeSpan tolerance) =>
+		(actual - expected).Duration().IsAtMost(tolerance);
 
 	/// <summary>
 	/// Asserts that the difference between the actual and expected <see cref="TimeSpan"/>
 	/// is within the specified <paramref name="tolerance"/>.
 	/// </summary>
-	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance)
-	{
-		if ((actual - expected).IsCloseTo(tolerance))
-			return true;
-
-		throw new NotException(actual, "is not approximately", expected);
-	}
+	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance) =>
+		(actual - expected).Duration().IsAtMost(tolerance);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> floating point
