@@ -230,7 +230,7 @@ value.IsBetween(6, 12);
 ```
 Enables collection assertion like:
 ```csharp
-Assert.All(item => item.IsPositive());
+list.All(item => item.IsPositive());
 ```
 
 
