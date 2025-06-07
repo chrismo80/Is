@@ -62,12 +62,15 @@ public class Assertions
 	[Test]
 	public void IsThrowing_NotThrown_Async()
 	{
-		var action = () => Task.Delay(10);
-		Action outerAction = () => action.IsThrowing<DivideByZeroException>();
+		var action = () => Task.Delay(100);
+		Action failingAction = () => action.IsThrowing<DivideByZeroException>();
+		Action succeedingAction = () => action.IsNotThrowing<DivideByZeroException>();
 
-		outerAction.IsThrowing<NotException>("not thrown");
 
+		action.IsCompletingWithin(TimeSpan.FromMilliseconds(200));
 		action.IsNotThrowing<Exception>();
+		failingAction.IsThrowing<NotException>("not thrown");
+		succeedingAction.IsCompletingWithin(TimeSpan.FromMilliseconds(200));
 	}
 
 	[Test]
