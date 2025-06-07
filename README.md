@@ -224,13 +224,13 @@ can look elegant, it introduces trade-offs that conflict with design goals:
 - ✅ Recommended calling assertions directly and explicitly:
 
 ```csharp
-Is.Positive(value);
-Is.GreaterThan(value, 6);
-Is.Between(value, 6, 12);
+value.IsPositive();
+value.IsGreaterThan(, 6);
+value.IsBetween(6, 12);
 ```
 Enables collection assertion like:
 ```csharp
-Assert.All(myList, item => Is.Positive(item));
+Assert.All(item => item.IsPositive());
 ```
 
 
