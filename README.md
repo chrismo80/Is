@@ -206,7 +206,8 @@ Exception messages
 - 📢 Failure messages like: ```42 (System.Int32) is not 41 (System.Int32)```
 - 🧠 Designed to make tests read like intentions, not machinery
 
-❌ Why We Avoid Chaining
+❌ Avoid Chaining
+
 While fluent-style chaining such as:
 
 ```csharp
@@ -215,7 +216,7 @@ value
     .IsGreaterThan(6)
     .IsBetween(6, 12);
 ```
-can look elegant, it introduces trade-offs that conflict with our goals:
+can look elegant, it introduces trade-offs that conflict with design goals:
 
 - 🧩 Conflicting goals
 Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
@@ -231,7 +232,7 @@ Is.Positive(value);
 Is.GreaterThan(value, 6);
 Is.Between(value, 6, 12);
 ```
-Or when used with collections:
+Enables collection assertion like:
 ```csharp
 Assert.All(myList, item => Is.Positive(item));
 ```
