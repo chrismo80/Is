@@ -225,7 +225,7 @@ can look elegant, it introduces trade-offs that conflict with design goals:
 
 ```csharp
 value.IsPositive();
-value.IsGreaterThan(, 6);
+value.IsGreaterThan(6);
 value.IsBetween(6, 12);
 ```
 Enables collection assertion like:
