@@ -218,14 +218,10 @@ value
 ```
 can look elegant, it introduces trade-offs that conflict with design goals:
 
-- 🧩 Conflicting goals
-Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
-- 🔄 Breaks LINQ patterns
-Useful patterns like .All(x => x.IsPositive()) require boolean-returning extensions — chaining breaks this.
-- 📏 Philosophical mismatch
-Chaining implies stateful assertion objects; this library favors stateless, minimal assertions for predictability and simplicity.
-- ✅ Preferred Style
-Recommended calling assertions directly and explicitly:
+- 🧩 Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
+- 🔄 Useful patterns like .All(x => x.IsPositive()) require boolean-returning extensions — chaining breaks this.
+- 📏 Chaining implies stateful assertion objects; this library favors stateless, minimal assertions for predictability and simplicity.
+- ✅ Recommended calling assertions directly and explicitly:
 
 ```csharp
 Is.Positive(value);
