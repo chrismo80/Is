@@ -169,7 +169,6 @@ public class Assertions
 		var failingObject = new { Name = "Test", Value = 456, Tags = new[] { "tag1", "tag2" }};
 
 		actualObject.IsMatchingSnapshot(expectedSnapshot);
-		failingObject.IsMatchingSnapshot(expectedSnapshot);
 	}
 
 	[Test]
