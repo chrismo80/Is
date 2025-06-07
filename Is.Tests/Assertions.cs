@@ -21,6 +21,16 @@ public class Assertions
 
 		action.IsThrowing<DivideByZeroException>();
 		action.IsThrowing<DivideByZeroException>("by zero");
+		action.IsNotThrowing<ArgumentException>();
+	}
+
+	[Test]
+	public void IsNotThrowing_Sync()
+	{
+		var action = () => Console.WriteLine("Hello World");
+
+		action.IsNotThrowing<DivideByZeroException>();
+		action.IsNotThrowing<ArgumentException>();
 	}
 
 	[Test]
@@ -44,6 +54,9 @@ public class Assertions
 
 		action2.IsThrowing<InvalidOperationException>();
 		action2.IsThrowing<InvalidOperationException>("timeout");
+
+		action1.IsNotThrowing<InvalidOperationException>();
+		action2.IsNotThrowing<DivideByZeroException>();
 	}
 
 	[Test]
@@ -53,6 +66,8 @@ public class Assertions
 		Action outerAction = () => action.IsThrowing<DivideByZeroException>();
 
 		outerAction.IsThrowing<NotException>("not thrown");
+
+		action.IsNotThrowing<Exception>();
 	}
 
 	[Test]

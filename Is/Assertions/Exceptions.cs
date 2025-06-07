@@ -27,6 +27,36 @@ public static class Exceptions
 	}
 
 	/// <summary>
+	/// Asserts that the given <paramref name="action" /> does not throw
+	/// an exception of type <typeparamref name="T" />.
+	/// </summary>
+	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotThrowing<T>(this Action action) where T : Exception
+	{
+		try
+		{
+			action();
+		}
+		catch (Exception ex)
+		{
+			return ex.IsNot<T>();
+		}
+
+		return true;
+	}
+
+	/// <summary>
+	/// Asserts that the given synchronous <paramref name="action"/> throws
+	/// an exception of type <typeparamref name="T"/>
+	/// and that the exception message contains
+	/// the specified <paramref name="message"/> substring.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
+		action.IsThrowing<T>().Message.IsContaining(message);
+
+	/// <summary>
 	/// Asserts that the given async <paramref name="function" /> throws
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
@@ -40,14 +70,17 @@ public static class Exceptions
 	}
 
 	/// <summary>
-	/// Asserts that the given synchronous <paramref name="action"/> throws
-	/// an exception of type <typeparamref name="T"/>
-	/// and that the exception message contains
-	/// the specified <paramref name="message"/> substring.
+	/// Asserts that the given async <paramref name="function" /> does not throw
+	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
+	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
-		action.IsThrowing<T>().Message.IsContaining(message);
+	public static bool IsNotThrowing<T>(this Func<Task> function) where T : Exception
+	{
+		var action = () => function().GetAwaiter().GetResult();
+
+		return action.IsNotThrowing<T>();
+	}
 
 	/// <summary>
 	/// Asserts that the given asynchronous <paramref name="function"/> throws
