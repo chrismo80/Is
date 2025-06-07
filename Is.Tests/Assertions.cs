@@ -162,6 +162,17 @@ public class Assertions
 	}
 
 	[Test]
+	public void Snapshot()
+	{
+		var expectedSnapshot = new { Name = "Test", Value = 123, Tags = new[] { "tag1", "tag2" } };
+		var actualObject = new { Name = "Test", Value = 123, Tags = new[] { "tag1", "tag2" } };
+		var failingObject = new { Name = "Test", Value = 456, Tags = new[] { "tag1", "tag2" }};
+
+		actualObject.IsMatchingSnapshot(expectedSnapshot);
+		failingObject.IsMatchingSnapshot(expectedSnapshot);
+	}
+
+	[Test]
 	public void Is_DifferentArrayDepths()
 	{
 		new object[] { (int[]) [1, 2], 3 }.Is(new object[] { (int[]) [1, 2], 3 });
