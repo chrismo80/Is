@@ -62,7 +62,18 @@ Methods that assert conditions related to equality.
 | `IsSameAs<T>(T actual, T expected)` | Asserts that the actual object is the same instance as the expected object. |
 | `IsDefault<T>(T actual)` | Asserts that the actual value is the default value of its type. |
 | `IsSatisfying<T>(T actual, Func<T, bool> predicate)` | Asserts that the actual object satisfies the specified predicate. |
+| `IsMatchingSnapshot<T>(T actual, T expected)` | Asserts that the actual object matches the expected by comparing their serialized JSON strings. |
 
+### Performance Assertions
+Methods that assert conditions related to method execution durations.
+
+| Method | Description |
+|--------|-------------|
+| `IsCompletingWithin(Action action, TimeSpan timeout)` | Asserts that the given synchronous action did complete within a specific timespan. |
+| `IsCompletingWithin(Func<Task> function, TimeSpan timeout)` | Asserts that the given asynchronous function did complete within a specific timespan. |
+
+
+ 
 ### Collection Assertions
 Methods that assert conditions related to collections and sequences.
 
