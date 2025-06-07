@@ -199,12 +199,42 @@ Exception messages
 ![plot](ErrorMessage.png)
 
 
-## ⚖️ Design Philosophy
+## ⚖️ Design Philosophy: Clarity over Chaining
 
 - ❌ No ```.Should()```, no fluent bloat
-- ✅ All positive assertions (Is, IsNull, IsTrue, etc.)
+- ✅ Focus on positive assertions
 - 📢 Failure messages like: ```42 (System.Int32) is not 41 (System.Int32)```
 - 🧠 Designed to make tests read like intentions, not machinery
+
+❌ Why We Avoid Chaining
+While fluent-style chaining such as:
+
+```csharp
+value
+    .IsPositive()
+    .IsGreaterThan(6)
+    .IsBetween(6, 12);
+```
+can look elegant, it introduces trade-offs that conflict with our goals:
+
+- 🧩 Conflicting goals
+Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
+- 🔄 Breaks LINQ patterns
+Useful patterns like .All(x => x.IsPositive()) require boolean-returning extensions — chaining breaks this.
+- 📏 Philosophical mismatch
+Chaining implies stateful assertion objects; this library favors stateless, minimal assertions for predictability and simplicity.
+- ✅ Preferred Style
+Recommended calling assertions directly and explicitly:
+
+```csharp
+Is.Positive(value);
+Is.GreaterThan(value, 6);
+Is.Between(value, 6, 12);
+```
+Or when used with collections:
+```csharp
+Assert.All(myList, item => Is.Positive(item));
+```
 
 
 ## 🔍 Key Advantages of Is
@@ -216,6 +246,22 @@ Exception messages
     - Prioritizes clarity over fluent DSL chaining.
 - 🔧 Extensible and Easy to Maintain
     - Simple to audit, fork, and adapt for your team or test infrastructure.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## 📝 License
