@@ -9,7 +9,7 @@ public static class Comparisons
 {
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> floating point
-	/// is approximately equal to <paramref name="expected"/>.
+	/// is approximately equal to <paramref name="expected"/> considering an <paramref name="epsilon"/>.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -29,21 +29,21 @@ public static class Comparisons
 		actual.IsApproximately(expected, T.CreateChecked(1e-6));
 
 	/// <summary>
-	/// Asserts that the actual numeric value is positive (greater than zero).
+	/// Asserts that the <paramref name="actual"/> numeric value is positive (greater than zero).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsPositive<T>(this T actual) where T : INumber<T> =>
 		actual.IsGreaterThan(T.Zero);
 
 	/// <summary>
-	/// Asserts that the actual numeric value is negative (less than zero).
+	/// Asserts that the <paramref name="actual"/> numeric value is negative (less than zero).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNegative<T>(this T actual) where T : INumber<T> =>
 		actual.IsSmallerThan(T.Zero);
 
 	/// <summary>
-	/// Asserts that the actual value is greater
+	/// Asserts that the <paramref name="actual"/> value is greater
 	/// than the given <paramref name="other" /> value.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
@@ -57,7 +57,7 @@ public static class Comparisons
 	}
 
 	/// <summary>
-	/// Asserts that the actual value is smaller
+	/// Asserts that the <paramref name="actual"/> value is smaller
 	/// than the given <paramref name="other" /> value.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
@@ -71,7 +71,7 @@ public static class Comparisons
 	}
 
 	/// <summary>
-	/// Asserts that the actual value is greater or equal
+	/// Asserts that the <paramref name="actual"/> value is greater or equal
 	/// the given <paramref name="other" /> value.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
@@ -85,7 +85,7 @@ public static class Comparisons
 	}
 
 	/// <summary>
-	/// Asserts that the actual value is smaller or equal
+	/// Asserts that the <paramref name="actual"/> value is smaller or equal
 	/// the given <paramref name="other" /> value.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
@@ -117,7 +117,7 @@ public static class Comparisons
 		actual.IsAtLeast(min) && actual.IsAtMost(max);
 
 	/// <summary>
-	/// Asserts that the actual value is not between
+	/// Asserts that the <paramref name="actual"/> value is not between
 	/// the specified <paramref name="min"/> and <paramref name="max"/> exclusive bounds.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
@@ -145,14 +145,14 @@ public static class Comparisons
 	}
 
 	/// <summary>
-	/// Asserts that the difference between the actual and expected <see cref="DateTime"/>
+	/// Asserts that the difference between the <paramref name="actual"/> and <paramref name="expected"/> <see cref="DateTime"/>
 	/// is within the specified <paramref name="tolerance"/>.
 	/// </summary>
 	public static bool IsApproximately(this DateTime actual, DateTime expected, TimeSpan tolerance) =>
 		(actual - expected).Duration().IsAtMost(tolerance);
 
 	/// <summary>
-	/// Asserts that the difference between the actual and expected <see cref="TimeSpan"/>
+	/// Asserts that the difference between the <paramref name="actual"/> and <paramref name="expected"/> <see cref="TimeSpan"/>
 	/// is within the specified <paramref name="tolerance"/>.
 	/// </summary>
 	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance) =>

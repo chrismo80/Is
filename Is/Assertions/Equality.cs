@@ -9,7 +9,7 @@ namespace Is;
 public static class Equality
 {
 	/// <summary>
-	/// Asserts that the actual object is equal to the expected value.
+	/// Asserts that the <paramref name="actual"/> object is equal to the <paramref name="expected"/> value.
 	/// (no array unwrapping, exact match for floating points)
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -22,7 +22,7 @@ public static class Equality
 	}
 
 	/// <summary>
-	/// Asserts that the actual object matches the expected value(s).
+	/// Asserts that the <paramref name="actual"/> object matches the <paramref name="expected"/> value(s).
 	/// (array unwrapping, approximately for floating points)
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -30,7 +30,7 @@ public static class Equality
 		actual.ShouldBe(expected?.Unwrap());
 
 	/// <summary>
-	/// Asserts that the actual value is not equal to the expected value.
+	/// Asserts that the <paramref name="actual"/> value is not equal to the <paramref name="expected"/> value.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNot<T>(this T actual, T expected)
@@ -42,7 +42,7 @@ public static class Equality
 	}
 
 	/// <summary>
-	/// Asserts that the actual object is the same instance as the expected object.
+	/// Asserts that the <paramref name="actual"/> object is the same instance as the <paramref name="expected"/> object.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSameAs<T>(this T actual, T expected) where T : class?
@@ -54,14 +54,14 @@ public static class Equality
 	}
 
 	/// <summary>
-	/// Asserts that the actual value is the default value of its type.
+	/// Asserts that the <paramref name="actual"/> value is the default value of its type.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsDefault<T>(this T actual) =>
 		actual.IsExactly(default);
 
 	/// <summary>
-	/// Asserts that the actual object satisfies the specified predicate.
+	/// Asserts that the <paramref name="actual"/> object satisfies the specified <paramref name="predicate"/>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSatisfying<T>(this T actual, Func<T, bool> predicate)
