@@ -41,8 +41,8 @@ The full public API and its extension methods can be [found here](https://github
 ### Basic value checks
 ```csharp
 42.Is(42);       // ✅ passes
-42.Is(41);       // ❌ throws IsNotException: 42 (System.Int32) is not 41 (System.Int32)
-42.Is(42.0);     // ❌ throws IsNotException: 42 (System.Int32) is not 42 (System.Double)
+42.Is(41);       // ❌ throws Is.NotException: 42 (System.Int32) is not 41 (System.Int32)
+42.Is(42.0);     // ❌ throws Is.NotException: 42 (System.Int32) is not 42 (System.Double)
 
 "test".Is("test");               // ✅ passes
 ```
@@ -62,7 +62,7 @@ new List<int> { 1, 2 }.IsIn(1, 2, 3, 4);            // ✅ passes
 ### Type checks
 ```csharp
 "hello".Is<string>();     // ✅ passes
-"hello".Is<int>();        // ❌ throws IsNotException: "hello" (System.String) is no System.Int32
+"hello".Is<int>();        // ❌ throws Is.NotException: "hello" (System.String) is no System.Int32
 ```
 
 ### Numeric comparisons
@@ -72,7 +72,7 @@ new List<int> { 1, 2 }.IsIn(1, 2, 3, 4);            // ✅ passes
 
 5.IsSmallerThan(6);      // ✅ passes
 6.IsGreaterThan(5.0);    // ✅ passes
-5.IsGreaterThan(6);      // ❌ throws IsNotException: 5 (System.Int32) is not greater than 6 (System.Int32)
+5.IsGreaterThan(6);      // ❌ throws Is.NotException: 5 (System.Int32) is not greater than 6 (System.Int32)
 2.IsBetween(1, 3);       // ✅ passes
 
 (0.1 + 0.2).Is(0.3);                // ✅ passes
@@ -80,7 +80,7 @@ new List<int> { 1, 2 }.IsIn(1, 2, 3, 4);            // ✅ passes
 (0.1 + 0.2).IsApproximately(0.3);   // ✅ passes
 
 (1.0 / 3.0).Is(0.333333);     // ✅ passes
-(1.0 / 3.0).Is(0.33333);      // ❌ throws IsNotException: 0,33333 (System.Double) is not close to 0,3333333333333333 (System.Double)
+(1.0 / 3.0).Is(0.33333);      // ❌ throws Is.NotException: 0,33333 (System.Double) is not close to 0,3333333333333333 (System.Double)
 ```
 
 ### Exception assertions
@@ -90,7 +90,7 @@ Action action = () => _ = DivideByZero(1);
 action.IsThrowing<DivideByZeroException>();  // ✅ passes
 
 Action action = () => 5.IsGreaterThan(6);
-action.IsThrowing<IsNotException>("is not greater than");    // ✅ passes
+action.IsThrowing<Is.NotException>("is not greater than");    // ✅ passes
 ```
 
 ### String checks
