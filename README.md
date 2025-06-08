@@ -1,4 +1,4 @@
-![plot](https://github.com/chrismo80/Is/blob/main/Is/icon.png)
+![plot](https://github.com/chrismo80/Is/blob/main/Is.png)
 # Minimalistic Assertion Extensions for .NET
 
 **Simple. Readable. Opinionated.**
