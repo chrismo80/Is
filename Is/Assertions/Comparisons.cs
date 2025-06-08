@@ -145,14 +145,14 @@ public static class Comparisons
 	}
 
 	/// <summary>
-	/// Asserts that the difference between two <see cref="DateTime"/>s
+	/// Asserts that the difference between two <see cref="DateTime"/>
 	/// is within the specified <paramref name="tolerance"/>.
 	/// </summary>
 	public static bool IsApproximately(this DateTime actual, DateTime expected, TimeSpan tolerance) =>
 		(actual - expected).Duration().IsAtMost(tolerance);
 
 	/// <summary>
-	/// Asserts that the difference between two <see cref="TimeSpan"/>s
+	/// Asserts that the difference between two <see cref="TimeSpan"/>
 	/// is within the specified <paramref name="tolerance"/>.
 	/// </summary>
 	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance) =>

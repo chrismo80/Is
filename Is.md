@@ -20,8 +20,8 @@
 - **IsInRange**: Asserts that the `actual` value is between `min` and `max` inclusive bounds.
 - **IsNotBetween**: Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds.
 - **IsOutOfRange**: Asserts that the `actual` value is smaller than `min` or greater than `max`.
-- **IsApproximately**: Asserts that the difference between two `DateTime`s is within the specified `tolerance`.
-- **IsApproximately**: Asserts that the difference between two `TimeSpan`s is within the specified `tolerance`.
+- **IsApproximately**: Asserts that the difference between two `DateTime` is within the specified `tolerance`.
+- **IsApproximately**: Asserts that the difference between two `TimeSpan` is within the specified `tolerance`.
 ### Equality
 - **IsExactly**: Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)
 - **Is**: Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)
