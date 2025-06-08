@@ -1,4 +1,4 @@
-![plot](Is/icon.png)
+![plot](https://github.com/chrismo80/Is/blob/main/Is/icon.png)
 # Minimalistic Assertion Extensions for .NET
 
 **Simple. Readable. Opinionated.**
@@ -133,6 +133,8 @@ Methods that assert conditions related to null values.
 
 > ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
 
+The full public API and its extension methods can be [found here](https://github.com/chrismo80/Is/blob/main/Is.md)
+
 
 ## 🔧 Usage Examples
 
@@ -207,7 +209,8 @@ Exception messages
 - uses colors to highlight important parts
 - displays the source of the error (line number and code)
 
-![plot](ErrorMessage.png)
+
+![plot](https://github.com/chrismo80/Is/blob/main/ErrorMessage.png)
 
 
 ## ⚖️ Design Philosophy: Clarity over Chaining
