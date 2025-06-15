@@ -62,12 +62,8 @@ public static class Exceptions
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsThrowing<T>(this Func<Task> function) where T : Exception
-	{
-		var action = () => function().GetAwaiter().GetResult();
-
-		return action.IsThrowing<T>();
-	}
+	public static T IsThrowing<T>(this Func<Task> function) where T : Exception =>
+		function.ToAction().IsThrowing<T>();
 
 	/// <summary>
 	/// Asserts that the given async <paramref name="function" /> does not throw
@@ -75,12 +71,8 @@ public static class Exceptions
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotThrowing<T>(this Func<Task> function) where T : Exception
-	{
-		var action = () => function().GetAwaiter().GetResult();
-
-		return action.IsNotThrowing<T>();
-	}
+	public static bool IsNotThrowing<T>(this Func<Task> function) where T : Exception =>
+		function.ToAction().IsNotThrowing<T>();
 
 	/// <summary>
 	/// Asserts that the given asynchronous <paramref name="function"/> throws
@@ -91,4 +83,7 @@ public static class Exceptions
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsThrowing<T>(this Func<Task> function, string message) where T : Exception =>
 		function.IsThrowing<T>().Message.IsContaining(message);
+
+	internal static Action ToAction(this Func<Task> function) =>
+		() => function().GetAwaiter().GetResult();
 }

@@ -24,10 +24,6 @@ public static class Performance
 	/// within a specific <paramref name="timespan" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsCompletingWithin(this Func<Task> function, TimeSpan timespan)
-	{
-		var action = () => function().GetAwaiter().GetResult();
-
-		return action.IsCompletingWithin(timespan);
-	}
+	public static bool IsCompletingWithin(this Func<Task> function, TimeSpan timespan) =>
+		function.ToAction().IsCompletingWithin(timespan);
 }
