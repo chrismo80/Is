@@ -8,8 +8,8 @@ internal static class JsonComparer
 	internal static List<string> DifferencesTo(this string actualJson, string expectedJson) =>
 		actualJson.ToJsonNode().CompareTo(expectedJson.ToJsonNode(), "", []);
 
-	internal static string ToJson<T>(this T me) =>
-		JsonSerializer.Serialize(me);
+	internal static string ToJson<T>(this T me, JsonSerializerOptions? options = null) =>
+		JsonSerializer.Serialize(me, options);
 
 	private static JsonNode? ToJsonNode(this string json) =>
 		JsonNode.Parse(json);

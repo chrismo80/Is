@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Collections;
+using System.Text.Json;
 
 namespace Is;
 
@@ -76,9 +77,9 @@ public static class Equality
 	/// <paramref name="expected" /> by comparing their serialized JSON strings for equality.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatchingSnapshot<T>(this T actual, T expected)
+	public static bool IsMatchingSnapshot<T>(this T actual, T expected, JsonSerializerOptions? options = null)
 	{
-		var (actualJson, expectedJson) = (actual.ToJson(), expected.ToJson());
+		var (actualJson, expectedJson) = (actual.ToJson(options), expected.ToJson(options));
 
 		if (actualJson.IsExactlyEqualTo(expectedJson))
 			return true;
