@@ -16,6 +16,12 @@ internal static class JsonComparer
 
 	private static List<string> CompareTo(this JsonNode? actual, JsonNode? expected, string path, List<string> diffs)
 	{
+		if (path.Count(c => c is '.' or '[') > 100)
+		{
+			diffs.Add($"{path.Color(100)}: path too deep (length limit exceeded)");
+			return diffs;
+		}
+
 		if (actual != null && expected != null)
 			return (actual, expected) switch
 			{
@@ -26,7 +32,7 @@ internal static class JsonComparer
 			};
 
 		if (actual == null || expected == null)
-			diffs.Add($"{path}: {actual?.ToJsonString() ?? "<NULL>"} is not {expected?.ToJsonString() ?? "<NULL>"}");
+			diffs.Add($"{path}: {actual.Format().Color(91)} is not {expected.Format().Color(92)}");
 
 		return diffs;
 	}
@@ -34,7 +40,7 @@ internal static class JsonComparer
 	private static List<string> Compare(JsonNode actual, JsonNode expected, string path, List<string> diffs)
 	{
 		if (actual.ToJsonString() != expected.ToJsonString())
-			diffs.Add($"{path}: " + actual.ToJsonString().Color(31) + " is not " + expected.ToJsonString().Color(32));
+			diffs.Add($"{path}: " + actual.ToJsonString().Color(91) + " is not " + expected.ToJsonString().Color(92));
 
 		return diffs;
 	}
@@ -58,7 +64,7 @@ internal static class JsonComparer
 				actual[i].CompareTo(expected[i], $"{path}[{i}]", diffs);
 		}
 		else
-			diffs.Add($"{path}: count mismatch ({actual.Count.Color(31)} is not {expected.Count.Color(32)})");
+			diffs.Add($"{path}: count mismatch ({actual.Count.Color(91)} is not {expected.Count.Color(92)})");
 
 		return diffs;
 	}
@@ -69,4 +75,7 @@ internal static class JsonComparer
 
 		return diffs;
 	}
+
+	private static string Format(this JsonNode? node) =>
+		node?.ToJsonString() ?? "<NULL>";
 }
