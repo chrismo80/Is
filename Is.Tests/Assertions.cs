@@ -205,7 +205,7 @@ public class Assertions
 					Names = new[] { "Ipsum", "Lorem" },
 				}
 			},
-			Tags = new[] { "tag1", "tag3" },
+			Tags = new[] { "tag1", "tag2", "tag3" },
 			Max = 3.7
 		};
 

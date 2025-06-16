@@ -1,6 +1,6 @@
 ### Booleans
-- **IsTrue**: Asserts that a boolean value is.
-- **IsFalse**: Asserts that a boolean value is.
+- **IsTrue**: Asserts that a boolean value is `true`.
+- **IsFalse**: Asserts that a boolean value is `false`.
 ### Collections
 - **IsEmpty**: Asserts that the sequence is empty.
 - **IsUnique**: Asserts that all elements in the sequence are unique.
@@ -38,8 +38,8 @@
 - **IsNotThrowing**: Asserts that the given async `function` does not throw an exception of type `T`.
 - **IsThrowing**: Asserts that the given asynchronous `function` throws an exception of type `T` and that the exception message contains the specified `message` substring.
 ### Null
-- **IsNull**: Asserts that an object is.
-- **IsNotNull**: Asserts that the object is not.
+- **IsNull**: Asserts that an object is `null`.
+- **IsNotNull**: Asserts that the object is not `null`.
 ### Performance
 - **IsCompletingWithin**: Asserts that the given `action` did complete within a specific `timespan`.
 - **IsCompletingWithin**: Asserts that the given async `function` did complete within a specific `timespan`.
