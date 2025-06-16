@@ -164,9 +164,50 @@ public class Assertions
 	[Test]
 	public void Snapshot()
 	{
-		var expectedSnapshot = new { Name = "Test", Value = 123, Info = new { Details = "Lorem" }, Tags = new[] { "tag1", "tag2" } };
-		var actualObject = new { Name = "Test", Value = 123, Info = new { Details = "Lorem" }, Tags = new[] { "tag1", "tag2" } };
-		var failingObject = new { Name = "Test", Value = 456, Info = new { Details = "Ipsum" }, Tags = new[] { "tag1", "tag3" } };
+		var expectedSnapshot = new
+			{
+				Name = "Test",
+				Value = 123,
+				Info = new
+				{
+					Details = new
+					{
+						Names = new[] { "Lorem", "Ipsum" },
+					}
+				},
+				Tags = new[] { "tag1", "tag2" },
+				Max = 4.5
+			};
+
+		var actualObject = new
+		{
+			Name = "Test",
+			Value = 123,
+			Info = new
+			{
+				Details = new
+				{
+					Names = new[] { "Lorem", "Ipsum" },
+				}
+			},
+			Tags = new[] { "tag1", "tag2" },
+			Max = 4.5
+		};
+
+		var failingObject = new
+		{
+			Name = "Test",
+			Value = 456,
+			Info = new
+			{
+				Details = new
+				{
+					Names = new[] { "Ipsum", "Lorem" },
+				}
+			},
+			Tags = new[] { "tag1", "tag3" },
+			Max = 3.7
+		};
 
 		actualObject.IsMatchingSnapshot(expectedSnapshot);
 

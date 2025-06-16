@@ -83,7 +83,7 @@ public static class Equality
 		if (actualJson.IsExactlyEqualTo(expectedJson))
 			return true;
 
-		throw new  NotException("object is not matching", actualJson.DifferencesTo(expectedJson));
+		throw new  NotException("object is not matching", actualJson.DifferencesTo(expectedJson), 10);
 	}
 
 	private static bool ShouldBe(this object actual, object[]? expected) =>
