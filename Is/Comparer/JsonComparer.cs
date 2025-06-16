@@ -51,7 +51,7 @@ public static class JsonComparer
 			};
 
 		if (actual == null || expected == null)
-			diffs.Add($"{path}: {actual.Format().Color(91)} is not {expected.Format().Color(92)}");
+			diffs.Add($"{path}: {actual.Actually("is not", expected)}");
 
 		return diffs;
 	}
@@ -59,7 +59,7 @@ public static class JsonComparer
 	private static List<string> Compare(JsonNode actual, JsonNode expected, string path, List<string> diffs)
 	{
 		if (actual.ToJsonString().IsExactlyEqualTo(expected.ToJsonString()))
-			diffs.Add($"{path}: " + actual.ToJsonString().Color(91) + " is not " + expected.ToJsonString().Color(92));
+			diffs.Add($"{path}: " + actual.ToJsonString().Simply("is not", expected.ToJsonString()));
 
 		return diffs;
 	}
@@ -83,7 +83,7 @@ public static class JsonComparer
 				actual[i].CompareTo(expected[i], $"{path}[{i}]", diffs);
 		}
 		else
-			diffs.Add($"{path}: count mismatch ({actual.Count.Color(91)} is not {expected.Count.Color(92)})");
+			diffs.Add($"{path}: count mismatch ({actual.Count.Simply("is not", expected.Count)})");
 
 		return diffs;
 	}

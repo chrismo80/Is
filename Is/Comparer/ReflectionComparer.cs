@@ -31,7 +31,7 @@ public static class ReflectionComparer
 		}
 
 		if (actual == null || expected == null)
-			diffs.Add($"{path}: {actual.FormatValue().Color(91)} is not {expected.FormatValue().Color(92)}");
+			diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
 
 		return diffs;
 	}
@@ -46,7 +46,7 @@ public static class ReflectionComparer
 		if (IsSimple(Nullable.GetUnderlyingType(type) ?? type))
 		{
 			if (!actual.IsExactlyEqualTo(expected))
-				diffs.Add($"{path}: {actual.FormatValue().Color(91)} is not {expected.FormatValue().Color(92)}");
+				diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
 
 			return diffs;
 		}
@@ -66,7 +66,7 @@ public static class ReflectionComparer
 
 		if (actualArr.Count != expectedArr.Count)
 		{
-			diffs.Add($"{path}: count mismatch ({actualArr.Count.Color(91)} is not {expectedArr.Count.Color(92)})");
+			diffs.Add($"{path}: count mismatch ({actualArr.Count.Simply("is not", expectedArr.Count)})");
 			return diffs;
 		}
 

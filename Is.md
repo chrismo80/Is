@@ -32,7 +32,7 @@ All public methods are designed as extensions methods.
 - __IsDefault__: _Asserts that the `actual` value is the default value of its type._
 - __IsSatisfying__: _Asserts that the `actual` object satisfies the specified `predicate`._
 - __IsMatchingSnapshot__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality._
-- __IsMatching__: _Asserts that the given `actual` object matches the `expected` by running a deep reflection-based object comparison on their properties and fields for equality._
+- __IsMatching__: _Asserts that the given `actual` object matches the `other` by running a deep reflection-based object comparison on their properties and fields for equality._
 #### <u>Exceptions</u>
 - __IsThrowing__: _Asserts that the given `action` throws an exception of type `T`._
 - __IsNotThrowing__: _Asserts that the given `action` does not throw an exception of type `T`._

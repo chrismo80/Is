@@ -26,11 +26,17 @@ internal static class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
+	const int RIGHT = 32;
+	const int WRONG = 91;
+
+	internal static string Simply(this object? actual, string equality, object? expected) =>
+		actual.Color(WRONG) + " " + equality + " " + expected.Color(RIGHT);
+
 	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format().Color(91), "actually " + equality, expected.Format().Color(32));
+		CreateMessage(actual.Format().Color(WRONG), equality, expected.Format().Color(RIGHT));
 
 	internal static string Actually(this object? actual, string equality) =>
-		CreateMessage(actual.Format().Color(91), "actually " + equality);
+		CreateMessage(actual.Format().Color(WRONG), equality);
 
 	internal static IEnumerable<string> Truncate(this List<string> text, int max) =>
 		text.Count > max ? text.Take(max).Append("...") : text;

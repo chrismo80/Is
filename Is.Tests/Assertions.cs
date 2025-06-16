@@ -327,7 +327,6 @@ public class Assertions
 		action.IsThrowing<NotException>();
 	}
 
-
 	[Test]
 	public void Comparisons()
 	{

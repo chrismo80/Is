@@ -90,13 +90,13 @@ public static class Equality
 	}
 
 	/// <summary>
-	/// Asserts that the given <paramref name="actual" /> object matches the <paramref name="expected" />
+	/// Asserts that the given <paramref name="actual" /> object matches the <paramref name="other" />
 	/// by running a deep reflection-based object comparison on their properties and fields for equality.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatching(this object actual, object expected)
+	public static bool IsMatching(this object actual, object other)
 	{
-		var diffs = actual.DifferencesTo(expected);
+		var diffs = actual.DifferencesTo(other);
 
 		if (diffs.Count == 0)
 			return true;
