@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Collections;
-using System.Text.Json;
 
 namespace Is;
 
@@ -77,8 +76,15 @@ public static class Equality
 	/// <paramref name="expected" /> by comparing their serialized JSON strings for equality.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatchingSnapshot<T>(this T actual, T expected) =>
-		JsonSerializer.Serialize(actual).IsExactly(JsonSerializer.Serialize(expected));
+	public static bool IsMatchingSnapshot<T>(this T actual, T expected)
+	{
+		var (actualJson, expectedJson) = (actual.ToJson(), expected.ToJson());
+
+		if (actualJson.IsExactlyEqualTo(expectedJson))
+			return true;
+
+		throw new  NotException("object is not matching", actualJson.DifferencesTo(expectedJson));
+	}
 
 	private static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch
@@ -121,8 +127,9 @@ public static class Equality
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>
 		(actual, expected) switch
 		{
-			(float a, float e) => a.IsApproximately(e),
 			(double a, double e) => a.IsApproximately(e),
+			(float a, float e) => a.IsApproximately(e),
+			(decimal a, decimal e) => a.IsApproximately(e),
 			_ => false
 		};
 

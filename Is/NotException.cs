@@ -15,6 +15,10 @@ public class NotException : Exception
 	public NotException(object? actual, string equality)
 		: base(actual.Actually(equality).AddCodeLine())
 	{ }
+
+	public NotException(string message, IEnumerable<string> text)
+		: base($"{message}\n\n\t{string.Join("\n\t", text)}\n".AddCodeLine())
+	{ }
 }
 
 [DebuggerStepThrough]
@@ -28,7 +32,7 @@ internal static class MessageExtensions
 	internal static string Actually(this object? actual, string equality) =>
 		CreateMessage(actual.Format().Color(31), "actually " + equality);
 
-	private static string Format(this object? value) =>
+	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
 	internal static string? Color<T>(this T text, int color) =>

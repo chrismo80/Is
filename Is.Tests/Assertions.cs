@@ -164,11 +164,14 @@ public class Assertions
 	[Test]
 	public void Snapshot()
 	{
-		var expectedSnapshot = new { Name = "Test", Value = 123, Tags = new[] { "tag1", "tag2" } };
-		var actualObject = new { Name = "Test", Value = 123, Tags = new[] { "tag1", "tag2" } };
-		var failingObject = new { Name = "Test", Value = 456, Tags = new[] { "tag1", "tag2" }};
+		var expectedSnapshot = new { Name = "Test", Value = 123, Info = new { Details = "Lorem" }, Tags = new[] { "tag1", "tag2" } };
+		var actualObject = new { Name = "Test", Value = 123, Info = new { Details = "Lorem" }, Tags = new[] { "tag1", "tag2" } };
+		var failingObject = new { Name = "Test", Value = 456, Info = new { Details = "Ipsum" }, Tags = new[] { "tag1", "tag3" } };
 
 		actualObject.IsMatchingSnapshot(expectedSnapshot);
+
+		Action action = () => failingObject.IsMatchingSnapshot(expectedSnapshot);
+		action.IsThrowing<NotException>();
 	}
 
 	[Test]

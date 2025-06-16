@@ -30,7 +30,6 @@ public static class Exceptions
 	/// Asserts that the given <paramref name="action" /> does not throw
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
-	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNotThrowing<T>(this Action action) where T : Exception
 	{
@@ -69,7 +68,6 @@ public static class Exceptions
 	/// Asserts that the given async <paramref name="function" /> does not throw
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
-	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNotThrowing<T>(this Func<Task> function) where T : Exception =>
 		function.ToAction().IsNotThrowing<T>();
