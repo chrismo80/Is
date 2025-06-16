@@ -27,7 +27,7 @@ internal static class MessageExtensions
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
 	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format().Color(91), "actually " + equality, expected.Format().Color(92));
+		CreateMessage(actual.Format().Color(91), "actually " + equality, expected.Format().Color(32));
 
 	internal static string Actually(this object? actual, string equality) =>
 		CreateMessage(actual.Format().Color(91), "actually " + equality);
