@@ -109,9 +109,9 @@ Exception messages
 - uses colors to highlight important parts
 - displays the source of the error (line number and code)
 
+![plot](https://github.com/chrismo80/Is/blob/main/Docs/SimpleErrorMessage.png)
 
-![plot](https://github.com/chrismo80/Is/blob/main/ErrorMessage.png)
-
+![plot](https://github.com/chrismo80/Is/blob/main/Docs/ComplexErrorMessage.png)
 
 ## ⚖️ Design Philosophy: Clarity over Chaining
 
