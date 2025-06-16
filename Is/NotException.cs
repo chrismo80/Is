@@ -27,14 +27,15 @@ internal static class MessageExtensions
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
 	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format().Color(31), "actually " + equality, expected.Format().Color(32));
+		CreateMessage(actual.Format().Color(91), "actually " + equality, expected.Format().Color(92));
 
 	internal static string Actually(this object? actual, string equality) =>
-		CreateMessage(actual.Format().Color(31), "actually " + equality);
+		CreateMessage(actual.Format().Color(91), "actually " + equality);
 
 	internal static IEnumerable<string> Truncate(this List<string> text, int max) =>
 		text.Count > max ? text.Take(max).Append("...") : text;
 
+	// https://ss64.com/nt/syntax-ansi.html
 	internal static string? Color<T>(this T text, int color) =>
 		ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
 
@@ -83,5 +84,5 @@ file static class CallStackExtensions
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
 
 	private static string GetLine(this string fileName, int lineNumber) => " in line " + lineNumber.Color(1) + ": " +
-		SourceCache.GetOrAdd(fileName, File.ReadAllLines)[lineNumber - 1].Trim().Color(33);
+		SourceCache.GetOrAdd(fileName, File.ReadAllLines)[lineNumber - 1].Trim().Color(93);
 }
