@@ -52,3 +52,6 @@
 ### Types
 - **Is**: Asserts that the actual object is of type `T`.
 - **IsNot**: Asserts that the actual object is not of type `T`.
+### JsonComparer
+- **ToJsonFile**: Serializes an object `me` to a JSON file to `filename`
+- **FromJsonFile**: Deserializes an object to type `T` from a JSON file at `filename`

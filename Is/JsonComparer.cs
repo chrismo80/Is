@@ -1,15 +1,33 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Is;
 
-internal static class JsonComparer
+public static class JsonComparer
 {
-	internal static List<string> DifferencesTo(this string actualJson, string expectedJson) =>
-		actualJson.ToJsonNode().CompareTo(expectedJson.ToJsonNode(), "", []);
+	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
+
+	/// <summary>
+	/// Serializes an object <paramref name="me"/> to a JSON file to <paramref name="filename"/>
+	/// </summary>
+	public static void ToJsonFile<T>(this T me, string filename) =>
+		File.WriteAllText(filename, me.ToJson(), Encoding.UTF8);
+
+	/// <summary>
+	/// Deserializes an object to type <typeparamref name="T" /> from a JSON file at <paramref name="filename"/>
+	/// </summary>
+	public static T? FromJsonFile<T>(this string filename) =>
+		File.ReadAllText(filename, Encoding.UTF8).FromJson<T>();
 
 	internal static string ToJson<T>(this T me, JsonSerializerOptions? options = null) =>
-		JsonSerializer.Serialize(me, options);
+		JsonSerializer.Serialize(me, options ?? DefaultOptions);
+
+	internal static T? FromJson<T>(this string json) =>
+		JsonSerializer.Deserialize<T>(json, DefaultOptions);
+
+	internal static List<string> DifferencesTo(this string actualJson, string expectedJson) =>
+		actualJson.ToJsonNode().CompareTo(expectedJson.ToJsonNode(), "", []);
 
 	private static JsonNode? ToJsonNode(this string json) =>
 		JsonNode.Parse(json);
