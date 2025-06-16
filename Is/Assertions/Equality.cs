@@ -8,6 +8,8 @@ namespace Is;
 [DebuggerStepThrough]
 public static class Equality
 {
+	private const int MATCHING_DETAILS = 30;
+
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object is equal to the <paramref name="expected"/> value.
 	/// (no array unwrapping, exact match for floating points)
@@ -84,7 +86,22 @@ public static class Equality
 		if (actualJson.IsExactlyEqualTo(expectedJson))
 			return true;
 
-		throw new  NotException("object is not matching", actualJson.DifferencesTo(expectedJson), 10);
+		throw new  NotException("object is not matching", actualJson.DifferencesTo(expectedJson), MATCHING_DETAILS);
+	}
+
+	/// <summary>
+	/// Asserts that the given <paramref name="actual" /> object matches the <paramref name="expected" />
+	/// by running a deep reflection-based object comparison on their properties and fields for equality.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsMatching(this object actual, object expected)
+	{
+		var diffs = actual.DifferencesTo(expected);
+
+		if (diffs.Count == 0)
+			return true;
+
+		throw new  NotException($"object is not matching", diffs, MATCHING_DETAILS);
 	}
 
 	private static bool ShouldBe(this object actual, object[]? expected) =>
@@ -116,13 +133,13 @@ public static class Equality
 		if (actual.IsExactlyEqualTo(expected))
 			return true;
 
-		if (actual.IsCloseTo(expected))
+		if(actual.IsCloseTo(expected))
 			return true;
 
 		throw new NotException(actual, "is not", expected);
 	}
 
-	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
+	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
 		EqualityComparer<T>.Default.Equals(actual, expected);
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>

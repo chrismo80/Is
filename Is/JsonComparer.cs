@@ -6,6 +6,7 @@ namespace Is;
 
 public static class JsonComparer
 {
+	private const int RECURSION_DEPTH = 100;
 	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
 
 	/// <summary>
@@ -34,7 +35,7 @@ public static class JsonComparer
 
 	private static List<string> CompareTo(this JsonNode? actual, JsonNode? expected, string path, List<string> diffs)
 	{
-		if (path.Count(c => c is '.' or '[') > 100)
+		if (path.Count(c => c is '.' or '[') > RECURSION_DEPTH)
 		{
 			diffs.Add($"{path.Color(100)}: path too deep (length limit exceeded)");
 			return diffs;
@@ -57,7 +58,7 @@ public static class JsonComparer
 
 	private static List<string> Compare(JsonNode actual, JsonNode expected, string path, List<string> diffs)
 	{
-		if (actual.ToJsonString() != expected.ToJsonString())
+		if (actual.ToJsonString().IsExactlyEqualTo(expected.ToJsonString()))
 			diffs.Add($"{path}: " + actual.ToJsonString().Color(91) + " is not " + expected.ToJsonString().Color(92));
 
 		return diffs;

@@ -162,7 +162,7 @@ public class Assertions
 	}
 
 	[Test]
-	public void Snapshot()
+	public void Matching()
 	{
 		var expectedSnapshot = new
 			{
@@ -209,9 +209,13 @@ public class Assertions
 			Max = 3.7
 		};
 
+		actualObject.IsMatching(expectedSnapshot);
 		actualObject.IsMatchingSnapshot(expectedSnapshot);
 
-		Action action = () => failingObject.IsMatchingSnapshot(expectedSnapshot);
+		Action action = () => failingObject.IsMatching(expectedSnapshot);
+		action.IsThrowing<NotException>();
+
+		action = () => failingObject.IsMatchingSnapshot(expectedSnapshot);
 		action.IsThrowing<NotException>();
 	}
 

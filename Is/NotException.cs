@@ -49,7 +49,7 @@ internal static class MessageExtensions
 			_ => $"{value}"
 		};
 
-	private static string Format(this object? value) =>
+	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
 	private static string FormatType(this object? value) =>
