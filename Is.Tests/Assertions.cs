@@ -206,6 +206,7 @@ public class Assertions
 				}
 			},
 			Tags = new[] { "tag1", "tag2", "tag3" },
+			Min = 1.2,
 			Max = 3.7
 		};
 

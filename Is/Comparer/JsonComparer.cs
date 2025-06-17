@@ -58,7 +58,7 @@ public static class JsonComparer
 
 	private static List<string> Compare(JsonNode actual, JsonNode expected, string path, List<string> diffs)
 	{
-		if (actual.ToJsonString().IsExactlyEqualTo(expected.ToJsonString()))
+		if (!actual.ToJsonString().IsExactlyEqualTo(expected.ToJsonString()))
 			diffs.Add($"{path}: " + actual.ToJsonString().Simply("is not", expected.ToJsonString()));
 
 		return diffs;
@@ -68,9 +68,14 @@ public static class JsonComparer
 	{
 		foreach (var prop in expected)
 		{
-			actual.TryGetPropertyValue(prop.Key, out var actualNode);
-			actualNode.CompareTo(prop.Value, path == "" ? prop.Key : $"{path}.{prop.Key}", diffs);
+			if (actual.TryGetPropertyValue(prop.Key, out var actualNode))
+				actualNode.CompareTo(prop.Value, path.Deeper(prop.Key), diffs);
+			else
+				diffs.Add($"{path.Deeper(prop.Key).Color(100)}: missing field");
 		}
+
+		foreach (var prop in actual.Where(p => !expected.ContainsKey(p.Key)))
+			diffs.Add($"{path.Deeper(prop.Key).Color(100)}: unexpected field");
 
 		return diffs;
 	}
@@ -83,7 +88,7 @@ public static class JsonComparer
 				actual[i].CompareTo(expected[i], $"{path}[{i}]", diffs);
 		}
 		else
-			diffs.Add($"{path}: count mismatch ({actual.Count.Simply("is not", expected.Count)})");
+			diffs.Add($"{path.Color(100)}: count mismatch ({actual.Count.Simply("is not", expected.Count)})");
 
 		return diffs;
 	}
@@ -95,6 +100,6 @@ public static class JsonComparer
 		return diffs;
 	}
 
-	private static string Format(this JsonNode? node) =>
-		node?.ToJsonString() ?? "<NULL>";
+	private static string Deeper(this string path, string next) =>
+		path == "" ? next : $"{path}.{next}";
 }

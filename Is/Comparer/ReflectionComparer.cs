@@ -36,24 +36,53 @@ public static class ReflectionComparer
 
 	private static List<string> CompareObjects(object actual, object expected, string path, HashSet<object> visited, List<string> diffs)
 	{
-		var type = actual.GetType();
+		var (actualType, expectedType) = (actual.GetType(), expected.GetType());
 
-		if (!type.IsValueType && !visited.Add(actual))
-			return diffs;
-
-		if (IsSimple(Nullable.GetUnderlyingType(type) ?? type))
+		if (actualType != expectedType && path != "")
 		{
-			if (!actual.IsExactlyEqualTo(expected))
-				diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
-
+			diffs.Add($"{path}: type mismatch ({actualType.Name.Simply("is no", expectedType.Name)})");
 			return diffs;
 		}
 
-		foreach (var prop in type.GetProperties(FLAGS).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead))
-			CompareTo(prop.GetValue(actual), prop.GetValue(expected), path == "" ? prop.Name : $"{path}.{prop.Name}", visited, diffs);
+		if (!actualType.IsValueType && !visited.Add(actual))
+			return diffs;
 
-		foreach (var field in type.GetFields(FLAGS).Where(f => !f.Name.StartsWith('<')))
-			CompareTo(field.GetValue(actual), field.GetValue(expected), path == "" ? field.Name : $"{path}.{field.Name}", visited, diffs);
+		if (IsSimple(Nullable.GetUnderlyingType(actualType) ?? actualType))
+		{
+			if (!actual.IsExactlyEqualTo(expected))
+				diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
+			return diffs;
+		}
+
+		var actualProps = actualType.GetPropertyNames();
+		var expectedProps = expectedType.GetPropertyNames();
+
+		foreach (var name in new HashSet<string>(actualProps.Keys.Concat(expectedProps.Keys)))
+		{
+			if (actualProps.TryGetValue(name, out var aInfo) && expectedProps.TryGetValue(name, out var eInfo))
+				aInfo.GetValue(actual).CompareTo(eInfo.GetValue(expected), path.Deeper(name), visited, diffs);
+			else
+			{
+				var state = actualProps.ContainsKey(name) ? "unexpected" : "missing";
+
+				diffs.Add($"{path.Deeper(name).Color(100)}: {state} property");
+			}
+		}
+
+		var actualFields = actualType.GetFieldNames();
+		var expectedFields = expectedType.GetFieldNames();
+
+		foreach (var name in new HashSet<string>(actualFields.Keys.Concat(expectedFields.Keys)))
+		{
+			if (actualFields.TryGetValue(name, out var aInfo) && expectedFields.TryGetValue(name, out var eInfo))
+				aInfo.GetValue(actual).CompareTo(eInfo.GetValue(expected), path.Deeper(name), visited, diffs);
+			else
+			{
+				var state = actualFields.ContainsKey(name) ? "unexpected" : "missing";
+
+				diffs.Add($"{path.Deeper(name).Color(100)}: {state} field");
+			}
+		}
 
 		return diffs;
 	}
@@ -80,6 +109,15 @@ public static class ReflectionComparer
 
 		return diffs;
 	}
+
+	private static  Dictionary<string,PropertyInfo> GetPropertyNames(this Type type) =>
+		type.GetProperties(FLAGS).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead).ToDictionary(p => p.Name);
+
+	private static  Dictionary<string,FieldInfo> GetFieldNames(this Type type) =>
+		type.GetFields(FLAGS).Where(f => !f.Name.StartsWith('<')).ToDictionary(f => f.Name);
+
+	private static string Deeper(this string path, string next) =>
+		path == "" ? next : $"{path}.{next}";
 
 	private static object? GetValue(this IDictionary dict, object key) =>
 		dict.Contains(key) ? dict[key] : null;

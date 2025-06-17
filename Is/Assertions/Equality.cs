@@ -79,7 +79,7 @@ public static class Equality
 	/// <paramref name="expected" /> by comparing their serialized JSON strings for equality.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatchingSnapshot<T>(this T actual, T expected, JsonSerializerOptions? options = null)
+	public static bool IsMatchingSnapshot(this object actual, object expected, JsonSerializerOptions? options = null)
 	{
 		var (actualJson, expectedJson) = (actual.ToJson(options), expected.ToJson(options));
 
