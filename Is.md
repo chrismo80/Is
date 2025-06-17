@@ -55,6 +55,3 @@ All public methods are designed as extensions methods.
 #### <u>Types</u>
 - __Is__: _Asserts that the actual object is of type `T`._
 - __IsNot__: _Asserts that the actual object is not of type `T`._
-#### <u>JsonComparer</u>
-- __ToJsonFile__: _Serializes an object `me` to a JSON file to `filename`_
-- __FromJsonFile__: _Deserializes an object to type `T` from a JSON file at `filename`_
