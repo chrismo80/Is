@@ -49,8 +49,6 @@ public static class ReflectionComparer
 		var actualProps = actualType.GetPropertyNames();
 		var expectedProps = expectedType.GetPropertyNames();
 
-		actualProps.TryGetValue("", out var asd);
-
 		diffs.AddRange(actualProps.Where(p => !expectedProps.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: unexpected property"));
 		diffs.AddRange(expectedProps.Where(p => !actualProps.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: missing property"));
 
