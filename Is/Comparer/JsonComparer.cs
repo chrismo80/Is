@@ -51,7 +51,7 @@ public static class JsonComparer
 			};
 
 		if (actual == null || expected == null)
-			diffs.Add($"{path}: {actual.Actually("is not", expected)}");
+			diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
 
 		return diffs;
 	}
@@ -77,7 +77,7 @@ public static class JsonComparer
 
 	private static List<string> Compare(JsonArray actual, JsonArray expected, string path, List<string> diffs)
 	{
-		if (expected.Count == actual.Count)
+		if (actual.Count == expected.Count)
 		{
 			for (int i = 0; i < expected.Count; i++)
 				actual[i].CompareTo(expected[i], $"{path}[{i}]", diffs);

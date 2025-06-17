@@ -11,7 +11,7 @@ public static class ReflectionComparer
 	internal static List<string> DifferencesTo(this object? actual, object? expected) =>
 		CompareTo(actual, expected, "", [], []);
 
-	private static List<string> CompareTo(object? actual, object? expected, string path, HashSet<object> visited, List<string> diffs)
+	private static List<string> CompareTo(this object? actual, object? expected, string path, HashSet<object> visited, List<string> diffs)
 	{
 		if (path.Count(c => c is '.' or '[') > RECURSION_DEPTH)
 		{
@@ -20,7 +20,6 @@ public static class ReflectionComparer
 		}
 
 		if (actual != null && expected != null)
-		{
 			return (actual, expected) switch
 			{
 				(string a, string e) => CompareObjects(a, e, path, visited, diffs),
@@ -28,7 +27,6 @@ public static class ReflectionComparer
 				(IEnumerable a, IEnumerable e) => Compare(a, e, path, visited, diffs),
 				_ => CompareObjects(actual, expected, path, visited, diffs)
 			};
-		}
 
 		if (actual == null || expected == null)
 			diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
@@ -64,14 +62,13 @@ public static class ReflectionComparer
 	{
 		var (actualArr, expectedArr) = (actual.Cast<object?>().ToList(), expected.Cast<object?>().ToList());
 
-		if (actualArr.Count != expectedArr.Count)
+		if (actualArr.Count == expectedArr.Count)
 		{
-			diffs.Add($"{path}: count mismatch ({actualArr.Count.Simply("is not", expectedArr.Count)})");
-			return diffs;
+			for (int i = 0; i < expectedArr.Count; i++)
+				actualArr[i].CompareTo(expectedArr[i], $"{path}[{i}]", visited, diffs);
 		}
-
-		for (int i = 0; i < actualArr.Count; i++)
-			CompareTo(actualArr[i], expectedArr[i], $"{path}[{i}]", visited, diffs);
+		else
+			diffs.Add($"{path}: count mismatch ({actualArr.Count.Simply("is not", expectedArr.Count)})");
 
 		return diffs;
 	}
