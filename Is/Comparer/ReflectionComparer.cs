@@ -5,7 +5,7 @@ namespace Is;
 
 public static class ReflectionComparer
 {
-	private const int RECURSION_DEPTH = 100;
+	private const int RECURSION_DEPTH = 20;
 	private const BindingFlags FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 	internal static List<string> DifferencesTo(this object? actual, object? expected) =>

@@ -6,7 +6,7 @@ namespace Is;
 
 public static class JsonComparer
 {
-	private const int RECURSION_DEPTH = 100;
+	private const int RECURSION_DEPTH = 20;
 	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
 
 	/// <summary>
