@@ -5,7 +5,7 @@ namespace Is;
 
 public static class ReflectionComparer
 {
-	private const int RECURSION_DEPTH = 20;
+	private const int RECURSION_DEPTH = 200;
 	private const BindingFlags FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 	internal static List<string> DifferencesTo(this object? actual, object? expected) =>
@@ -14,75 +14,57 @@ public static class ReflectionComparer
 	private static List<string> CompareTo(this object? actual, object? expected, string path, HashSet<object> visited, List<string> diffs)
 	{
 		if (path.Count(c => c is '.' or '[') > RECURSION_DEPTH)
-		{
-			diffs.Add($"{path.Color(100)}: path too deep (length limit exceeded)");
-			return diffs;
-		}
-
-		if (actual != null && expected != null)
-			return (actual, expected) switch
-			{
-				(string a, string e) => CompareObjects(a, e, path, visited, diffs),
-				(IDictionary a, IDictionary e) => Compare(a, e, path, visited, diffs),
-				(IEnumerable a, IEnumerable e) => Compare(a, e, path, visited, diffs),
-				_ => CompareObjects(actual, expected, path, visited, diffs)
-			};
+			return diffs.AddMessage($"{path.Color(100)}: path too deep (length limit exceeded)");
 
 		if (actual == null || expected == null)
-			diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
+			return diffs.AddMessage($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
 
-		return diffs;
+		return (actual, expected) switch
+		{
+			(string a, string e) => CompareObjects(a, e, path, visited, diffs),
+			(IDictionary a, IDictionary e) => Compare(a, e, path, visited, diffs),
+			(IEnumerable a, IEnumerable e) => Compare(a, e, path, visited, diffs),
+			_ => CompareObjects(actual, expected, path, visited, diffs)
+		};
 	}
 
 	private static List<string> CompareObjects(object actual, object expected, string path, HashSet<object> visited, List<string> diffs)
 	{
 		var (actualType, expectedType) = (actual.GetType(), expected.GetType());
 
-		if (actualType != expectedType && path != "")
-		{
-			diffs.Add($"{path}: type mismatch ({actualType.Name.Simply("is no", expectedType.Name)})");
-			return diffs;
-		}
-
 		if (!actualType.IsValueType && !visited.Add(actual))
 			return diffs;
 
 		if (IsSimple(Nullable.GetUnderlyingType(actualType) ?? actualType))
 		{
+			if (actualType != expectedType && path != "")
+				return diffs.AddMessage($"{path}: type mismatch ({actualType.Name.Simply("is no", expectedType.Name)})");
+
 			if (!actual.IsExactlyEqualTo(expected))
 				diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
+
 			return diffs;
 		}
 
 		var actualProps = actualType.GetPropertyNames();
 		var expectedProps = expectedType.GetPropertyNames();
 
-		foreach (var name in new HashSet<string>(actualProps.Keys.Concat(expectedProps.Keys)))
-		{
-			if (actualProps.TryGetValue(name, out var aInfo) && expectedProps.TryGetValue(name, out var eInfo))
-				aInfo.GetValue(actual).CompareTo(eInfo.GetValue(expected), path.Deeper(name), visited, diffs);
-			else
-			{
-				var state = actualProps.ContainsKey(name) ? "unexpected" : "missing";
+		actualProps.TryGetValue("", out var asd);
 
-				diffs.Add($"{path.Deeper(name).Color(100)}: {state} property");
-			}
-		}
+		diffs.AddRange(actualProps.Where(p => !expectedProps.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: unexpected property"));
+		diffs.AddRange(expectedProps.Where(p => !actualProps.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: missing property"));
+
+		foreach (var info in expectedProps.Where(p => actualProps.ContainsKey(p.Key)).ToList())
+			actualProps[info.Key].GetValue(actual).CompareTo(expectedProps[info.Key].GetValue(expected), path.Deeper(info.Key), visited, diffs);
 
 		var actualFields = actualType.GetFieldNames();
 		var expectedFields = expectedType.GetFieldNames();
 
-		foreach (var name in new HashSet<string>(actualFields.Keys.Concat(expectedFields.Keys)))
-		{
-			if (actualFields.TryGetValue(name, out var aInfo) && expectedFields.TryGetValue(name, out var eInfo))
-				aInfo.GetValue(actual).CompareTo(eInfo.GetValue(expected), path.Deeper(name), visited, diffs);
-			else
-			{
-				var state = actualFields.ContainsKey(name) ? "unexpected" : "missing";
+		diffs.AddRange(actualFields.Where(p => !expectedFields.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: unexpected field"));
+		diffs.AddRange(expectedFields.Where(p => !actualFields.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: missing field"));
 
-				diffs.Add($"{path.Deeper(name).Color(100)}: {state} field");
-			}
-		}
+		foreach (var info in expectedFields.Where(f => actualFields.ContainsKey(f.Key)))
+			actualFields[info.Key].GetValue(actual).CompareTo(expectedFields[info.Key].GetValue(expected), path.Deeper(info.Key), visited, diffs);
 
 		return diffs;
 	}
@@ -110,11 +92,17 @@ public static class ReflectionComparer
 		return diffs;
 	}
 
-	private static  Dictionary<string,PropertyInfo> GetPropertyNames(this Type type) =>
-		type.GetProperties(FLAGS).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead).ToDictionary(p => p.Name);
+	private static  Dictionary<string, PropertyInfo> GetPropertyNames(this Type type) => type.GetProperties(FLAGS)
+		.Where(p => p.GetIndexParameters().Length == 0 && p.CanRead).ToDictionary(p => p.Name);
 
-	private static  Dictionary<string,FieldInfo> GetFieldNames(this Type type) =>
-		type.GetFields(FLAGS).Where(f => !f.Name.StartsWith('<')).ToDictionary(f => f.Name);
+	private static  Dictionary<string, FieldInfo> GetFieldNames(this Type type) => type.GetFields(FLAGS)
+		.Where(f => !f.Name.StartsWith('<')).ToDictionary(f => f.Name);
+
+	private static List<string> AddMessage(this List<string> diffs, string message)
+	{
+		diffs.Add(message);
+		return diffs;
+	}
 
 	private static string Deeper(this string path, string next) =>
 		path == "" ? next : $"{path}.{next}";

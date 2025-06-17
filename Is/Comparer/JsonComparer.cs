@@ -36,24 +36,18 @@ public static class JsonComparer
 	private static List<string> CompareTo(this JsonNode? actual, JsonNode? expected, string path, List<string> diffs)
 	{
 		if (path.Count(c => c is '.' or '[') > RECURSION_DEPTH)
-		{
-			diffs.Add($"{path.Color(100)}: path too deep (length limit exceeded)");
-			return diffs;
-		}
-
-		if (actual != null && expected != null)
-			return (actual, expected) switch
-			{
-				(JsonValue, JsonValue) => Compare(actual, expected, path, diffs),
-				(JsonObject actualObj, JsonObject expectedObj) => Compare(actualObj, expectedObj, path, diffs),
-				(JsonArray actualArr, JsonArray expectedArr) => Compare(actualArr, expectedArr, path, diffs),
-				_ => UnHandledNodeType(expected, path, diffs)
-			};
+			return diffs.AddMessage($"{path.Color(100)}: path too deep (length limit exceeded)");
 
 		if (actual == null || expected == null)
-			diffs.Add($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
+			return diffs.AddMessage($"{path}: {actual.FormatValue().Simply("is not", expected.FormatValue())}");
 
-		return diffs;
+		return (actual, expected) switch
+		{
+			(JsonValue, JsonValue) => Compare(actual, expected, path, diffs),
+			(JsonObject actualObj, JsonObject expectedObj) => Compare(actualObj, expectedObj, path, diffs),
+			(JsonArray actualArr, JsonArray expectedArr) => Compare(actualArr, expectedArr, path, diffs),
+			_ => diffs.AddMessage($"{path}: unhandled json node type {expected.GetType().Name}")
+		};
 	}
 
 	private static List<string> Compare(JsonNode actual, JsonNode expected, string path, List<string> diffs)
@@ -66,16 +60,11 @@ public static class JsonComparer
 
 	private static List<string> Compare(JsonObject actual, JsonObject expected, string path, List<string> diffs)
 	{
-		foreach (var prop in expected)
-		{
-			if (actual.TryGetPropertyValue(prop.Key, out var actualNode))
-				actualNode.CompareTo(prop.Value, path.Deeper(prop.Key), diffs);
-			else
-				diffs.Add($"{path.Deeper(prop.Key).Color(100)}: missing field");
-		}
+		diffs.AddRange(actual.Where(p => !expected.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: unexpected field"));
+		diffs.AddRange(expected.Where(p => !actual.ContainsKey(p.Key)).Select(n => $"{path.Deeper(n.Key).Color(100)}: missing field"));
 
-		foreach (var prop in actual.Where(p => !expected.ContainsKey(p.Key)))
-			diffs.Add($"{path.Deeper(prop.Key).Color(100)}: unexpected field");
+		foreach (var node in expected.Where(n => actual.ContainsKey(n.Key)))
+			actual[node.Key].CompareTo(node.Value, path.Deeper(node.Key), diffs);
 
 		return diffs;
 	}
@@ -93,10 +82,9 @@ public static class JsonComparer
 		return diffs;
 	}
 
-	private static List<string> UnHandledNodeType(JsonNode expected, string path, List<string> diffs)
+	private static List<string> AddMessage(this List<string> diffs, string message)
 	{
-		diffs.Add($"{path}: unhandled json node type {expected.GetType().Name}");
-
+		diffs.Add(message);
 		return diffs;
 	}
 

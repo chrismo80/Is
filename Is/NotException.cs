@@ -59,7 +59,7 @@ internal static class MessageExtensions
 		value.FormatValue() + value.FormatType();
 
 	private static string FormatType(this object? value) =>
-		value is null or Type ? "" : $" ({value.GetType()})";
+		value is null or Type ? "" : $" ({value.GetType().Name})";
 
 	private static string Join(this IEnumerable<string?> items, string start, string separator, string end) =>
 		start + string.Join(separator, items) + end;
