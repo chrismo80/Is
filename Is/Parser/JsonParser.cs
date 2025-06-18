@@ -28,35 +28,35 @@ public static class JsonComparer
 		JsonSerializer.Deserialize<T>(json, DefaultOptions);
 
 	internal static Dictionary<string, object?> ParseJson(this string json) =>
-		JsonNode.Parse(json).Parse("", []);
+		JsonNode.Parse(json).Parse([]);
 
-	private static Dictionary<string, object?> Parse(this JsonNode? node, string path, Dictionary<string, object?> result)
+	private static Dictionary<string, object?> Parse(this JsonNode? node, Dictionary<string, object?> result, string path = "", int depth = 0)
 	{
-		if (path.Count(c => c is '.' or '[') > MAX_RECURSION_DEPTH)
-			return result.AddItem(path, "path too deep (length limit exceeded)");
+		if (depth > MAX_RECURSION_DEPTH)
+			return result.AddItem(path, $"path too deep (length limit {depth} exceeded)");
 
 		return node switch
 		{
 			null => result.AddItem(path, null),
 			JsonValue value => result.AddItem(path, value.GetValue<JsonElement>().ToValue()),
-			JsonObject obj => ParseObject(obj, path, result),
-			JsonArray array => ParseArray(array, path, result),
+			JsonObject obj => ParseObject(obj, result, path, depth + 1),
+			JsonArray array => ParseArray(array, result, path, depth + 1),
 			_ => result.AddItem(path, "unhandled json node type"),
 		};
 	}
 
-	private static Dictionary<string, object?> ParseArray(JsonArray array, string path, Dictionary<string, object?> result)
+	private static Dictionary<string, object?> ParseArray(JsonArray array, Dictionary<string, object?> result, string path, int depth)
 	{
 		for (int i = 0; i < array.Count; i++)
-			array[i].Parse($"{path}[{i}]", result);
+			array[i].Parse(result, $"{path}[{i}]", depth);
 
 		return result;
 	}
 
-	private static Dictionary<string, object?> ParseObject(JsonObject obj, string path, Dictionary<string, object?> result)
+	private static Dictionary<string, object?> ParseObject(JsonObject obj, Dictionary<string, object?> result, string path, int depth)
 	{
 		foreach (var node in obj)
-			node.Value.Parse(path.Deeper(node.Key), result);
+			node.Value.Parse(result, path.Deeper(node.Key), depth);
 
 		return result;
 	}
