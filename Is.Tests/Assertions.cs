@@ -183,13 +183,22 @@ public class Assertions
 		var dict1 = new Dictionary<int, double>() { [0] = 0.0, [1] = 1.0, [2] = 2.0 };
 		var dict2 = new Dictionary<int, double>() { [1] = 11.0, [2] = 2.0, [3] = 3.0 };
 		var dict3 = new Dictionary<int, double>() { [1] = 11.0, [2] = 2.0, [3] = 3.0 };
+		var dict4 = new Dictionary<int, double>() { [1] = 11.0, [2] = 22.0, [3] = 3.0 };
 
 		dict2.IsEquivalentTo(dict3);
 		dict2.IsMatching(dict3);
 		dict2.Is(dict3);
 
-		Action action = () => dict1.IsEquivalentTo(dict2);
-		action.IsThrowing<NotException>();
+		dict3.IsEquivalentTo(dict4, key => key == 2);
+
+		var actions = new List<Action>()
+		{
+			() => dict1.IsEquivalentTo(dict2),
+			() => dict3.IsEquivalentTo(dict4),
+		};
+
+		foreach(var action in actions)
+			action.IsThrowing<NotException>();
 	}
 
 	[Test]

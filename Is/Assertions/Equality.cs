@@ -76,18 +76,20 @@ public static class Equality
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the
 	/// <paramref name="expected" /> by comparing their serialized JSON strings for equality.
+	/// Optional predicate can be used to ignore specific paths.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatchingSnapshot(this object actual, object expected, JsonSerializerOptions? options = null) =>
-		actual.ToJson().ParseJson().IsEquivalentTo(expected.ToJson().ParseJson());
+	public static bool IsMatchingSnapshot(this object actual, object expected, Func<string, bool>? ignorePaths = null, JsonSerializerOptions? options = null) =>
+		actual.ToJson(options).ParseJson().IsEquivalentTo(expected.ToJson(options).ParseJson(), ignorePaths);
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the <paramref name="other" />
 	/// by running a deep reflection-based object comparison on their properties and fields for equality.
+	/// Optional predicate can be used to ignore specific paths.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatching(this object actual, object other) =>
-		actual.Parse().IsEquivalentTo(other.Parse());
+	public static bool IsMatching(this object actual, object other, Func<string, bool>? ignorePaths = null) =>
+		actual.Parse().IsEquivalentTo(other.Parse(), ignorePaths);
 
 	private static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch

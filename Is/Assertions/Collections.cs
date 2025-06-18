@@ -83,10 +83,18 @@ public static class Collections
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> dictionary matches
 	/// the <paramref name="expected"/> dictionary ignoring order.
+	/// Optional predicate can be used to ignore specific keys.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEquivalentTo<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected) where TKey : notnull
+	public static bool IsEquivalentTo<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
+		where TKey : notnull
 	{
+		if (ignoreKeys is not null)
+		{
+			actual = actual.Ignore(kvp => ignoreKeys(kvp.Key)).ToDictionary();
+			expected = expected.Ignore(kvp => ignoreKeys(kvp.Key)).ToDictionary();
+		}
+
 		var (missingKeys, unexpectedKeys) = actual.Keys.Diff(expected.Keys);
 
 		var (missing, unexpected) = actual.Where(kvp => !unexpectedKeys.Contains(kvp.Key))
@@ -122,4 +130,7 @@ public static class Collections
 
 	private static T[] Filter<T>(this Dictionary<T, int> dict, Func<int, bool> predicate) where T : notnull =>
 		dict.Where(kvp => predicate(kvp.Value)).Select(kvp => kvp.Key).ToArray();
+
+	private static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>
+		items.Where(item => !(predicate?.Invoke(item) ?? false));
 }
