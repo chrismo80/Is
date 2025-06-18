@@ -82,7 +82,6 @@ public static class Delegates
 	public static bool IsThrowing<T>(this Func<Task> function, string message) where T : Exception =>
 		function.IsThrowing<T>().Message.IsContaining(message);
 
-
 	/// <summary>
 	/// Asserts that the given <paramref name="action" /> did complete
 	/// within a specific <paramref name="timespan" />.
@@ -110,22 +109,27 @@ public static class Delegates
 	/// </summary>
 	public static bool IsAllocatingAtMost(this Action action, long kiloBytes)
 	{
-		long before = GC.GetTotalMemory(forceFullCollection: true);
+		long before = GC.GetTotalMemory(true);
 
 		action();
 
-		long after = GC.GetTotalMemory(forceFullCollection: false);
+		long after = GC.GetTotalMemory(false);
 
 		long allocated = (after - before) / 1024;
-
-		Console.WriteLine(kiloBytes);
-		Console.WriteLine(allocated);
 
 		if (allocated <= kiloBytes)
 			return true;
 
 		throw new NotException(allocated, "is allocating more kB than", kiloBytes);
 	}
+
+	/// <summary>
+	/// Asserts that the given async <paramref name="function" /> is allocating
+	/// not more than <paramref name="kiloBytes" />.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsAllocatingAtMost(this Func<Task> function, long kiloBytes) =>
+		function.ToAction().IsAllocatingAtMost(kiloBytes);
 
 	private static Action ToAction(this Func<Task> function) =>
 		() => function().GetAwaiter().GetResult();

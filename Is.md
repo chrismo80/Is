@@ -35,6 +35,7 @@ All public methods are designed as extensions methods.
 - __IsCompletingWithin__: _Asserts that the given `action` did complete within a specific `timespan`._
 - __IsCompletingWithin__: _Asserts that the given async `function` did complete within a specific `timespan`._
 - __IsAllocatingAtMost__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
+- __IsAllocatingAtMost__: _Asserts that the given async `function` is allocating not more than `kiloBytes`._
 #### <u>Equality</u>
 - __IsExactly__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
 - __Is__: _Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)_
