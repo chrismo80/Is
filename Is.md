@@ -25,6 +25,16 @@ All public methods are designed as extensions methods.
 - __IsOutOfRange__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
 - __IsApproximately__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
 - __IsApproximately__: _Asserts that the difference between two `TimeSpan` is within the specified `tolerance`._
+#### <u>Delegates</u>
+- __IsThrowing__: _Asserts that the given `action` throws an exception of type `T`._
+- __IsNotThrowing__: _Asserts that the given `action` does not throw an exception of type `T`._
+- __IsThrowing__: _Asserts that the given synchronous `action` throws an exception of type `T` and that the exception message contains the specified `message` substring._
+- __IsThrowing__: _Asserts that the given async `function` throws an exception of type `T`._
+- __IsNotThrowing__: _Asserts that the given async `function` does not throw an exception of type `T`._
+- __IsThrowing__: _Asserts that the given asynchronous `function` throws an exception of type `T` and that the exception message contains the specified `message` substring._
+- __IsCompletingWithin__: _Asserts that the given `action` did complete within a specific `timespan`._
+- __IsCompletingWithin__: _Asserts that the given async `function` did complete within a specific `timespan`._
+- __IsAllocatingAtMost__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
 #### <u>Equality</u>
 - __IsExactly__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
 - __Is__: _Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)_
@@ -34,19 +44,9 @@ All public methods are designed as extensions methods.
 - __IsSatisfying__: _Asserts that the `actual` object satisfies the specified `predicate`._
 - __IsMatchingSnapshot__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality._
 - __IsMatching__: _Asserts that the given `actual` object matches the `other` by running a deep reflection-based object comparison on their properties and fields for equality._
-#### <u>Exceptions</u>
-- __IsThrowing__: _Asserts that the given `action` throws an exception of type `T`._
-- __IsNotThrowing__: _Asserts that the given `action` does not throw an exception of type `T`._
-- __IsThrowing__: _Asserts that the given synchronous `action` throws an exception of type `T` and that the exception message contains the specified `message` substring._
-- __IsThrowing__: _Asserts that the given async `function` throws an exception of type `T`._
-- __IsNotThrowing__: _Asserts that the given async `function` does not throw an exception of type `T`._
-- __IsThrowing__: _Asserts that the given asynchronous `function` throws an exception of type `T` and that the exception message contains the specified `message` substring._
 #### <u>Null</u>
 - __IsNull__: _Asserts that an object is `null`._
 - __IsNotNull__: _Asserts that the object is not `null`._
-#### <u>Performance</u>
-- __IsCompletingWithin__: _Asserts that the given `action` did complete within a specific `timespan`._
-- __IsCompletingWithin__: _Asserts that the given async `function` did complete within a specific `timespan`._
 #### <u>Strings</u>
 - __IsContaining__: _Asserts that the `actual` string contains the specified `expected` substring._
 - __IsStartingWith__: _Asserts that the `actual` string starts with the specified `expected` string._

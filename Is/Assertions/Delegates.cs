@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Is;
 
 [DebuggerStepThrough]
-public static class Exceptions
+public static class Delegates
 {
 	/// <summary>
 	/// Asserts that the given <paramref name="action" /> throws
@@ -82,6 +82,51 @@ public static class Exceptions
 	public static bool IsThrowing<T>(this Func<Task> function, string message) where T : Exception =>
 		function.IsThrowing<T>().Message.IsContaining(message);
 
-	internal static Action ToAction(this Func<Task> function) =>
+
+	/// <summary>
+	/// Asserts that the given <paramref name="action" /> did complete
+	/// within a specific <paramref name="timespan" />.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsCompletingWithin(this Action action, TimeSpan timespan)
+	{
+		if (Task.Run(action).Wait(timespan))
+			return true;
+
+		throw new NotException(action, "was not completing within", timespan);
+	}
+
+	/// <summary>
+	/// Asserts that the given async <paramref name="function" /> did complete
+	/// within a specific <paramref name="timespan" />.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsCompletingWithin(this Func<Task> function, TimeSpan timespan) =>
+		function.ToAction().IsCompletingWithin(timespan);
+
+	/// <summary>
+	/// Asserts that the given <paramref name="action" /> is allocating
+	/// not more than <paramref name="kiloBytes" />.
+	/// </summary>
+	public static bool IsAllocatingAtMost(this Action action, long kiloBytes)
+	{
+		long before = GC.GetTotalMemory(forceFullCollection: true);
+
+		action();
+
+		long after = GC.GetTotalMemory(forceFullCollection: false);
+
+		long allocated = (after - before) / 1024;
+
+		Console.WriteLine(kiloBytes);
+		Console.WriteLine(allocated);
+
+		if (allocated <= kiloBytes)
+			return true;
+
+		throw new NotException(allocated, "is allocating more kB than", kiloBytes);
+	}
+
+	private static Action ToAction(this Func<Task> function) =>
 		() => function().GetAwaiter().GetResult();
 }

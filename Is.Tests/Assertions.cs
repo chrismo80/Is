@@ -162,6 +162,22 @@ public class Assertions
 	}
 
 	[Test]
+	public void IsAllocating()
+	{
+		byte[] buffer = [];
+
+		Action action = () => buffer = new byte[1024 * 1024 * 10]; // 10 MB total
+
+		action.IsAllocatingAtMost(10_300);
+
+		Action pass = () => action.IsAllocatingAtMost(10_240);
+		Action fail = () => action.IsAllocatingAtMost(10_240);
+
+		pass.IsNotThrowing<NotException>();
+		fail.IsThrowing<NotException>();
+	}
+
+	[Test]
 	public void Dictionary()
 	{
 		var dict1 = new Dictionary<int, double>() { [0] = 0.0, [1] = 1.0, [2] = 2.0 };
