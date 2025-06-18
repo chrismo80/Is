@@ -9,18 +9,6 @@ public static class JsonParser
 	private const int MAX_RECURSION_DEPTH = 20;
 	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
 
-	/// <summary>
-	/// Serializes an object <paramref name="me"/> to a JSON file to <paramref name="filename"/>
-	/// </summary>
-	public static void ToJsonFile<T>(this T me, string filename) =>
-		File.WriteAllText(filename, me.ToJson(), Encoding.UTF8);
-
-	/// <summary>
-	/// Deserializes an object to type <typeparamref name="T" /> from a JSON file at <paramref name="filename"/>
-	/// </summary>
-	public static T? FromJsonFile<T>(this string filename) =>
-		File.ReadAllText(filename, Encoding.UTF8).FromJson<T>();
-
 	internal static string ToJson<T>(this T me, JsonSerializerOptions? options = null) =>
 		JsonSerializer.Serialize(me, options ?? DefaultOptions);
 

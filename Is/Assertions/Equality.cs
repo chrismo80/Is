@@ -9,8 +9,6 @@ namespace Is;
 [DebuggerStepThrough]
 public static class Equality
 {
-	private const int MATCHING_DETAILS = 30;
-
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object is equal to the <paramref name="expected"/> value.
 	/// (no array unwrapping, exact match for floating points)
