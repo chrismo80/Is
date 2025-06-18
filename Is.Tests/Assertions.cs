@@ -549,4 +549,15 @@ public class Assertions
 		action = () => actual.IsNegative();
 		action.IsThrowing<NotException>("is not smaller");
 	}
+
+	[Test]
+	[NonParallelizable]
+	public void Configuration_DoNotThrow()
+	{
+		Configuration.ThrowOnFailure = false;
+
+		3.Is(4);
+
+		Configuration.ThrowOnFailure = true;
+	}
 }

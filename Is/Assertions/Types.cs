@@ -16,7 +16,9 @@ public static class Types
 		if (actual is T cast)
 			return cast;
 
-		throw new NotException(actual, "is no", typeof(T));
+		new NotException(actual, "is no", typeof(T)).Throw();
+
+		return default;
 	}
 
 	/// <summary>
@@ -28,6 +30,6 @@ public static class Types
 		if (actual is not T)
 			return true;
 
-		throw new NotException(actual, "is a", typeof(T));
+		return new NotException(actual, "is a", typeof(T)).Throw();
 	}
 }

@@ -18,7 +18,7 @@ public static class Comparisons
 		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
 			return true;
 
-		throw new NotException(actual, "is not approximately", expected);
+		return new NotException(actual, "is not approximately", expected).Throw();
 	}
 
 	/// <summary>
@@ -53,7 +53,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) > 0)
 			return true;
 
-		throw new NotException(actual, "is not greater than", other);
+		return new NotException(actual, "is not greater than", other).Throw();
 	}
 
 	/// <summary>
@@ -67,7 +67,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) < 0)
 			return true;
 
-		throw new NotException(actual, "is not smaller than", other);
+		return new NotException(actual, "is not smaller than", other).Throw();
 	}
 
 	/// <summary>
@@ -81,7 +81,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) >= 0)
 			return true;
 
-		throw new NotException(actual, "is smaller than", other);
+		return new NotException(actual, "is smaller than", other).Throw();
 	}
 
 	/// <summary>
@@ -95,7 +95,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) <= 0)
 			return true;
 
-		throw new NotException(actual, "is greater than", other);
+		return new NotException(actual, "is greater than", other).Throw();
 	}
 
 	/// <summary>
@@ -127,7 +127,7 @@ public static class Comparisons
 		if (max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
 			return true;
 
-		throw new NotException(actual, $"is between {min} and {max}");
+		return new NotException(actual, $"is between {min} and {max}").Throw();
 	}
 
 	/// <summary>
@@ -141,7 +141,7 @@ public static class Comparisons
 		if (max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
 			return true;
 
-		throw new NotException(actual, $"is in range of {min} and {max}");
+		return new NotException(actual, $"is in range of {min} and {max}").Throw();
 	}
 
 	/// <summary>

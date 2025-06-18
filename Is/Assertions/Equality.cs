@@ -19,7 +19,7 @@ public static class Equality
 		if (actual.IsExactlyEqualTo(expected))
 			return true;
 
-		throw new NotException(actual, "is not", expected);
+		return new  NotException(actual, "is not", expected).Throw();
 	}
 
 	/// <summary>
@@ -39,7 +39,7 @@ public static class Equality
 		if (!actual.IsExactlyEqualTo(expected))
 			return true;
 
-		throw new NotException(actual, "is", expected);
+		return new  NotException(actual, "is", expected).Throw();
 	}
 
 	/// <summary>
@@ -51,7 +51,7 @@ public static class Equality
 		if (ReferenceEquals(actual, expected))
 			return true;
 
-		throw new NotException(actual, "is not the same instance as", expected);
+		return new  NotException(actual, "is not the same instance as", expected).Throw();
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public static class Equality
 		if (predicate(actual))
 			return true;
 
-		throw new NotException(actual, "is not satisfying the predicate");
+		return new  NotException(actual, "is not satisfying the predicate").Throw();
 	}
 
 	/// <summary>
@@ -110,7 +110,7 @@ public static class Equality
 		if (values.Length == expected.Length)
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
 
-		throw new NotException(values, "are not", expected);
+		return new NotException(values, "are not", expected).Throw();
 	}
 
 	private static bool IsEqualTo<T>(this T? actual, T? expected)
@@ -121,7 +121,7 @@ public static class Equality
 		if(actual.IsCloseTo(expected))
 			return true;
 
-		throw new NotException(actual, "is not", expected);
+		return new NotException(actual, "is not", expected).Throw();
 	}
 
 	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
