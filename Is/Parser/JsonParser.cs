@@ -4,7 +4,7 @@ using System.Text.Json.Nodes;
 
 namespace Is.Parser;
 
-public static class JsonComparer
+public static class JsonParser
 {
 	private const int MAX_RECURSION_DEPTH = 20;
 	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
