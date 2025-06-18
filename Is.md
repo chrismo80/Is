@@ -9,6 +9,7 @@ All public methods are designed as extensions methods.
 - __IsContaining__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
 - __IsIn__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
 - __IsEquivalentTo__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order._
+- __IsEquivalentTo__: _Asserts that the `actual` dictionary matches the `expected` dictionary ignoring order._
 #### <u>Comparisons</u>
 - __IsApproximately__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `epsilon`._
 - __IsApproximately__: _default epsilon is 1e-6._

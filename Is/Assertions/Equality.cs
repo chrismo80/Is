@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Collections;
 using System.Text.Json;
+using Is.Parser;
 
 namespace Is;
 
@@ -79,30 +80,16 @@ public static class Equality
 	/// <paramref name="expected" /> by comparing their serialized JSON strings for equality.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatchingSnapshot(this object actual, object expected, JsonSerializerOptions? options = null)
-	{
-		var (actualJson, expectedJson) = (actual.ToJson(options), expected.ToJson(options));
-
-		if (actualJson.IsExactlyEqualTo(expectedJson))
-			return true;
-
-		throw new  NotException("object is not matching", actualJson.DifferencesTo(expectedJson), MATCHING_DETAILS);
-	}
+	public static bool IsMatchingSnapshot(this object actual, object expected, JsonSerializerOptions? options = null) =>
+		actual.ToJson().ParseJson().IsEquivalentTo(expected.ToJson().ParseJson());
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the <paramref name="other" />
 	/// by running a deep reflection-based object comparison on their properties and fields for equality.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsMatching(this object actual, object other)
-	{
-		var diffs = actual.DifferencesTo(other);
-
-		if (diffs.Count == 0)
-			return true;
-
-		throw new  NotException($"object is not matching", diffs, MATCHING_DETAILS);
-	}
+	public static bool IsMatching(this object actual, object other) =>
+		actual.Parse().IsEquivalentTo(other.Parse());
 
 	private static bool ShouldBe(this object actual, object[]? expected) =>
 		expected?.Length switch
@@ -139,7 +126,7 @@ public static class Equality
 		throw new NotException(actual, "is not", expected);
 	}
 
-	internal static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
+	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
 		EqualityComparer<T>.Default.Equals(actual, expected);
 
 	private static bool IsCloseTo<T>(this T? actual, T? expected) =>

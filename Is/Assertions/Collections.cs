@@ -80,6 +80,30 @@ public static class Collections
 		throw new NotException(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
 	}
 
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> dictionary matches
+	/// the <paramref name="expected"/> dictionary ignoring order.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsEquivalentTo<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected) where TKey : notnull
+	{
+		var (missingKeys, unexpectedKeys) = actual.Keys.Diff(expected.Keys);
+
+		var (missing, unexpected) = actual.Where(kvp => !unexpectedKeys.Contains(kvp.Key))
+			.Diff(expected.Where(kvp => !missingKeys.Contains(kvp.Key)));
+
+		var diffs = missing.Zip(unexpected, (m, u) => $"{u.Key}: {u.Value.FormatValue().Simply("is not", m.Value.FormatValue())}").ToList();
+
+		if(missingKeys.Length == 0 && unexpectedKeys.Length == 0 && diffs.Count == 0)
+			return true;
+
+		var messages = diffs
+			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].FormatValue()}"))
+			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
+
+		throw new  NotException("object is not matching", messages.ToList());
+	}
+
 	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
 	{
 		var histogram = new Dictionary<T, int>();
