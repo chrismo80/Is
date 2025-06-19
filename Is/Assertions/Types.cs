@@ -16,7 +16,7 @@ public static class Types
 		if (actual is T cast)
 			return cast;
 
-		return new NotException(actual, "is no", typeof(T)).Throw<T>();
+		return new NotException(actual, "is no", typeof(T)).HandleFailure<T>();
 	}
 
 	/// <summary>
@@ -28,6 +28,6 @@ public static class Types
 		if (actual is not T)
 			return true;
 
-		return new NotException(actual, "is a", typeof(T)).Throw();
+		return new NotException(actual, "is a", typeof(T)).HandleFailure<bool>();
 	}
 }

@@ -15,7 +15,7 @@ public static class Collections
 		if (!actual.Any())
 			return true;
 
-		return new NotException(actual, "is not empty").Throw();
+		return new NotException(actual, "is not empty").HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -29,7 +29,7 @@ public static class Collections
 		foreach (var item in actual)
 		{
 			if (!set.Add(item))
-				return new NotException(actual, "is containing a duplicate", item).Throw();
+				return new NotException(actual, "is containing a duplicate", item).HandleFailure<bool>();
 		}
 
 		return true;
@@ -47,7 +47,7 @@ public static class Collections
 		if (missing.Length == 0)
 			return true;
 
-		return new NotException(actual, "is not containing", missing).Throw();
+		return new NotException(actual, "is not containing", missing).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -62,7 +62,7 @@ public static class Collections
 		if (unexpected.Length == 0)
 			return true;
 
-		return new NotException(unexpected, "is not in", expected).Throw();
+		return new NotException(unexpected, "is not in", expected).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -77,7 +77,7 @@ public static class Collections
 		if (missing.Length == 0 && unexpected.Length == 0)
 			return true;
 
-		return new NotException(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}").Throw();
+		return new NotException(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}").HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -109,7 +109,7 @@ public static class Collections
 			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].FormatValue()}"))
 			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
 
-		return new NotException("object is not matching", messages.ToList()).Throw();
+		return new NotException("object is not matching", messages.ToList()).HandleFailure<bool>();
 	}
 
 	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull

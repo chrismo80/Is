@@ -18,7 +18,7 @@ public static class Comparisons
 		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
 			return true;
 
-		return new NotException(actual, "is not approximately", expected).Throw();
+		return new NotException(actual, "is not approximately", expected).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -53,7 +53,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) > 0)
 			return true;
 
-		return new NotException(actual, "is not greater than", other).Throw();
+		return new NotException(actual, "is not greater than", other).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -67,7 +67,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) < 0)
 			return true;
 
-		return new NotException(actual, "is not smaller than", other).Throw();
+		return new NotException(actual, "is not smaller than", other).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -81,7 +81,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) >= 0)
 			return true;
 
-		return new NotException(actual, "is smaller than", other).Throw();
+		return new NotException(actual, "is smaller than", other).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -95,7 +95,7 @@ public static class Comparisons
 		if (actual.CompareTo(other) <= 0)
 			return true;
 
-		return new NotException(actual, "is greater than", other).Throw();
+		return new NotException(actual, "is greater than", other).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -127,7 +127,7 @@ public static class Comparisons
 		if (max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
 			return true;
 
-		return new NotException(actual, $"is between {min} and {max}").Throw();
+		return new NotException(actual, $"is between {min} and {max}").HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -141,7 +141,7 @@ public static class Comparisons
 		if (max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
 			return true;
 
-		return new NotException(actual, $"is in range of {min} and {max}").Throw();
+		return new NotException(actual, $"is in range of {min} and {max}").HandleFailure<bool>();
 	}
 
 	/// <summary>

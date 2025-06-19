@@ -17,7 +17,7 @@ public static class Configuration
 	/// </summary>
 	public static Action<string?>? Logger { get; set; } = msg => System.Diagnostics.Debug.WriteLine(msg);
 
-	internal static T? Throw<T>(this NotException ex)
+	internal static T? HandleFailure<T>(this NotException ex)
 	{
 		if (ThrowOnFailure && !AssertionContext.IsActive)
 			throw ex;
@@ -28,6 +28,4 @@ public static class Configuration
 
 		return default;
 	}
-
-	internal static bool Throw(this NotException ex) => ex.Throw<bool>();
 }

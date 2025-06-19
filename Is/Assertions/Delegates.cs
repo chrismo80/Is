@@ -23,7 +23,7 @@ public static class Delegates
 			return ex.Is<T>();
 		}
 
-		return new NotException(typeof(T), "is not thrown").Throw<T>();
+		return new NotException(typeof(T), "is not thrown").HandleFailure<T>();
 	}
 
 	/// <summary>
@@ -92,7 +92,7 @@ public static class Delegates
 		if (Task.Run(action).Wait(timespan))
 			return true;
 
-		return new NotException(action, "was not completing within", timespan).Throw();
+		return new NotException(action, "was not completing within", timespan).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -120,7 +120,7 @@ public static class Delegates
 		if (allocated <= kiloBytes)
 			return true;
 
-		return new NotException(allocated, "is allocating more kB than", kiloBytes).Throw();
+		return new NotException(allocated, "is allocating more kB than", kiloBytes).HandleFailure<bool>();
 	}
 
 	/// <summary>

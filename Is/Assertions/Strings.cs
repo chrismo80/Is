@@ -17,7 +17,7 @@ public static class Strings
 		if (actual.Contains(expected))
 			return true;
 
-		return new NotException(actual, "is not containing", expected).Throw();
+		return new NotException(actual, "is not containing", expected).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -30,7 +30,7 @@ public static class Strings
 		if (actual.StartsWith(expected))
 			return true;
 
-		return new NotException(actual, "is not starting with", expected).Throw();
+		return new NotException(actual, "is not starting with", expected).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -43,7 +43,7 @@ public static class Strings
 		if (actual.EndsWith(expected))
 			return true;
 
-		return new NotException(actual, "is not ending with", expected).Throw();
+		return new NotException(actual, "is not ending with", expected).HandleFailure<bool>();
 	}
 
 	/// <summary>
@@ -57,7 +57,7 @@ public static class Strings
 		if (Regex.Match(actual, pattern) is { Success: true } match)
 			return match.Groups;
 
-		return new NotException(actual, "is not matching", pattern).Throw<GroupCollection>();
+		return new NotException(actual, "is not matching", pattern).HandleFailure<GroupCollection>();
 	}
 
 	/// <summary>
@@ -70,6 +70,6 @@ public static class Strings
 		if (!Regex.Match(actual, pattern).Success)
 			return true;
 
-		return new NotException(actual, "is matching", pattern).Throw();
+		return new NotException(actual, "is matching", pattern).HandleFailure<bool>();
 	}
 }
