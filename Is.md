@@ -1,5 +1,10 @@
-### Public API
+# Public API
 All public methods are designed as extensions methods.
+## Properties
+#### <u>Configuration</u>
+- __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
+- __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
+## Methods
 #### <u>Booleans</u>
 - __IsTrue__: _Asserts that a boolean value is `true`._
 - __IsFalse__: _Asserts that a boolean value is `false`._
@@ -57,9 +62,6 @@ All public methods are designed as extensions methods.
 #### <u>Types</u>
 - __Is__: _Asserts that the actual object is of type `T`._
 - __IsNot__: _Asserts that the actual object is not of type `T`._
-#### <u>Configuration</u>
-- __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
-- __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 #### <u>Helper</u>
 - __SaveJson__: _Serializes an object `obj` to a JSON file to `filename`_
 - __LoadJson__: _Deserializes an object to type `T` from a JSON file at `filename`_
