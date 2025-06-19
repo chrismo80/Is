@@ -1,10 +1,19 @@
 # Public API
 All public methods are designed as extensions methods.
+## Classes
+- __AssertionContext__: _Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred._
+- __NotException__: _This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately._
 ## Properties
+#### <u>AssertionContext</u>
+- __FailureCount__: _Gets the number of remaining assertion failures in the context._
 #### <u>Configuration</u>
 - __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
 - __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 ## Methods
+#### <u>AssertionContext</u>
+- __Begin__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
+- __Dispose__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
+- __NextFailure__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
 #### <u>Booleans</u>
 - __IsTrue__: _Asserts that a boolean value is `true`._
 - __IsFalse__: _Asserts that a boolean value is `false`._

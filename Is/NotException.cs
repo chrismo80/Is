@@ -5,6 +5,11 @@ using System.Collections;
 
 namespace Is;
 
+/// <summary>
+/// This exception is thrown when an assertion fails and <c>ThrowOnFailure</c> is enabled.
+/// When used inside an <see cref="AssertionContext"/>, instances of <see cref="NotException"/>
+/// are collected instead of being thrown immediately.
+/// </summary>
 [DebuggerStepThrough]
 public class NotException : Exception
 {

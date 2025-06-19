@@ -1,5 +1,6 @@
 namespace Is.Tests;
 
+[TestFixture]
 public class Assertions
 {
 	private static int DivideByZero(int value) => value / 0;
@@ -575,5 +576,19 @@ public class Assertions
 		action();
 
 		Configuration.ThrowOnFailure = true;
+	}
+
+	[Test]
+	public void ContextTest()
+	{
+		using var context = AssertionContext.Begin();
+
+		false.IsTrue();
+		4.Is(5);
+
+		context.FailureCount.Is(2);
+
+		context.NextFailure().Message.IsContaining("false.IsTrue()");
+		context.NextFailure().Message.IsContaining("4.Is(5)");
 	}
 }

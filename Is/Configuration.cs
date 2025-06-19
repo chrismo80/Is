@@ -19,8 +19,10 @@ public static class Configuration
 
 	internal static T? Throw<T>(this NotException ex)
 	{
-		if (ThrowOnFailure)
+		if (ThrowOnFailure && !AssertionContext.IsActive)
 			throw ex;
+
+		AssertionContext.Current?.AddFailure(ex);
 
 		Logger?.Invoke(ex.Message);
 
