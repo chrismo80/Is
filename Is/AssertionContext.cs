@@ -39,6 +39,9 @@ public sealed class AssertionContext : IDisposable
 
 	internal static bool IsActive => current.Value is not null;
 
+	private AssertionContext()
+	{ }
+
 	/// <summary>
 	/// Starts a new <see cref="AssertionContext"/> on the current thread.
 	/// All assertion failures will be collected and thrown as an <see cref="AggregateException"/> when the context is disposed.
