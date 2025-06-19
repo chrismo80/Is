@@ -11,14 +11,12 @@ public static class Types
 	/// </summary>
 	/// <returns>The cast object to the type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T Is<T>(this object actual)
+	public static T? Is<T>(this object actual)
 	{
 		if (actual is T cast)
 			return cast;
 
-		new NotException(actual, "is no", typeof(T)).Throw();
-
-		return default;
+		return new NotException(actual, "is no", typeof(T)).Throw<T>();
 	}
 
 	/// <summary>

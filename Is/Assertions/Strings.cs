@@ -52,14 +52,12 @@ public static class Strings
 	/// </summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static GroupCollection IsMatching(this string actual, string pattern)
+	public static GroupCollection? IsMatching(this string actual, string pattern)
 	{
 		if (Regex.Match(actual, pattern) is { Success: true } match)
 			return match.Groups;
 
-		new NotException(actual, "is not matching", pattern).Throw();
-
-		return default;
+		return new NotException(actual, "is not matching", pattern).Throw<GroupCollection>();
 	}
 
 	/// <summary>

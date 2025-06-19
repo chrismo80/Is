@@ -23,9 +23,7 @@ public static class Delegates
 			return ex.Is<T>();
 		}
 
-		new NotException(typeof(T), "is not thrown").Throw();
-
-		return default;
+		return new NotException(typeof(T), "is not thrown").Throw<T>();
 	}
 
 	/// <summary>

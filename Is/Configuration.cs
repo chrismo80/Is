@@ -14,13 +14,15 @@ public static class Configuration
 	/// </summary>
 	public static Action<string?>? Logger { get; set; } = msg => System.Diagnostics.Debug.WriteLine(msg);
 
-	internal static bool Throw(this NotException ex)
+	internal static T? Throw<T>(this NotException ex)
 	{
 		if (ThrowOnFailure)
 			throw ex;
 
 		Logger?.Invoke(ex.Message);
 
-		return false;
+		return default;
 	}
+
+	internal static bool Throw(this NotException ex) => ex.Throw<bool>();
 }
