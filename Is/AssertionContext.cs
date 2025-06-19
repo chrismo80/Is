@@ -37,7 +37,7 @@ public sealed class AssertionContext : IDisposable
 
 	public static AssertionContext? Current => current.Value;
 
-	internal static bool IsActive => Current is not null;
+	internal static bool IsActive => current.Value is not null;
 
 	/// <summary>
 	/// Starts a new <see cref="AssertionContext"/> on the current thread.
@@ -45,7 +45,7 @@ public sealed class AssertionContext : IDisposable
 	/// </summary>
 	public static AssertionContext Begin()
 	{
-		if (current.Value != null)
+		if (IsActive)
 			throw new InvalidOperationException("AssertionContext already active on this async context.");
 
 		current.Value = new AssertionContext();

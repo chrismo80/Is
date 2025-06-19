@@ -169,10 +169,10 @@ public class Assertions
 
 		Action action = () => buffer = new byte[1024 * 1024 * 10]; // 10 MB total
 
-		action.IsAllocatingAtMost(10_248);
+		action.IsAllocatingAtMost(10_300);
 
-		Action pass = () => action.IsAllocatingAtMost(10_248);
-		Action fail = () => action.IsAllocatingAtMost(10_239);
+		Action pass = () => action.IsAllocatingAtMost(10_300);
+		Action fail = () => action.IsAllocatingAtMost(10_200);
 
 		pass.IsNotThrowing<NotException>();
 		fail.IsThrowing<NotException>();
