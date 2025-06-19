@@ -109,7 +109,7 @@ public static class Collections
 			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].FormatValue()}"))
 			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
 
-		return new  NotException("object is not matching", messages.ToList()).Throw();
+		return new NotException("object is not matching", messages.ToList()).Throw();
 	}
 
 	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
