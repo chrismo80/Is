@@ -1,4 +1,4 @@
-![plot](https://github.com/chrismo80/Is/blob/main/Is.png)
+![plot](Is.png)
 # Minimalistic Assertion Extensions for .NET
 
 **Simple. Readable. Opinionated.**
@@ -109,9 +109,9 @@ Exception messages
 - uses colors to highlight important parts
 - displays the source of the error (line number and code)
 
-![plot](https://github.com/chrismo80/Is/blob/main/Docs/SimpleErrorMessage.png)
+![plot](Docs/SimpleErrorMessage.png)
 
-![plot](https://github.com/chrismo80/Is/blob/main/Docs/ComplexErrorMessage.png)
+![plot](Docs/ComplexErrorMessage.png)
 
 ## ⚖️ Design Philosophy: Clarity over Chaining
 
@@ -146,6 +146,23 @@ Enables collection assertion like:
 ```csharp
 list.All(item => item.IsPositive());
 ```
+
+
+
+## ⚙️ Configuration: Enable/Disable Exception Throwing
+
+The `Is` library allows users to control whether assertion failures throw exceptions or not.
+By default, assertion failures throw a `NotException`.
+However, you can modify this behavior using the `Configuration.ThrowOnFailure` flag.
+If disabled, assertions will instead return `false` on failure and log the exception message using the configured logger.
+
+### Key Properties
+- **`ThrowOnFailure`**: A `bool` indicating whether assertions throw exceptions on failure. Default is `true`.
+- **`Logger`**: An optional delegate to handle log messages when exceptions are disabled. Defaults to writing messages to `System.Diagnostics.Debug.WriteLine`.
+
+
+
+
 
 
 ## 🔍 Key Advantages of Is
