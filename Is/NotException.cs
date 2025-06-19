@@ -35,10 +35,14 @@ internal static class MessageExtensions
 	const int WRONG = 91;
 
 	internal static string Simply(this object? actual, string equality, object? expected) =>
-		actual.Color(WRONG) + " " + equality + " " + expected.Color(RIGHT);
+		actual?.GetType() == expected?.GetType() ?
+			actual.FormatValue().Color(WRONG) + " " + equality + " " + expected.FormatValue().Color(RIGHT) :
+			actual.Format().Color(WRONG) + " " + equality + " " + expected.Format().Color(RIGHT);
 
 	internal static string Actually(this object? actual, string equality, object? expected) =>
-		CreateMessage(actual.Format().Color(WRONG), equality, expected.Format().Color(RIGHT));
+		actual?.GetType() == expected?.GetType() ?
+			CreateMessage(actual.FormatValue().Color(WRONG), equality, expected.FormatValue().Color(RIGHT)) :
+			CreateMessage(actual.Format().Color(WRONG), equality, expected.Format().Color(RIGHT));
 
 	internal static string Actually(this object? actual, string equality) =>
 		CreateMessage(actual.Format().Color(WRONG), equality);

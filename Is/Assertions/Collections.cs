@@ -100,13 +100,13 @@ public static class Collections
 		var (missing, unexpected) = actual.Where(kvp => !unexpectedKeys.Contains(kvp.Key))
 			.Diff(expected.Where(kvp => !missingKeys.Contains(kvp.Key)));
 
-		var diffs = missing.Zip(unexpected, (m, u) => $"{u.Key}: {u.Value.FormatValue().Simply("is not", m.Value.FormatValue())}").ToList();
+		var diffs = missing.Zip(unexpected, (m, u) => $"{u.Key}: {u.Value.Simply("is not", m.Value)}").ToList();
 
 		if(missingKeys.Length == 0 && unexpectedKeys.Length == 0 && diffs.Count == 0)
 			return true;
 
 		var messages = diffs
-			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].FormatValue()}"))
+			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].Format()}"))
 			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
 
 		return new NotException("object is not matching", messages.ToList()).HandleFailure<bool>();
@@ -133,4 +133,6 @@ public static class Collections
 
 	private static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>
 		items.Where(item => !(predicate?.Invoke(item) ?? false));
+
+	private static string ComposeLine() => "";
 }
