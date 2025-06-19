@@ -148,7 +148,6 @@ list.All(item => item.IsPositive());
 ```
 
 
-
 ## ⚙️ Configuration: Enable/Disable Exception Throwing
 
 The `Is` library allows users to control whether assertion failures throw exceptions or not.
@@ -160,7 +159,46 @@ If disabled, assertions will instead return `false` on failure and log the excep
 - **`ThrowOnFailure`**: A `bool` indicating whether assertions throw exceptions on failure. Default is `true`.
 - **`Logger`**: An optional delegate to handle log messages when exceptions are disabled. Defaults to writing messages to `System.Diagnostics.Debug.WriteLine`.
 
+## 🔄 Grouped Assertion Evaluation with AssertionContext
 
+Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The AssertionContext provides exactly that capability.
+
+```csharp
+using var context = AssertionContext.Begin();
+
+false.IsTrue();       // ❌ fails
+4.Is(5);              // ❌ fails
+
+context.FailureCount.Is(2);
+
+// You can inspect failures manually:
+context.NextFailure().Message.IsContaining("false.IsTrue()");
+context.NextFailure().Message.IsContaining("4.Is(5)");
+```
+
+If any assertion failures remain unhandled when the context is disposed, an AggregateException is thrown containing all captured NotExceptions:
+
+```csharp
+try
+{
+    using var context = AssertionContext.Begin();
+
+    "abc".IsContaining("xyz"); // ❌
+    42.Is(0);                  // ❌
+}
+catch (AggregateException ex)
+{
+    ex.InnerExceptions.Count.Is(2);
+}
+```
+
+🔒 Scoped Context:
+
+Only one context can be active per async-flow at a time. It uses AsyncLocal<T> for full async test compatibility.
+
+🧪 Designed for Integration:
+
+Works with NUnit, xUnit, or MSTest, either manually via using or with custom test base classes or source generators.
 
 
 
