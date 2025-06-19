@@ -352,6 +352,8 @@ public class Assertions
 		list1.IsEquivalentTo(list2);
 		list2.IsEquivalentTo(list1);
 
+		list1.IsSatisfying(l => l.All(x => x < 5));
+
 		var actions = new List<Action>
 		{
 			() => list2.IsEquivalentTo(list3),

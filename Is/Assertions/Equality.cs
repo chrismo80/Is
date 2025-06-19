@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Collections;
+using System.Linq.Expressions;
 using System.Text.Json;
 using Is.Parser;
 
@@ -65,12 +66,12 @@ public static class Equality
 	/// Asserts that the <paramref name="actual"/> object satisfies the specified <paramref name="predicate"/>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSatisfying<T>(this T actual, Func<T, bool> predicate)
+	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate)
 	{
-		if (predicate(actual))
+		if (predicate.Compile()(actual))
 			return true;
 
-		return new NotException(actual, "is not satisfying the predicate").Throw();
+		return new NotException(actual, $"is not satisfying", predicate.Body).Throw();
 	}
 
 	/// <summary>
