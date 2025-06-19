@@ -563,9 +563,14 @@ public class Assertions
 	[NonParallelizable]
 	public void Configuration_DoNotThrow()
 	{
+		Action action = () => 3.Is(4);
+
+		action.IsThrowing<NotException>();
+
+		Configuration.Logger = Console.WriteLine;
 		Configuration.ThrowOnFailure = false;
 
-		3.Is(4);
+		action();
 
 		Configuration.ThrowOnFailure = true;
 	}
