@@ -1,5 +1,8 @@
-﻿namespace Is;
+﻿using System.Diagnostics;
 
+namespace Is;
+
+[DebuggerStepThrough]
 public static class Configuration
 {
 	/// <summary>
