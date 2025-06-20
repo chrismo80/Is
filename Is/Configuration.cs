@@ -17,6 +17,11 @@ public static class Configuration
 	/// </summary>
 	public static Action<string?>? Logger { get; set; } = msg => Debug.WriteLine(msg);
 
+	/// <summary>
+	/// Default value used for floating point comparisons if not specified specifically
+	/// </summary>
+	public static double FloatingPointComparisonFactor = 1e-6;
+
 	internal static T? HandleFailure<T>(this NotException ex)
 	{
 		if (ThrowOnFailure && !AssertionContext.IsActive)

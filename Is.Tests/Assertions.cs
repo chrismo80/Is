@@ -560,6 +560,9 @@ public class Assertions
 
 		action = () => actual.IsNegative();
 		action.IsThrowing<NotException>("is not smaller");
+
+		Configuration.FloatingPointComparisonFactor = 1e-4;
+		actual.IsApproximately(expected);
 	}
 
 	[Test]

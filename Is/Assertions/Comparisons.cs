@@ -9,24 +9,24 @@ public static class Comparisons
 {
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> floating point
-	/// is approximately equal to <paramref name="expected"/> considering an <paramref name="epsilon"/>.
+	/// is approximately equal to <paramref name="expected"/> considering an <paramref name="factor"/>.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsApproximately<T>(this T actual, T expected, T epsilon) where T : IFloatingPoint<T>
+	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T>
 	{
-		if (T.Abs(actual - expected) <= epsilon * T.Max(T.One, T.Abs(expected)))
+		if (T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
 			return true;
 
 		return new NotException(actual, "is not approximately", expected).HandleFailure<bool>();
 	}
 
 	/// <summary>
-	/// default epsilon is 1e-6.
+	/// uses default value from configuration
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsApproximately<T>(this T actual, T expected) where T : IFloatingPoint<T> =>
-		actual.IsApproximately(expected, T.CreateChecked(1e-6));
+		actual.IsApproximately(expected, T.CreateChecked(Configuration.FloatingPointComparisonFactor));
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> numeric value is positive (greater than zero).
