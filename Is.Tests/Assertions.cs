@@ -581,10 +581,22 @@ public class Assertions
 	[Test]
 	public void ContextTest_WithUsing()
 	{
+		try
+		{
+			using var ctx = AssertionContext.Begin();
+
+			"abc".IsContaining("xyz"); // ❌
+			42.Is(0);                  // ❌
+		}
+		catch (AggregateException ex)
+		{
+			ex.InnerExceptions.Count.Is(2);
+		}
+
 		using var context = AssertionContext.Begin();
 
-		false.IsTrue();
-		4.Is(5);
+		false.IsTrue(); // ❌
+		4.Is(5);        // ❌
 
 		context.FailureCount.Is(2);
 
@@ -596,8 +608,8 @@ public class Assertions
 	[AssertionContext]
 	public void ContextTest_WithAttribute()
 	{
-		false.IsTrue();
-		4.Is(5);
+		false.IsTrue(); // ❌
+		4.Is(5);        // ❌
 
 		AssertionContext.Current?.NextFailure();
 		AssertionContext.Current?.NextFailure();
