@@ -15,7 +15,7 @@ public static class Configuration
 	/// Gets or sets the logger delegate to use when <see cref="ThrowOnFailure"/> is false.
 	/// Default case, messages will be written to <c>Debug.WriteLine</c>.
 	/// </summary>
-	public static Action<string?>? Logger { get; set; } = msg => System.Diagnostics.Debug.WriteLine(msg);
+	public static Action<string?>? Logger { get; set; } = msg => Debug.WriteLine(msg);
 
 	internal static T? HandleFailure<T>(this NotException ex)
 	{
