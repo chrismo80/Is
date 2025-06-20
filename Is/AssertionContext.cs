@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Is;
 
 /// <summary>
@@ -31,6 +33,8 @@ public sealed class AssertionContext : IDisposable
 
 	private readonly Queue<NotException> _failures = [];
 
+	private string? Caller { get; init; }
+
 	/// <summary>
 	/// Gets the number of remaining assertion failures in the context.
 	/// </summary>
@@ -47,12 +51,12 @@ public sealed class AssertionContext : IDisposable
 	/// Starts a new <see cref="AssertionContext"/> on the current thread.
 	/// All assertion failures will be collected and thrown as an <see cref="AggregateException"/> when the context is disposed.
 	/// </summary>
-	public static AssertionContext Begin()
+	public static AssertionContext Begin([CallerMemberName] string? method = null)
 	{
 		if (IsActive)
 			throw new InvalidOperationException("AssertionContext already active on this async context.");
 
-		current.Value = new AssertionContext();
+		current.Value = new AssertionContext() { Caller = method };
 
 		return current.Value;
 	}
@@ -70,7 +74,7 @@ public sealed class AssertionContext : IDisposable
 
 		var s = _failures.Count == 1 ? "" : "s";
 
-		throw new AggregateException($"{_failures.Count} assertion{s} failed.", _failures);
+		throw new AggregateException($"{_failures.Count} assertion{s} failed in '{Caller}'", _failures);
 	}
 
 	/// <summary>
