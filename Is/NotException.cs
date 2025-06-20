@@ -83,16 +83,21 @@ internal static class MessageExtensions
 [DebuggerStepThrough]
 file static class CallStackExtensions
 {
+	private static readonly Assembly Mine = Assembly.GetExecutingAssembly();
+
 	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
 
 	internal static string AddCodeLine(this string text) =>
-		Configuration.AppendCodeLine ? "\n" + text + "\n" + FindFrame()?.CodeLine() + "\n" : text;
+		Configuration.AppendCodeLine ? "\n" + text + "\n" + new StackTrace(true).FindFrame()?.CodeLine() + "\n" : text;
 
-	private static StackFrame? FindFrame() =>
-		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsForeignAssembly() && f.GetFileName() != null);
+	private static StackFrame? FindFrame(this StackTrace trace) =>
+		trace.EnumerateFrames().FirstOrDefault(f => f?.IsForeignAssembly() == true && f.GetFileName() != null);
+
+	private static IEnumerable<StackFrame?> EnumerateFrames(this StackTrace trace) =>
+		Enumerable.Range(0, trace.FrameCount).Select(trace.GetFrame);
 
 	private static bool IsForeignAssembly(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Assembly != Assembly.GetExecutingAssembly();
+		frame.GetMethod()?.DeclaringType?.Assembly != Mine;
 
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
