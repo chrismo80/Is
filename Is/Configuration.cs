@@ -22,6 +22,11 @@ public static class Configuration
 	/// </summary>
 	public static double FloatingPointComparisonFactor { get; set; } = 1e-6;
 
+	/// <summary>
+	/// Makes code line info in <see cref="NotException"/> optional
+	/// </summary>
+	public static bool AppendCodeLine { get; set; } = true;
+
 	internal static T? HandleFailure<T>(this NotException ex)
 	{
 		if (ThrowOnFailure && !AssertionContext.IsActive)

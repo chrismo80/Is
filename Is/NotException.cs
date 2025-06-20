@@ -86,7 +86,7 @@ file static class CallStackExtensions
 	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
 
 	internal static string AddCodeLine(this string text) =>
-		"\n" + text + "\n" + FindFrame()?.CodeLine() + "\n";
+		Configuration.AppendCodeLine ? "\n" + text + "\n" + FindFrame()?.CodeLine() + "\n" : text;
 
 	private static StackFrame? FindFrame() =>
 		new StackTrace(true).GetFrames().FirstOrDefault(f => f.IsForeignAssembly() && f.GetFileName() != null);

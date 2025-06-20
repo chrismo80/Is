@@ -10,6 +10,7 @@ All public methods are designed as extensions methods.
 - __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
 - __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __FloatingPointComparisonFactor__: _Default value used for floating point comparisons if not specified specifically_
+- __AppendCodeLine__: _Makes code line info in `NotException` optional_
 ## Methods
 #### <u>AssertionContext</u>
 - __Begin__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
