@@ -155,6 +155,16 @@ By default, assertion failures throw a `NotException`.
 However, you can modify this behavior using the `Configuration.ThrowOnFailure` flag.
 If disabled, assertions will instead return `false` on failure and log the exception message using the configured logger.
 
+```csharp
+Configuration.Logger = Console.WriteLine;
+
+Configuration.ThrowOnFailure = false;
+
+3.Is(4); // ❌
+
+Configuration.ThrowOnFailure = true;
+```
+    
 ### Key Properties
 - **`ThrowOnFailure`**: A `bool` indicating whether assertions throw exceptions on failure. Default is `true`.
 - **`Logger`**: An optional delegate to handle log messages when exceptions are disabled. Defaults to writing messages to `System.Diagnostics.Debug.WriteLine`.

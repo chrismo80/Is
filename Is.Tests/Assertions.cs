@@ -564,16 +564,13 @@ public class Assertions
 
 	[Test]
 	[NonParallelizable]
-	public void Configuration_DoNotThrow()
+	public void Configuration_DoNotThrow_JustLog()
 	{
-		Action action = () => 3.Is(4);
-
-		action.IsThrowing<NotException>();
-
 		Configuration.Logger = Console.WriteLine;
+
 		Configuration.ThrowOnFailure = false;
 
-		action();
+		3.Is(4); // ❌
 
 		Configuration.ThrowOnFailure = true;
 	}
