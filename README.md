@@ -192,15 +192,54 @@ catch (AggregateException ex)
 }
 ```
 
+
 🔒 Scoped Context:
 
 Only one context can be active per async-flow at a time. It uses AsyncLocal<T> for full async test compatibility.
 
 🧪 Designed for Integration:
 
-Works with NUnit, xUnit, or MSTest, either manually via using or with custom test base classes or source generators.
+Works with NUnit, xUnit, or MSTest, either manually via using or with custom test base classes or attributes.
+To keep the package dependency-free, such implementations are out of scope for the library, but here is an example for such an Attribute for NUnit.
 
+```csharp
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public sealed class AssertionContextAttribute
+	: NUnitAttribute, NUnit.Framework.Interfaces.IWrapTestMethod
+{
+	public NUnit.Framework.Internal.Commands.TestCommand Wrap(NUnit.Framework.Internal.Commands.TestCommand command) =>
+		new AssertionContextCommand(command);
 
+	private sealed class AssertionContextCommand(NUnit.Framework.Internal.Commands.TestCommand innerCommand)
+		: NUnit.Framework.Internal.Commands.DelegatingTestCommand(innerCommand)
+	{
+		public override NUnit.Framework.Internal.TestResult Execute(NUnit.Framework.Internal.TestExecutionContext testContext)
+		{
+			var caller = testContext.CurrentTest.Method?.MethodInfo.Name ?? testContext.CurrentTest.Name;
+
+			using var assertionContext = AssertionContext.Begin(caller);
+
+			return innerCommand.Execute(testContext);
+		}
+	}
+}
+```
+
+This allows you to verify NotException like this:
+
+```csharp
+[Test]
+[AssertionContext]
+public void ContextTest_WithAttribute()
+{
+    false.IsTrue();
+    4.Is(5);
+
+    AssertionContext.Current?.NextFailure();
+    AssertionContext.Current?.NextFailure();
+}
+
+```
 
 
 ## 🔍 Key Advantages of Is

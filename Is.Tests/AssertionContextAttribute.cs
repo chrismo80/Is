@@ -1,17 +1,16 @@
-using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
-using NUnit.Framework.Internal.Commands;
-
 namespace Is.Tests;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class AssertionContextAttribute : NUnitAttribute, IWrapTestMethod
+public sealed class AssertionContextAttribute
+	: NUnitAttribute, NUnit.Framework.Interfaces.IWrapTestMethod
 {
-	public TestCommand Wrap(TestCommand command) => new AssertionContextCommand(command);
+	public NUnit.Framework.Internal.Commands.TestCommand Wrap(NUnit.Framework.Internal.Commands.TestCommand command) =>
+		new AssertionContextCommand(command);
 
-	private sealed class AssertionContextCommand(TestCommand innerCommand) : DelegatingTestCommand(innerCommand)
+	private sealed class AssertionContextCommand(NUnit.Framework.Internal.Commands.TestCommand innerCommand)
+		: NUnit.Framework.Internal.Commands.DelegatingTestCommand(innerCommand)
 	{
-		public override TestResult Execute(TestExecutionContext testContext)
+		public override NUnit.Framework.Internal.TestResult Execute(NUnit.Framework.Internal.TestExecutionContext testContext)
 		{
 			var caller = testContext.CurrentTest.Method?.MethodInfo.Name ?? testContext.CurrentTest.Name;
 
