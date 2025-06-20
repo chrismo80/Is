@@ -78,7 +78,6 @@ internal static class MessageExtensions
 
 	private static string Strip(this string text, int length = 50) =>
 		text.Length <= length ? text : text[..length];
-
 }
 
 [DebuggerStepThrough]
