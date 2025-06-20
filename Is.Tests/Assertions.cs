@@ -579,7 +579,7 @@ public class Assertions
 	}
 
 	[Test]
-	public void ContextTest()
+	public void ContextTest_WithUsing()
 	{
 		using var context = AssertionContext.Begin();
 
@@ -590,5 +590,16 @@ public class Assertions
 
 		context.NextFailure().Message.IsContaining("false.IsTrue()");
 		context.NextFailure().Message.IsContaining("4.Is(5)");
+	}
+
+	[Test]
+	[AssertionContext]
+	public void ContextTest_WithAttribute()
+	{
+		false.IsTrue();
+		4.Is(5);
+
+		AssertionContext.Current?.NextFailure();
+		AssertionContext.Current?.NextFailure();
 	}
 }
