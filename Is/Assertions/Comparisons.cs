@@ -16,9 +16,9 @@ public static class Comparisons
 	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T>
 	{
 		if (T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not approximately", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not approximately", expected);
 	}
 
 	/// <summary>
@@ -51,9 +51,9 @@ public static class Comparisons
 	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) > 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not greater than", other).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not greater than", other);
 	}
 
 	/// <summary>
@@ -65,9 +65,9 @@ public static class Comparisons
 	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) < 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not smaller than", other).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not smaller than", other);
 	}
 
 	/// <summary>
@@ -79,9 +79,9 @@ public static class Comparisons
 	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) >= 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is smaller than", other).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is smaller than", other);
 	}
 
 	/// <summary>
@@ -93,9 +93,9 @@ public static class Comparisons
 	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T>
 	{
 		if (actual.CompareTo(other) <= 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is greater than", other).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is greater than", other);
 	}
 
 	/// <summary>
@@ -125,9 +125,9 @@ public static class Comparisons
 	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T>
 	{
 		if (max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, $"is between {min} and {max}").HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, $"is between {min} and {max}");
 	}
 
 	/// <summary>
@@ -139,9 +139,9 @@ public static class Comparisons
 	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T>
 	{
 		if (max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, $"is in range of {min} and {max}").HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, $"is in range of {min} and {max}");
 	}
 
 	/// <summary>

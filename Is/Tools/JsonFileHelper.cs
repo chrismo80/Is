@@ -3,7 +3,7 @@ using Is.Parser;
 
 namespace Is;
 
-public static class Helper
+public static class JsonFileHelper
 {
 	/// <summary>
 	/// Serializes an object <paramref name="obj"/> to a JSON file to <paramref name="filename"/>

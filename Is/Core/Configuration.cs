@@ -26,16 +26,4 @@ public static class Configuration
 	/// Makes code line info in <see cref="NotException"/> optional
 	/// </summary>
 	public static bool AppendCodeLine { get; set; } = true;
-
-	internal static T? HandleFailure<T>(this NotException ex)
-	{
-		if (ThrowOnFailure && !AssertionContext.IsActive)
-			throw ex;
-
-		AssertionContext.Current?.AddFailure(ex);
-
-		Logger?.Invoke(ex.Message);
-
-		return default;
-	}
 }

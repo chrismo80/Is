@@ -18,9 +18,9 @@ public static class Equality
 	public static bool IsExactly<T>(this T actual, T expected)
 	{
 		if (actual.IsExactlyEqualTo(expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not", expected);
 	}
 
 	/// <summary>
@@ -38,9 +38,9 @@ public static class Equality
 	public static bool IsNot<T>(this T actual, T expected)
 	{
 		if (!actual.IsExactlyEqualTo(expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is", expected);
 	}
 
 	/// <summary>
@@ -50,9 +50,9 @@ public static class Equality
 	public static bool IsSameAs<T>(this T actual, T expected) where T : class?
 	{
 		if (ReferenceEquals(actual, expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not the same instance as", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not the same instance as", expected);
 	}
 
 	/// <summary>
@@ -69,9 +69,9 @@ public static class Equality
 	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate)
 	{
 		if (predicate.Compile()(actual))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, $"is not satisfying", predicate.Body).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, $"is not satisfying", predicate.Body);
 	}
 
 	/// <summary>
@@ -113,18 +113,18 @@ public static class Equality
 		if (values.Length == expected.Length)
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
 
-		return new NotException(values, "are not", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(values, "are not", expected);
 	}
 
 	private static bool IsEqualTo<T>(this T? actual, T? expected)
 	{
 		if (actual.IsExactlyEqualTo(expected))
-			return true;
+			return Assertion.Passed();
 
 		if(actual.IsCloseTo(expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not", expected);
 	}
 
 	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>

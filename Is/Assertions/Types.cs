@@ -11,12 +11,12 @@ public static class Types
 	/// </summary>
 	/// <returns>The cast object to the type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T? Is<T>(this object actual)
+	public static T Is<T>(this object actual)
 	{
 		if (actual is T cast)
-			return cast;
+			return Assertion.Passed(cast);
 
-		return new NotException(actual, "is no", typeof(T)).HandleFailure<T>();
+		return Assertion.Failed<T>(actual, "is no", typeof(T));
 	}
 
 	/// <summary>
@@ -26,8 +26,8 @@ public static class Types
 	public static bool IsNot<T>(this object actual)
 	{
 		if (actual is not T)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is a", typeof(T)).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is a", typeof(T));
 	}
 }

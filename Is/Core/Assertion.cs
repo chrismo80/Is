@@ -1,29 +1,42 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
-using System.Collections.Concurrent;
 using System.Collections;
 
 namespace Is;
 
-/// <summary>
-/// This exception is thrown when an assertion fails and <c>ThrowOnFailure</c> is enabled.
-/// When used inside an <see cref="AssertionContext"/>, instances of <see cref="NotException"/>
-/// are collected instead of being thrown immediately.
-/// </summary>
 [DebuggerStepThrough]
-public class NotException : Exception
+internal static class Assertion
 {
-	public NotException(object? actual, string equality, object? expected)
-		: base(actual.Actually(equality, expected).AddCodeLine())
-	{ }
+	internal static bool Passed() => Passed(true);
 
-	public NotException(object? actual, string equality)
-		: base(actual.Actually(equality).AddCodeLine())
-	{ }
+	internal static T Passed<T>(T result)
+	{
+		AssertionContext.Current?.AddSuccess();
 
-	public NotException(string message, List<string> text, int max = 100)
-		: base($"{message}\n\n\t{string.Join("\n\t", text.Truncate(max))}\n".AddCodeLine())
-	{ }
+		return result;
+	}
+
+	private static T Failed<T>(this string message)
+	{
+		var ex = new NotException(message);
+
+		if (Configuration.ThrowOnFailure && !AssertionContext.IsActive)
+			throw ex;
+
+		AssertionContext.Current?.AddFailure(ex);
+
+		Configuration.Logger?.Invoke(ex.Message);
+
+		return default;
+	}
+
+	internal static T Failed<T>(object? actual, string equality, object? expected) =>
+		Failed<T>(actual.Actually(equality, expected));
+
+	internal static T Failed<T>(object? actual, string equality) =>
+		Failed<T>(actual.Actually(equality));
+
+	internal static T Failed<T>(string message, List<string> text, int max = 100) =>
+		Failed<T>($"{message}\n\n\t{string.Join("\n\t", text.Truncate(max))}\n");
 }
 
 [DebuggerStepThrough]
@@ -78,30 +91,4 @@ internal static class MessageExtensions
 
 	private static string Strip(this string text, int length = 50) =>
 		text.Length <= length ? text : text[..length];
-}
-
-[DebuggerStepThrough]
-file static class CallStackExtensions
-{
-	private static readonly Assembly Mine = Assembly.GetExecutingAssembly();
-
-	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
-
-	internal static string AddCodeLine(this string text) =>
-		Configuration.AppendCodeLine ? "\n" + text + "\n" + new StackTrace(true).FindFrame()?.CodeLine() + "\n" : text;
-
-	private static StackFrame? FindFrame(this StackTrace trace) =>
-		trace.EnumerateFrames().FirstOrDefault(f => f?.IsForeignAssembly() == true && f.GetFileName() != null);
-
-	private static IEnumerable<StackFrame?> EnumerateFrames(this StackTrace trace) =>
-		Enumerable.Range(0, trace.FrameCount).Select(trace.GetFrame);
-
-	private static bool IsForeignAssembly(this StackFrame frame) =>
-		frame.GetMethod()?.DeclaringType?.Assembly != Mine;
-
-	private static string CodeLine(this StackFrame frame) => "in " +
-		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());
-
-	private static string GetLine(this string fileName, int lineNumber) => " in line " + lineNumber.Color(1) + ": " +
-		SourceCache.GetOrAdd(fileName, File.ReadAllLines)[lineNumber - 1].Trim().Color(93);
 }

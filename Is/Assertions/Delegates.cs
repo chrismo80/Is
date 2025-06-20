@@ -23,7 +23,7 @@ public static class Delegates
 			return ex.Is<T>();
 		}
 
-		return new NotException(typeof(T), "is not thrown").HandleFailure<T>();
+		return Assertion.Failed<T>(typeof(T), "is not thrown");
 	}
 
 	/// <summary>
@@ -42,7 +42,7 @@ public static class Delegates
 			return ex.IsNot<T>();
 		}
 
-		return true;
+		return Assertion.Passed();
 	}
 
 	/// <summary>
@@ -90,9 +90,9 @@ public static class Delegates
 	public static bool IsCompletingWithin(this Action action, TimeSpan timespan)
 	{
 		if (Task.Run(action).Wait(timespan))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(action, "was not completing within", timespan).HandleFailure<bool>();
+		return Assertion.Failed<bool>(action, "was not completing within", timespan);
 	}
 
 	/// <summary>
@@ -118,9 +118,9 @@ public static class Delegates
 		long allocated = (after - before) / 1024;
 
 		if (allocated <= kiloBytes)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(allocated, "is allocating more kB than", kiloBytes).HandleFailure<bool>();
+		return Assertion.Failed<bool>(allocated, "is allocating more kB than", kiloBytes);
 	}
 
 	/// <summary>

@@ -13,9 +13,9 @@ public static class Collections
 	public static bool IsEmpty<T>(this IEnumerable<T> actual)
 	{
 		if (!actual.Any())
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not empty").HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not empty");
 	}
 
 	/// <summary>
@@ -29,10 +29,10 @@ public static class Collections
 		foreach (var item in actual)
 		{
 			if (!set.Add(item))
-				return new NotException(actual, "is containing a duplicate", item).HandleFailure<bool>();
+				return Assertion.Failed<bool>(actual, "is containing a duplicate", item);
 		}
 
-		return true;
+		return Assertion.Passed();
 	}
 
 	/// <summary>
@@ -45,9 +45,9 @@ public static class Collections
 		var (missing, _) = actual.Diff(expected);
 
 		if (missing.Length == 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not containing", missing).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not containing", missing);
 	}
 
 	/// <summary>
@@ -60,9 +60,9 @@ public static class Collections
 		var (_, unexpected) = actual.Diff(expected);
 
 		if (unexpected.Length == 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(unexpected, "is not in", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(unexpected, "is not in", expected);
 	}
 
 	/// <summary>
@@ -75,9 +75,9 @@ public static class Collections
 		var (missing, unexpected) = actual.Diff(expected);
 
 		if (missing.Length == 0 && unexpected.Length == 0)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}").HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
 	}
 
 	/// <summary>
@@ -103,13 +103,13 @@ public static class Collections
 		var diffs = missing.Zip(unexpected, (m, u) => $"{u.Key}: {u.Value.Simply("is not", m.Value)}").ToList();
 
 		if(missingKeys.Length == 0 && unexpectedKeys.Length == 0 && diffs.Count == 0)
-			return true;
+			return Assertion.Passed();
 
 		var messages = diffs
 			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].Format()}"))
 			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
 
-		return new NotException("object is not matching", messages.ToList()).HandleFailure<bool>();
+		return Assertion.Failed<bool>("object is not matching", messages.ToList());
 	}
 
 	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
@@ -133,6 +133,4 @@ public static class Collections
 
 	private static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>
 		items.Where(item => !(predicate?.Invoke(item) ?? false));
-
-	private static string ComposeLine() => "";
 }

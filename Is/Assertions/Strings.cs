@@ -15,9 +15,9 @@ public static class Strings
 	public static bool IsContaining(this string actual, string expected)
 	{
 		if (actual.Contains(expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not containing", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not containing", expected);
 	}
 
 	/// <summary>
@@ -28,9 +28,9 @@ public static class Strings
 	public static bool IsStartingWith(this string actual, string expected)
 	{
 		if (actual.StartsWith(expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not starting with", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not starting with", expected);
 	}
 
 	/// <summary>
@@ -41,9 +41,9 @@ public static class Strings
 	public static bool IsEndingWith(this string actual, string expected)
 	{
 		if (actual.EndsWith(expected))
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is not ending with", expected).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is not ending with", expected);
 	}
 
 	/// <summary>
@@ -52,12 +52,12 @@ public static class Strings
 	/// </summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static GroupCollection? IsMatching(this string actual, string pattern)
+	public static GroupCollection IsMatching(this string actual, string pattern)
 	{
 		if (Regex.Match(actual, pattern) is { Success: true } match)
-			return match.Groups;
+			return Assertion.Passed(match.Groups);
 
-		return new NotException(actual, "is not matching", pattern).HandleFailure<GroupCollection>();
+		return Assertion.Failed<GroupCollection>(actual, "is not matching", pattern);
 	}
 
 	/// <summary>
@@ -68,8 +68,8 @@ public static class Strings
 	public static bool IsNotMatching(this string actual, string pattern)
 	{
 		if (!Regex.Match(actual, pattern).Success)
-			return true;
+			return Assertion.Passed();
 
-		return new NotException(actual, "is matching", pattern).HandleFailure<bool>();
+		return Assertion.Failed<bool>(actual, "is matching", pattern);
 	}
 }

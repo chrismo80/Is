@@ -33,12 +33,14 @@ public sealed class AssertionContext : IDisposable
 
 	private readonly Queue<NotException> _failures = [];
 
-	private string? Caller { get; init; }
+	private string? _caller;
 
 	/// <summary>
 	/// Gets the number of remaining assertion failures in the context.
 	/// </summary>
-	public int FailureCount => _failures.Count;
+	public int Failed => _failures.Count;
+
+	public int Passed { get; private set; }
 
 	public static AssertionContext? Current => current.Value;
 
@@ -56,7 +58,7 @@ public sealed class AssertionContext : IDisposable
 		if (IsActive)
 			throw new InvalidOperationException("AssertionContext already active on this async context.");
 
-		current.Value = new AssertionContext() { Caller = method };
+		current.Value = new AssertionContext() { _caller = method };
 
 		return current.Value;
 	}
@@ -74,7 +76,7 @@ public sealed class AssertionContext : IDisposable
 
 		var s = _failures.Count == 1 ? "" : "s";
 
-		throw new AggregateException($"{_failures.Count} assertion{s} failed in '{Caller}'", _failures);
+		throw new AggregateException($"{_failures.Count} assertion{s} failed in '{_caller}'", _failures);
 	}
 
 	/// <summary>
@@ -83,4 +85,6 @@ public sealed class AssertionContext : IDisposable
 	public NotException NextFailure() => _failures.Dequeue();
 
 	internal void AddFailure(NotException ex) => _failures.Enqueue(ex);
+
+	internal void AddSuccess() => Passed++;
 }
