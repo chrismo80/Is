@@ -20,7 +20,7 @@ public static class Configuration
 	/// <summary>
 	/// Default value used for floating point comparisons if not specified specifically
 	/// </summary>
-	public static double FloatingPointComparisonFactor = 1e-6;
+	public static double FloatingPointComparisonFactor { get; set; } = 1e-6;
 
 	internal static T? HandleFailure<T>(this NotException ex)
 	{

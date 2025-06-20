@@ -9,6 +9,7 @@ All public methods are designed as extensions methods.
 #### <u>Configuration</u>
 - __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
 - __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
+- __FloatingPointComparisonFactor__: _Default value used for floating point comparisons if not specified specifically_
 ## Methods
 #### <u>AssertionContext</u>
 - __Begin__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
@@ -25,8 +26,8 @@ All public methods are designed as extensions methods.
 - __IsEquivalentTo__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order._
 - __IsEquivalentTo__: _Asserts that the `actual` dictionary matches the `expected` dictionary ignoring order. Optional predicate can be used to ignore specific keys._
 #### <u>Comparisons</u>
-- __IsApproximately__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `epsilon`._
-- __IsApproximately__: _default epsilon is 1e-6._
+- __IsApproximately__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
+- __IsApproximately__: _uses default value from configuration_
 - __IsPositive__: _Asserts that the `actual` numeric value is positive (greater than zero)._
 - __IsNegative__: _Asserts that the `actual` numeric value is negative (less than zero)._
 - __IsGreaterThan__: _Asserts that the `actual` value is greater than the given `other` value._
