@@ -10,6 +10,9 @@ public static class Check
 
 	public static Failure<bool> That(bool condition) =>
 		new(condition, true);
+
+	public static Failure<bool> That<T>(T value, Func<T, bool> predicate, Func<T, object?>? failureContextExtractor = null) =>
+		new (predicate(value), true, failureContextExtractor?.Invoke(value));
 }
 
 [DebuggerStepThrough]
@@ -23,7 +26,7 @@ public readonly struct Result<T>(bool condition, T value)
 }
 
 [DebuggerStepThrough]
-public readonly struct Failure<TResult>(bool condition, TResult result)
+public readonly struct Failure<TResult>(bool condition, TResult result, object? failureContext = null)
 {
 	public TResult Unless(object? actual, string message, object? other) => condition switch
 	{
@@ -34,6 +37,6 @@ public readonly struct Failure<TResult>(bool condition, TResult result)
 	public TResult Unless(object? actual, string message) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(actual, message)
+		false => failureContext == null ? Assertion.Failed<TResult>(actual, message) : Assertion.Failed<TResult>(actual, message, failureContext)
 	};
 }

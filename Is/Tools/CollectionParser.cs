@@ -5,7 +5,7 @@ namespace Is;
 [DebuggerStepThrough]
 internal static class CollectionParser
 {
-	internal static (bool Result, T Duplicate) HasDuplicate<T>(this IEnumerable<T> items)
+	internal static (bool Yes, T Duplicate) HasDuplicate<T>(this IEnumerable<T> items)
 	{
 		var set = new HashSet<T>();
 

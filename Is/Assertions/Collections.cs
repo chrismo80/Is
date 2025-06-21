@@ -18,13 +18,16 @@ public static class Collections
 	/// Asserts that all elements in the sequence are unique.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsUnique<T>(this IEnumerable<T> actual)
-	{
-		if(actual.HasDuplicate() is { Result: true } result)
-			return Assertion.Failed<bool>(actual, "is containing a duplicate", result.Duplicate);
+	public static bool IsUnique<T>(this IEnumerable<T> actual) => Check
+		.That(actual.HasDuplicate(), result => !result.Yes, result => result.Duplicate)
+		.Unless(actual, "is containing a duplicate");
 
-		return Assertion.Passed();
-	}
+	// {
+	// 	if(actual.HasDuplicate() is { Result: true } result)
+	// 		return Assertion.Failed<bool>(actual, "is containing a duplicate", result.Duplicate);
+	//
+	// 	return Assertion.Passed();
+	// }
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> sequence contains
