@@ -10,9 +10,9 @@ public static class Collections
 	/// Asserts that the sequence is empty.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Return
-		.IsTrue(!actual.Any())
-		.Otherwise(actual, "is not empty");
+	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Check
+		.That(!actual.Any())
+		.Unless(actual, "is not empty");
 
 	/// <summary>
 	/// Asserts that all elements in the sequence are unique.
