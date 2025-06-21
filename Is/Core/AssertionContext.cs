@@ -69,7 +69,7 @@ public sealed class AssertionContext : IDisposable
 
 	/// <summary>
 	/// Ends the assertion context and validates all collected failures.
-	/// If any assertions failed, throws an <see cref="AggregateException"/> containing all collected <see cref="Is.NotException"/>s.
+	/// If any assertions failed, throws an <see cref="AggregateException"/> containing all collected <see cref="Is.Core.NotException"/>s.
 	/// </summary>
 	public void Dispose()
 	{
@@ -84,7 +84,7 @@ public sealed class AssertionContext : IDisposable
 	}
 
 	/// <summary>
-	/// Dequeues an <see cref="Is.NotException"/> from the queue to not be thrown at the end of the context.
+	/// Dequeues an <see cref="Is.Core.NotException"/> from the queue to not be thrown at the end of the context.
 	/// </summary>
 	public NotException NextFailure() => _failures.Dequeue();
 

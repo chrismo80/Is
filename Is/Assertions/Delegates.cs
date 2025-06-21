@@ -13,7 +13,7 @@ public static class Delegates
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsThrowing<T>(this Action action) where T : Exception
+	public static T? IsThrowing<T>(this Action action) where T : Exception
 	{
 		try
 		{
@@ -54,7 +54,7 @@ public static class Delegates
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsThrowing<T>(this Action action, string message) where T : Exception =>
-		action.IsThrowing<T>().Message.IsContaining(message);
+		action.IsThrowing<T>()?.Message.IsContaining(message) ?? false;
 
 	/// <summary>
 	/// Asserts that the given async <paramref name="function" /> throws
@@ -62,7 +62,7 @@ public static class Delegates
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsThrowing<T>(this Func<Task> function) where T : Exception =>
+	public static T? IsThrowing<T>(this Func<Task> function) where T : Exception =>
 		function.ToAction().IsThrowing<T>();
 
 	/// <summary>
@@ -81,7 +81,7 @@ public static class Delegates
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsThrowing<T>(this Func<Task> function, string message) where T : Exception =>
-		function.IsThrowing<T>().Message.IsContaining(message);
+		function.IsThrowing<T>()?.Message.IsContaining(message) ?? false;
 
 	/// <summary>
 	/// Asserts that the given <paramref name="action" /> did complete

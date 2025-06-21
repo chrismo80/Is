@@ -23,21 +23,21 @@ public readonly struct Result<T>(bool condition, T value)
 }
 
 [DebuggerStepThrough]
-public readonly struct Failure<TResult>(bool condition, TResult result)
+public readonly struct Failure<TResult>(bool condition, TResult? result)
 {
-	public TResult Unless(object? actual, string message, object? other) => condition switch
+	public TResult? Unless(object? actual, string message, object? other) => condition switch
 	{
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(actual, message, other)
 	};
 
-	public TResult Unless(object? actual, string message) => condition switch
+	public TResult? Unless(object? actual, string message) => condition switch
 	{
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(actual, message),
 	};
 
-	public TResult Unless(string message, List<string> text) => condition switch
+	public TResult? Unless(string message, List<string> text) => condition switch
 	{
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(message, text),
