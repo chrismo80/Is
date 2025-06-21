@@ -1,3 +1,4 @@
+using Is.Core;
 using System.Reflection;
 
 namespace Is.Tests;

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Collections.Concurrent;
 
-namespace Is;
+namespace Is.Core;
 
 /// <summary>
 /// This exception is thrown when an assertion fails and <c>ThrowOnFailure</c> is enabled.

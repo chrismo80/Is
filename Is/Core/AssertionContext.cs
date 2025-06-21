@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Is;
+namespace Is.Core;
 
 /// <summary>
 /// Represents a scoped context that captures all assertion failures (as <see cref="NotException"/> instances)

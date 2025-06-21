@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Collections;
 
-namespace Is;
+namespace Is.Core;
 
 [DebuggerStepThrough]
 internal static class Assertion

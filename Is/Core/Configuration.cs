@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Is;
+namespace Is.Core;
 
 [DebuggerStepThrough]
 public static class Configuration

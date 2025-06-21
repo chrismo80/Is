@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Is.Core;
+using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 

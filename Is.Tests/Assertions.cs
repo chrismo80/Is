@@ -1,3 +1,5 @@
+using Is.Core;
+
 namespace Is.Tests;
 
 [TestFixture]
