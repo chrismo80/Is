@@ -1,9 +1,10 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Is.Parser;
 
+[DebuggerStepThrough]
 public static class JsonParser
 {
 	private const int MAX_RECURSION_DEPTH = 20;

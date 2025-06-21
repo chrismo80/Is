@@ -20,13 +20,8 @@ public static class Collections
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsUnique<T>(this IEnumerable<T> actual)
 	{
-		var set = new HashSet<T>();
-
-		foreach (var item in actual)
-		{
-			if (!set.Add(item))
-				return Assertion.Failed<bool>(actual, "is containing a duplicate", item);
-		}
+		if(actual.HasDuplicate() is { Result: true } result)
+			return Assertion.Failed<bool>(actual, "is containing a duplicate", result.Duplicate);
 
 		return Assertion.Passed();
 	}
@@ -107,26 +102,4 @@ public static class Collections
 
 		return Assertion.Failed<bool>("object is not matching", messages.ToList());
 	}
-
-	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
-	{
-		var histogram = new Dictionary<T, int>();
-
-		histogram.CountItems(actual, 1);
-		histogram.CountItems(expected, -1);
-
-		return (histogram.Filter(c => c < 0), histogram.Filter(c => c > 0));
-	}
-
-	private static void CountItems<T>(this Dictionary<T, int> dict, IEnumerable<T> source, int increment) where T : notnull
-	{
-		foreach (var item in source)
-			dict[item] = dict.GetValueOrDefault(item) + increment;
-	}
-
-	private static T[] Filter<T>(this Dictionary<T, int> dict, Func<int, bool> predicate) where T : notnull =>
-		dict.Where(kvp => predicate(kvp.Value)).Select(kvp => kvp.Key).ToArray();
-
-	private static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>
-		items.Where(item => !(predicate?.Invoke(item) ?? false));
 }

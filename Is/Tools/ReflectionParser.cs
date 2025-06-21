@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Is.Parser;
 
+[DebuggerStepThrough]
 internal static class ReflectionParser
 {
 	private const int MAX_RECURSION_DEPTH = 20;
