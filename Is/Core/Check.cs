@@ -5,25 +5,25 @@ namespace Is;
 [DebuggerStepThrough]
 public static class Check
 {
-	public static Conditional<T> That<T>(T value, Func<T, bool> predicate) =>
+	public static Result<T> That<T>(T value, Func<T, bool> predicate) =>
 		new(predicate(value), value);
 
-	public static Failable<bool> That(bool condition) =>
+	public static Failure<bool> That(bool condition) =>
 		new(condition, true);
 }
 
 [DebuggerStepThrough]
-public readonly struct Conditional<T>(bool condition, T value)
+public readonly struct Result<T>(bool condition, T value)
 {
-	public Failable<TResult> Yields<TResult>(Func<T, TResult> result) => condition switch
+	public Failure<TResult> Yields<TResult>(Func<T, TResult> result) => condition switch
 	{
-		true => new Failable<TResult>(true, result(value)),
-		false => new Failable<TResult>(false, default)
+		true => new Failure<TResult>(true, result(value)),
+		false => new Failure<TResult>(false, default)
 	};
 }
 
 [DebuggerStepThrough]
-public readonly struct Failable<TResult>(bool condition, TResult result)
+public readonly struct Failure<TResult>(bool condition, TResult result)
 {
 	public TResult Unless(object? actual, string message, object? other) => condition switch
 	{
