@@ -16,9 +16,8 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsExactly<T>(this T actual, T expected) => Check
-		.That(actual).And(expected)
-		.Return(() => actual.IsExactlyEqualTo(expected))
-		.OrFailWith("is not");
+		.That(() => actual.IsExactlyEqualTo(expected))
+		.OrFailWith(actual, "is not", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object matches the <paramref name="expected"/> value(s).
@@ -33,18 +32,16 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNot<T>(this T actual, T expected)=> Check
-		.That(actual).And(expected)
-		.Return(() => !actual.IsExactlyEqualTo(expected))
-		.OrFailWith("is");
+		.That(() => !actual.IsExactlyEqualTo(expected))
+		.OrFailWith(actual, "is", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object is the same instance as the <paramref name="expected"/> object.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSameAs<T>(this T actual, T expected) where T : class? => Check
-		.That(actual).And(expected)
-		.Return(() => ReferenceEquals(actual, expected))
-		.OrFailWith("is not the same instance as");
+		.That(() => ReferenceEquals(actual, expected))
+		.OrFailWith(actual, "is not the same instance as", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is the default value of its type.
@@ -58,9 +55,8 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate) => Check
-		.That(actual).And(predicate.Body)
-		.Return(() => predicate.Compile()(actual))
-		.OrFailWith("is not satisfying");
+		.That(() => predicate.Compile()(actual))
+		.OrFailWith(actual, "is not satisfying", predicate.Body);
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the
