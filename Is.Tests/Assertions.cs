@@ -610,8 +610,13 @@ public class Assertions
 	[AssertionContext]
 	public void ContextTest_WithAttribute()
 	{
+		true.IsTrue();  // ✅
 		false.IsTrue(); // ❌
 		4.Is(5);        // ❌
+		5.Is(5);        // ✅
+		6.Is(6);        // ✅
+
+		var ctx = AssertionContext.Current;
 
 		AssertionContext.Current?.NextFailure();
 		AssertionContext.Current?.NextFailure();

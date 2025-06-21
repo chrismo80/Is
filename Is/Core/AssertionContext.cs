@@ -42,6 +42,10 @@ public sealed class AssertionContext : IDisposable
 
 	public int Passed { get; private set; }
 
+	public int Total => Passed + Failed;
+
+	public double Ratio => (double)Passed / Total;
+
 	public static AssertionContext? Current => current.Value;
 
 	internal static bool IsActive => current.Value is not null;
@@ -76,7 +80,7 @@ public sealed class AssertionContext : IDisposable
 
 		var s = _failures.Count == 1 ? "" : "s";
 
-		throw new AggregateException($"{_failures.Count} assertion{s} failed in '{_caller}'", _failures);
+		throw new AggregateException($"{_failures.Count} of {Total} assertion{s} failed in '{_caller}'", _failures);
 	}
 
 	/// <summary>
