@@ -13,9 +13,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T> => Check
-		.Return(T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
-		.OrFail(actual, "is not approximately", expected);
+	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T> => Return
+		.Check(T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
+		.Otherwise(actual, "is not approximately", expected);
 
 	/// <summary>
 	/// uses default value from configuration
@@ -44,9 +44,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> => Check
-		.Return(actual.CompareTo(other) > 0)
-		.OrFail(actual, "is not greater than", other);
+	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> => Return
+		.Check(actual.CompareTo(other) > 0)
+		.Otherwise(actual, "is not greater than", other);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is smaller
@@ -54,9 +54,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> => Check
-		.Return(actual.CompareTo(other) < 0)
-		.OrFail(actual, "is not smaller than", other);
+	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> => Return
+		.Check(actual.CompareTo(other) < 0)
+		.Otherwise(actual, "is not smaller than", other);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is greater or equal
@@ -64,9 +64,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T> => Check
-		.Return(actual.CompareTo(other) >= 0)
-		.OrFail(actual, "is smaller than", other);
+	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T> => Return
+		.Check(actual.CompareTo(other) >= 0)
+		.Otherwise(actual, "is smaller than", other);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is smaller or equal
@@ -74,9 +74,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T> => Check
-		.Return(actual.CompareTo(other) <= 0)
-		.OrFail(actual, "is greater than", other);
+	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T> => Return
+		.Check(actual.CompareTo(other) <= 0)
+		.Otherwise(actual, "is greater than", other);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value
@@ -102,9 +102,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> => Check
-		.Return(max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
-		.OrFail(actual, $"is between {min} and {max}");
+	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> => Return
+		.Check(max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
+		.Otherwise(actual, $"is between {min} and {max}");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value
@@ -112,9 +112,9 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T> => Check
-		.Return(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
-		.OrFail(actual, $"is in range of {min} and {max}");
+	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T> => Return
+		.Check(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
+		.Otherwise(actual, $"is in range of {min} and {max}");
 
 	/// <summary>
 	/// Asserts that the difference between two <see cref="DateTime"/>

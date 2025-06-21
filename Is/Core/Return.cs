@@ -3,19 +3,19 @@
 namespace Is;
 
 [DebuggerStepThrough]
-public static class Check
+public static class Return
 {
 	public static Conditional<T> When<T>(T value, Func<T, bool> predicate) =>
 		new(predicate(value), value);
 
-	public static Failable<bool> Return(bool condition) =>
+	public static Failable<bool> Check(bool condition) =>
 		new(condition, true);
 }
 
 [DebuggerStepThrough]
 public readonly struct Conditional<T>(bool condition, T value)
 {
-	public Failable<TResult> Return<TResult>(Func<T, TResult> result) => condition switch
+	public Failable<TResult> Then<TResult>(Func<T, TResult> result) => condition switch
 	{
 		true => new Failable<TResult>(true, result(value)),
 		false => new Failable<TResult>(false, default)
@@ -25,13 +25,13 @@ public readonly struct Conditional<T>(bool condition, T value)
 [DebuggerStepThrough]
 public readonly struct Failable<TResult>(bool condition, TResult result)
 {
-	public TResult OrFail(object? actual, string message, object? other) => condition switch
+	public TResult Otherwise(object? actual, string message, object? other) => condition switch
 	{
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(actual, message, other)
 	};
 
-	public TResult OrFail(object? actual, string message) => condition switch
+	public TResult Otherwise(object? actual, string message) => condition switch
 	{
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(actual, message)

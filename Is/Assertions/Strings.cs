@@ -12,27 +12,27 @@ public static class Strings
 	/// contains the specified <paramref name="expected"/> substring.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsContaining(this string actual, string expected) => Check
-		.Return(actual.Contains(expected))
-		.OrFail(actual, "is not containing", expected);
+	public static bool IsContaining(this string actual, string expected) => Return
+		.Check(actual.Contains(expected))
+		.Otherwise(actual, "is not containing", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// starts with the specified <paramref name="expected"/> string.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsStartingWith(this string actual, string expected) => Check
-		.Return(actual.StartsWith(expected))
-		.OrFail(actual, "is not starting with", expected);
+	public static bool IsStartingWith(this string actual, string expected) => Return
+		.Check(actual.StartsWith(expected))
+		.Otherwise(actual, "is not starting with", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// ends with the specified <paramref name="expected"/> string.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEndingWith(this string actual, string expected) => Check
-		.Return(actual.EndsWith(expected))
-		.OrFail(actual, "is not ending with", expected);
+	public static bool IsEndingWith(this string actual, string expected) => Return
+		.Check(actual.EndsWith(expected))
+		.Otherwise(actual, "is not ending with", expected);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -40,17 +40,17 @@ public static class Strings
 	/// </summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static GroupCollection? IsMatching(this string actual, string pattern) => Check
+	public static GroupCollection? IsMatching(this string actual, string pattern) => Return
 		.When(Regex.Match(actual, pattern), match => match.Success)
-		.Return(match => match.Groups)
-		.OrFail(actual, "is not matching", pattern);
+		.Then(match => match.Groups)
+		.Otherwise(actual, "is not matching", pattern);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// does not match the specified <paramref name="pattern"/> regular expression.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotMatching(this string actual, string pattern)=> Check
-		.Return(!Regex.Match(actual, pattern).Success)
-		.OrFail(actual, "is matching", pattern);
+	public static bool IsNotMatching(this string actual, string pattern)=> Return
+		.Check(!Regex.Match(actual, pattern).Success)
+		.Otherwise(actual, "is matching", pattern);
 }
