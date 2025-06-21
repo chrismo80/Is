@@ -215,23 +215,23 @@ To keep the package dependency-free, such implementations are out of scope for t
 ```csharp
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class AssertionContextAttribute
-	: NUnitAttribute, NUnit.Framework.Interfaces.IWrapTestMethod
+    : NUnitAttribute, NUnit.Framework.Interfaces.IWrapTestMethod
 {
-	public NUnit.Framework.Internal.Commands.TestCommand Wrap(NUnit.Framework.Internal.Commands.TestCommand command) =>
-		new AssertionContextCommand(command);
+    public NUnit.Framework.Internal.Commands.TestCommand Wrap(NUnit.Framework.Internal.Commands.TestCommand command) =>
+        new AssertionContextCommand(command);
 
-	private sealed class AssertionContextCommand(NUnit.Framework.Internal.Commands.TestCommand innerCommand)
-		: NUnit.Framework.Internal.Commands.DelegatingTestCommand(innerCommand)
-	{
-		public override NUnit.Framework.Internal.TestResult Execute(NUnit.Framework.Internal.TestExecutionContext testContext)
-		{
-			var caller = testContext.CurrentTest.Method?.MethodInfo.Name ?? testContext.CurrentTest.Name;
+    private sealed class AssertionContextCommand(NUnit.Framework.Internal.Commands.TestCommand innerCommand)
+        : NUnit.Framework.Internal.Commands.DelegatingTestCommand(innerCommand)
+    {
+        public override NUnit.Framework.Internal.TestResult Execute(NUnit.Framework.Internal.TestExecutionContext testContext)
+        {
+            var caller = testContext.CurrentTest.Method?.MethodInfo.Name ?? testContext.CurrentTest.Name;
 
-			using var assertionContext = AssertionContext.Begin(caller);
+            using var assertionContext = AssertionContext.Begin(caller);
 
-			return innerCommand.Execute(testContext);
-		}
-	}
+            return innerCommand.Execute(testContext);
+        }
+    }
 }
 ```
 
@@ -262,8 +262,8 @@ Use the built-in **`Check`** fluent API to insert the assertion into the feature
 public static class CustomAssertions
 {
     public static bool IsLettersOnly(this string word) => Check
-		.That(word.All(char.IsLetter))
-		.Unless(word, "does not contain only letters");
+        .That(word.All(char.IsLetter))
+        .Unless(word, "does not contain only letters");
 }
 ```
 
