@@ -107,17 +107,14 @@ public static class Delegates
 	public static bool IsAllocatingAtMost(this Action action, long kiloBytes)
 	{
 		long before = GC.GetTotalMemory(true);
-
 		action();
-
 		long after = GC.GetTotalMemory(false);
 
 		long allocated = (after - before) / 1024;
 
-		if (allocated <= kiloBytes)
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(allocated, "is allocating more kB than", kiloBytes);
+		return Check
+			.That(allocated <= kiloBytes)
+			.Unless(allocated, "is allocating more kB than", kiloBytes);
 	}
 
 	/// <summary>

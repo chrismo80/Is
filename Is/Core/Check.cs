@@ -9,10 +9,7 @@ public static class Check
 		new(predicate(value), value);
 
 	public static Failure<bool> That(bool condition) =>
-		new(condition, true, null);
-
-	public static Failure<bool> That<T>(T value, Func<T, bool> predicate, Func<T, object?>? failureContextExtractor) =>
-		new (predicate(value), true, failureContextExtractor?.Invoke(value));
+		new(condition, true);
 }
 
 [DebuggerStepThrough]
@@ -20,13 +17,13 @@ public readonly struct Result<T>(bool condition, T value)
 {
 	public Failure<TResult> Yields<TResult>(Func<T, TResult> result) => condition switch
 	{
-		true => new Failure<TResult>(true, result(value), null),
-		false => new Failure<TResult>(false, default, null)
+		true => new Failure<TResult>(true, result(value)),
+		false => new Failure<TResult>(false, default)
 	};
 }
 
 [DebuggerStepThrough]
-public readonly struct Failure<TResult>(bool condition, TResult result, object? failureContext)
+public readonly struct Failure<TResult>(bool condition, TResult result)
 {
 	public TResult Unless(object? actual, string message, object? other) => condition switch
 	{
@@ -37,14 +34,12 @@ public readonly struct Failure<TResult>(bool condition, TResult result, object? 
 	public TResult Unless(object? actual, string message) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false when failureContext == null => Assertion.Failed<TResult>(actual, message),
-		false => Unless(actual, message, failureContext),
+		false => Assertion.Failed<TResult>(actual, message),
 	};
 
-	public TResult Unless(string message) => condition switch
+	public TResult Unless(string message, List<string> text) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false when failureContext is List<string> text => Assertion.Failed<TResult>(message, text),
-		false => Assertion.Failed<TResult>(message),
+		false => Assertion.Failed<TResult>(message, text),
 	};
 }
