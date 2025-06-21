@@ -248,8 +248,37 @@ public void ContextTest_WithAttribute()
     AssertionContext.Current?.NextFailure();
     AssertionContext.Current?.NextFailure();
 }
-
 ```
+
+
+
+
+
+## 🔧 Custom Assertions
+Create a static class with an extension method that performs the desired assertion.
+Use the built-in **`Check`** fluent API to insert the assertion into the features of the library, such as AssertionContext and message formatting.
+
+```csharp
+public static class CustomAssertions
+{
+    public static bool IsLettersOnly(this string word) => Check
+		.That(word.All(char.IsLetter))
+		.Unless(word, "does not contain only letters");
+}
+```
+
+✅ Usage Example
+
+```csharp
+"hello".IsLettersOnly();        // ✅
+"hello world".IsLettersOnly();  // ❌
+```
+ℹ️ Your custom assertions integrate seamlessly with the existing fluent style of the library.
+
+
+
+
+
 
 
 ## 🔍 Key Advantages of Is
