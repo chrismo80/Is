@@ -12,6 +12,7 @@ public static class Check
 		new(condition, true);
 }
 
+[DebuggerStepThrough]
 public readonly struct Conditional<T>(bool condition, T value)
 {
 	public Failable<TResult> Return<TResult>(Func<T, TResult> result) => condition ?
@@ -19,6 +20,7 @@ public readonly struct Conditional<T>(bool condition, T value)
 		new Failable<TResult>(false, default);
 }
 
+[DebuggerStepThrough]
 public readonly struct Failable<TResult>(bool condition, TResult result)
 {
 	public TResult OrFail(object? actual, string message, object? other)
