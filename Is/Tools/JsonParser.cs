@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Is.Parser;
+namespace Is.Tools;
 
 [DebuggerStepThrough]
 public static class JsonParser

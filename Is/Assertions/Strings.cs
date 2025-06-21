@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace Is;
+namespace Is.Assertions;
 
 [DebuggerStepThrough]
 public static class Strings

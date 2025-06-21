@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
-namespace Is;
+namespace Is.Assertions;
 
 [DebuggerStepThrough]
 public static class Delegates

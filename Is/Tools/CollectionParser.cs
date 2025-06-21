@@ -1,7 +1,7 @@
 ﻿using Is.Core;
 using System.Diagnostics;
 
-namespace Is;
+namespace Is.Tools;
 
 [DebuggerStepThrough]
 internal static class CollectionParser

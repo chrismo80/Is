@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Is.Parser;
+namespace Is.Tools;
 
 [DebuggerStepThrough]
 internal static class ReflectionParser

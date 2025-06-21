@@ -1,4 +1,5 @@
 using Is.Core;
+using Is.Assertions;
 
 namespace Is.Tests;
 

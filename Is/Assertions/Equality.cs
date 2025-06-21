@@ -1,12 +1,12 @@
 ﻿using Is.Core;
-using Is.Parser;
+using Is.Tools;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Collections;
 using System.Linq.Expressions;
 using System.Text.Json;
 
-namespace Is;
+namespace Is.Assertions;
 
 [DebuggerStepThrough]
 public static class Equality

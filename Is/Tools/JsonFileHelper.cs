@@ -1,7 +1,6 @@
 ﻿using System.Text;
-using Is.Parser;
 
-namespace Is;
+namespace Is.Tools;
 
 public static class JsonFileHelper
 {
