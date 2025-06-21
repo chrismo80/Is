@@ -18,6 +18,32 @@ internal static class CollectionParser
 		return (false, default);
 	}
 
+	internal static List<string> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
+		where TKey : notnull
+	{
+		if (ignoreKeys is not null)
+		{
+			actual = actual.Ignore(kvp => ignoreKeys(kvp.Key)).ToDictionary();
+			expected = expected.Ignore(kvp => ignoreKeys(kvp.Key)).ToDictionary();
+		}
+
+		var (missingKeys, unexpectedKeys) = actual.Keys.Diff(expected.Keys);
+
+		var (missing, unexpected) = actual.Where(kvp => !unexpectedKeys.Contains(kvp.Key))
+			.Diff(expected.Where(kvp => !missingKeys.Contains(kvp.Key)));
+
+		var diffs = missing.Zip(unexpected, (m, u) => $"{u.Key}: {u.Value.Simply("is not", m.Value)}").ToList();
+
+		if (missingKeys.Length == 0 && unexpectedKeys.Length == 0 && diffs.Count == 0)
+			return [];
+
+		var messages = diffs
+			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].Format()}"))
+			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
+
+		return messages.ToList();
+	}
+
 	internal static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>
 		items.Where(item => !(predicate?.Invoke(item) ?? false));
 
