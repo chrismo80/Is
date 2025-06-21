@@ -15,27 +15,25 @@ public static class Check
 [DebuggerStepThrough]
 public readonly struct Conditional<T>(bool condition, T value)
 {
-	public Failable<TResult> Return<TResult>(Func<T, TResult> result) => condition ?
-		new Failable<TResult>(true, result(value)) :
-		new Failable<TResult>(false, default);
+	public Failable<TResult> Return<TResult>(Func<T, TResult> result) => condition switch
+	{
+		true => new Failable<TResult>(true, result(value)),
+		false => new Failable<TResult>(false, default)
+	};
 }
 
 [DebuggerStepThrough]
 public readonly struct Failable<TResult>(bool condition, TResult result)
 {
-	public TResult OrFail(object? actual, string message, object? other)
+	public TResult OrFail(object? actual, string message, object? other) => condition switch
 	{
-		if (!condition)
-			return Assertion.Failed<TResult>(actual, message, other);
+		true => Assertion.Passed(result),
+		false => Assertion.Failed<TResult>(actual, message, other)
+	};
 
-		return Assertion.Passed(result);
-	}
-
-	public TResult OrFail(object? actual, string message)
+	public TResult OrFail(object? actual, string message) => condition switch
 	{
-		if (!condition)
-			return Assertion.Failed<TResult>(actual, message);
-
-		return Assertion.Passed(result);
-	}
+		true => Assertion.Passed(result),
+		false => Assertion.Failed<TResult>(actual, message)
+	};
 }
