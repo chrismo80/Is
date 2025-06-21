@@ -11,8 +11,8 @@ public static class Collections
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Check
-		.That(() => !actual.Any())
-		.OrFailWith(actual, "is not empty");
+		.Return(!actual.Any())
+		.OrFail(actual, "is not empty");
 
 	/// <summary>
 	/// Asserts that all elements in the sequence are unique.

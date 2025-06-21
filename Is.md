@@ -73,8 +73,6 @@ All public methods are designed as extensions methods.
 - __Begin__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
 - __NextFailure__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
-#### <u>Check</u>
-- __That__: _Starts a fluent verification chain by specifying the actual value to check._
 #### <u>NotException</u>
 - __#ctor__: _This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately._
 #### <u>JsonFileHelper</u>
