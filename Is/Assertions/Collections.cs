@@ -13,7 +13,7 @@ public static class Collections
 	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Check
 		.That(actual)
 		.Returns(() => !actual.Any())
-		.FailsIf("is not empty");
+		.OrFailWith("is not empty");
 
 	/// <summary>
 	/// Asserts that all elements in the sequence are unique.

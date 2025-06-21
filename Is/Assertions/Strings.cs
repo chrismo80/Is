@@ -15,7 +15,7 @@ public static class Strings
 	public static bool IsContaining(this string actual, string expected) => Check
 		.That(actual).And(expected)
 		.Return(() => actual.Contains(expected))
-		.FailsIf("is not containing");
+		.OrFailWith("is not containing");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -25,7 +25,7 @@ public static class Strings
 	public static bool IsStartingWith(this string actual, string expected) => Check
 		.That(actual).And(expected)
 		.Return(() => actual.StartsWith(expected))
-		.FailsIf("is not starting with");
+		.OrFailWith("is not starting with");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -35,7 +35,7 @@ public static class Strings
 	public static bool IsEndingWith(this string actual, string expected) => Check
 		.That(actual).And(expected)
 		.Return(() => actual.EndsWith(expected))
-		.FailsIf("is not ending with");
+		.OrFailWith("is not ending with");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -46,7 +46,7 @@ public static class Strings
 	public static GroupCollection? IsMatching(this string actual, string pattern) => Check
 		.That(actual).And(pattern)
 		.Return(() => Regex.Match(actual, pattern) is { Success: true } match ? match.Groups : null)
-		.FailsIf("is not matching");
+		.OrFailWith("is not matching");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -56,5 +56,5 @@ public static class Strings
 	public static bool IsNotMatching(this string actual, string pattern)=> Check
 		.That(actual).And(pattern)
 		.Return(() => !Regex.Match(actual, pattern).Success)
-		.FailsIf("is matching");
+		.OrFailWith("is matching");
 }

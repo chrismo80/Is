@@ -32,7 +32,7 @@ public class AndOther<TActual, TOther>(TActual? actual, TOther? other)
 [DebuggerStepThrough]
 public class ReturnsResult<TActual, TResult>(TActual? actual, Func<TResult> function)
 {
-	public TResult FailsIf(string fails)
+	public TResult OrFailWith(string fails)
 	{
 		var result = function();
 
@@ -46,7 +46,7 @@ public class ReturnsResult<TActual, TResult>(TActual? actual, Func<TResult> func
 [DebuggerStepThrough]
 public class ReturnResult<TActual, TOther, TResult>(TActual? actual, TOther? other, Func<TResult> function)
 {
-	public TResult FailsIf(string fails)
+	public TResult OrFailWith(string fails)
 	{
 		var result = function();
 

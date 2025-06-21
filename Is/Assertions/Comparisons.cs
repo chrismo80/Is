@@ -16,7 +16,7 @@ public static class Comparisons
 	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T> => Check
 		.That(actual).And(expected)
 		.Return(() => T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
-		.FailsIf("is not approximately");
+		.OrFailWith("is not approximately");
 
 	/// <summary>
 	/// uses default value from configuration
@@ -48,7 +48,7 @@ public static class Comparisons
 	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> => Check
 		.That(actual).And(other)
 		.Return(() => actual.CompareTo(other) > 0)
-		.FailsIf("is not greater than");
+		.OrFailWith("is not greater than");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is smaller
@@ -59,7 +59,7 @@ public static class Comparisons
 	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> => Check
 		.That(actual).And(other)
 		.Return(() => actual.CompareTo(other) < 0)
-		.FailsIf("is not smaller than");
+		.OrFailWith("is not smaller than");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is greater or equal
@@ -70,7 +70,7 @@ public static class Comparisons
 	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T> => Check
 		.That(actual).And(other)
 		.Return(() => actual.CompareTo(other) >= 0)
-		.FailsIf("is smaller than");
+		.OrFailWith("is smaller than");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is smaller or equal
@@ -81,7 +81,7 @@ public static class Comparisons
 	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T> => Check
 		.That(actual).And(other)
 		.Return(() => actual.CompareTo(other) <= 0)
-		.FailsIf("is greater than");
+		.OrFailWith("is greater than");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value
@@ -110,7 +110,7 @@ public static class Comparisons
 	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> => Check
 		.That(actual)
 		.Returns(() => max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
-		.FailsIf($"is between {min} and {max}");
+		.OrFailWith($"is between {min} and {max}");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value
@@ -121,7 +121,7 @@ public static class Comparisons
 	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T> => Check
 		.That(actual)
 		.Returns(() => max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
-		.FailsIf($"is in range of {min} and {max}");
+		.OrFailWith($"is in range of {min} and {max}");
 
 	/// <summary>
 	/// Asserts that the difference between two <see cref="DateTime"/>

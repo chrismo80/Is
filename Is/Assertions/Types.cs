@@ -14,7 +14,7 @@ public static class Types
 	public static T? Is<T>(this object actual) => Check
 		.That(actual).And(typeof(T))
 		.Return(() => actual is T cast ? cast : default)
-		.FailsIf("is no");
+		.OrFailWith("is no");
 
 	/// <summary>
 	/// Asserts that the actual object is not of type <typeparamref name="T"/>.
@@ -23,5 +23,5 @@ public static class Types
 	public static bool IsNot<T>(this object actual) => Check
 		.That(actual).And(typeof(T))
 		.Return(() => actual is not T)
-		.FailsIf("is a");
+		.OrFailWith("is a");
 }

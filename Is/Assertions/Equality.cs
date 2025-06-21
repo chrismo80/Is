@@ -18,7 +18,7 @@ public static class Equality
 	public static bool IsExactly<T>(this T actual, T expected) => Check
 		.That(actual).And(expected)
 		.Return(() => actual.IsExactlyEqualTo(expected))
-		.FailsIf("is not");
+		.OrFailWith("is not");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object matches the <paramref name="expected"/> value(s).
@@ -35,7 +35,7 @@ public static class Equality
 	public static bool IsNot<T>(this T actual, T expected)=> Check
 		.That(actual).And(expected)
 		.Return(() => !actual.IsExactlyEqualTo(expected))
-		.FailsIf("is");
+		.OrFailWith("is");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object is the same instance as the <paramref name="expected"/> object.
@@ -44,7 +44,7 @@ public static class Equality
 	public static bool IsSameAs<T>(this T actual, T expected) where T : class? => Check
 		.That(actual).And(expected)
 		.Return(() => ReferenceEquals(actual, expected))
-		.FailsIf("is not the same instance as");
+		.OrFailWith("is not the same instance as");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is the default value of its type.
@@ -60,7 +60,7 @@ public static class Equality
 	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate) => Check
 		.That(actual).And(predicate.Body)
 		.Return(() => predicate.Compile()(actual))
-		.FailsIf("is not satisfying");
+		.OrFailWith("is not satisfying");
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the
