@@ -10,13 +10,10 @@ public static class Collections
 	/// Asserts that the sequence is empty.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEmpty<T>(this IEnumerable<T> actual)
-	{
-		if (!actual.Any())
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is not empty");
-	}
+	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Check
+		.That(actual)
+		.Returns(() => !actual.Any())
+		.FailsIf("is not empty");
 
 	/// <summary>
 	/// Asserts that all elements in the sequence are unique.

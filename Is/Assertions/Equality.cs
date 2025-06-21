@@ -15,13 +15,10 @@ public static class Equality
 	/// (no array unwrapping, exact match for floating points)
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsExactly<T>(this T actual, T expected)
-	{
-		if (actual.IsExactlyEqualTo(expected))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is not", expected);
-	}
+	public static bool IsExactly<T>(this T actual, T expected) => Check
+		.That(actual).And(expected)
+		.Return(() => actual.IsExactlyEqualTo(expected))
+		.FailsIf("is not");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object matches the <paramref name="expected"/> value(s).
@@ -35,25 +32,19 @@ public static class Equality
 	/// Asserts that the <paramref name="actual"/> value is not equal to the <paramref name="expected"/> value.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNot<T>(this T actual, T expected)
-	{
-		if (!actual.IsExactlyEqualTo(expected))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is", expected);
-	}
+	public static bool IsNot<T>(this T actual, T expected)=> Check
+		.That(actual).And(expected)
+		.Return(() => !actual.IsExactlyEqualTo(expected))
+		.FailsIf("is");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object is the same instance as the <paramref name="expected"/> object.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSameAs<T>(this T actual, T expected) where T : class?
-	{
-		if (ReferenceEquals(actual, expected))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is not the same instance as", expected);
-	}
+	public static bool IsSameAs<T>(this T actual, T expected) where T : class? => Check
+		.That(actual).And(expected)
+		.Return(() => ReferenceEquals(actual, expected))
+		.FailsIf("is not the same instance as");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is the default value of its type.
@@ -66,13 +57,10 @@ public static class Equality
 	/// Asserts that the <paramref name="actual"/> object satisfies the specified <paramref name="predicate"/>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate)
-	{
-		if (predicate.Compile()(actual))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, $"is not satisfying", predicate.Body);
-	}
+	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate) => Check
+		.That(actual).And(predicate.Body)
+		.Return(() => predicate.Compile()(actual))
+		.FailsIf("is not satisfying");
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the

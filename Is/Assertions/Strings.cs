@@ -12,39 +12,30 @@ public static class Strings
 	/// contains the specified <paramref name="expected"/> substring.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsContaining(this string actual, string expected)
-	{
-		if (actual.Contains(expected))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is not containing", expected);
-	}
+	public static bool IsContaining(this string actual, string expected) => Check
+		.That(actual).And(expected)
+		.Return(() => actual.Contains(expected))
+		.FailsIf("is not containing");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// starts with the specified <paramref name="expected"/> string.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsStartingWith(this string actual, string expected)
-	{
-		if (actual.StartsWith(expected))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is not starting with", expected);
-	}
+	public static bool IsStartingWith(this string actual, string expected) => Check
+		.That(actual).And(expected)
+		.Return(() => actual.StartsWith(expected))
+		.FailsIf("is not starting with");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// ends with the specified <paramref name="expected"/> string.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEndingWith(this string actual, string expected)
-	{
-		if (actual.EndsWith(expected))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is not ending with", expected);
-	}
+	public static bool IsEndingWith(this string actual, string expected) => Check
+		.That(actual).And(expected)
+		.Return(() => actual.EndsWith(expected))
+		.FailsIf("is not ending with");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -52,24 +43,18 @@ public static class Strings
 	/// </summary>
 	/// <returns>The <see cref="GroupCollection"/> of the match if the string matches the pattern.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static GroupCollection IsMatching(this string actual, string pattern)
-	{
-		if (Regex.Match(actual, pattern) is { Success: true } match)
-			return Assertion.Passed(match.Groups);
-
-		return Assertion.Failed<GroupCollection>(actual, "is not matching", pattern);
-	}
+	public static GroupCollection? IsMatching(this string actual, string pattern) => Check
+		.That(actual).And(pattern)
+		.Return(() => Regex.Match(actual, pattern) is { Success: true } match ? match.Groups : null)
+		.FailsIf("is not matching");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// does not match the specified <paramref name="pattern"/> regular expression.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotMatching(this string actual, string pattern)
-	{
-		if (!Regex.Match(actual, pattern).Success)
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(actual, "is matching", pattern);
-	}
+	public static bool IsNotMatching(this string actual, string pattern)=> Check
+		.That(actual).And(pattern)
+		.Return(() => !Regex.Match(actual, pattern).Success)
+		.FailsIf("is matching");
 }

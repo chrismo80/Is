@@ -87,13 +87,10 @@ public static class Delegates
 	/// within a specific <paramref name="timespan" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsCompletingWithin(this Action action, TimeSpan timespan)
-	{
-		if (Task.Run(action).Wait(timespan))
-			return Assertion.Passed();
-
-		return Assertion.Failed<bool>(action, "was not completing within", timespan);
-	}
+	public static bool IsCompletingWithin(this Action action, TimeSpan timespan) => Check
+		.That(action).And(timespan)
+		.Return(() => Task.Run(action).Wait(timespan))
+		.FailsIf("is not completing within");
 
 	/// <summary>
 	/// Asserts that the given async <paramref name="function" /> did complete
