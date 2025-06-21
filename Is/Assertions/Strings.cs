@@ -13,7 +13,7 @@ public static class Strings
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsContaining(this string actual, string expected) => Return
-		.Check(actual.Contains(expected))
+		.IsTrue(actual.Contains(expected))
 		.Otherwise(actual, "is not containing", expected);
 
 	/// <summary>
@@ -22,7 +22,7 @@ public static class Strings
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsStartingWith(this string actual, string expected) => Return
-		.Check(actual.StartsWith(expected))
+		.IsTrue(actual.StartsWith(expected))
 		.Otherwise(actual, "is not starting with", expected);
 
 	/// <summary>
@@ -31,7 +31,7 @@ public static class Strings
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEndingWith(this string actual, string expected) => Return
-		.Check(actual.EndsWith(expected))
+		.IsTrue(actual.EndsWith(expected))
 		.Otherwise(actual, "is not ending with", expected);
 
 	/// <summary>
@@ -51,6 +51,6 @@ public static class Strings
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNotMatching(this string actual, string pattern)=> Return
-		.Check(!Regex.Match(actual, pattern).Success)
+		.IsTrue(!Regex.Match(actual, pattern).Success)
 		.Otherwise(actual, "is matching", pattern);
 }

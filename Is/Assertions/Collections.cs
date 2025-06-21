@@ -11,7 +11,7 @@ public static class Collections
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Return
-		.Check(!actual.Any())
+		.IsTrue(!actual.Any())
 		.Otherwise(actual, "is not empty");
 
 	/// <summary>

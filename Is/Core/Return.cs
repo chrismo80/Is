@@ -8,7 +8,7 @@ public static class Return
 	public static Conditional<T> When<T>(T value, Func<T, bool> predicate) =>
 		new(predicate(value), value);
 
-	public static Failable<bool> Check(bool condition) =>
+	public static Failable<bool> IsTrue(bool condition) =>
 		new(condition, true);
 }
 

@@ -21,6 +21,6 @@ public static class Types
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNot<T>(this object actual) => Return
-		.Check(actual is not T)
+		.IsTrue(actual is not T)
 		.Otherwise(actual, "is a", typeof(T));
 }

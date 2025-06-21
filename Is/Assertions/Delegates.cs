@@ -88,7 +88,7 @@ public static class Delegates
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsCompletingWithin(this Action action, TimeSpan timespan) => Return
-		.Check(Task.Run(action).Wait(timespan))
+		.IsTrue(Task.Run(action).Wait(timespan))
 		.Otherwise(action, "is not completing within", timespan);
 
 	/// <summary>

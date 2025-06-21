@@ -16,7 +16,7 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsExactly<T>(this T actual, T expected) => Return
-		.Check(actual.IsExactlyEqualTo(expected))
+		.IsTrue(actual.IsExactlyEqualTo(expected))
 		.Otherwise(actual, "is not", expected);
 
 	/// <summary>
@@ -32,7 +32,7 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNot<T>(this T actual, T expected)=> Return
-		.Check(!actual.IsExactlyEqualTo(expected))
+		.IsTrue(!actual.IsExactlyEqualTo(expected))
 		.Otherwise(actual, "is", expected);
 
 	/// <summary>
@@ -40,7 +40,7 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSameAs<T>(this T actual, T expected) where T : class? => Return
-		.Check(ReferenceEquals(actual, expected))
+		.IsTrue(ReferenceEquals(actual, expected))
 		.Otherwise(actual, "is not the same instance as", expected);
 
 	/// <summary>
@@ -55,7 +55,7 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate) => Return
-		.Check(predicate.Compile()(actual))
+		.IsTrue(predicate.Compile()(actual))
 		.Otherwise(actual, "is not satisfying", predicate.Body);
 
 	/// <summary>

@@ -14,7 +14,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T> => Return
-		.Check(T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
+		.IsTrue(T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
 		.Otherwise(actual, "is not approximately", expected);
 
 	/// <summary>
@@ -45,7 +45,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> => Return
-		.Check(actual.CompareTo(other) > 0)
+		.IsTrue(actual.CompareTo(other) > 0)
 		.Otherwise(actual, "is not greater than", other);
 
 	/// <summary>
@@ -55,7 +55,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> => Return
-		.Check(actual.CompareTo(other) < 0)
+		.IsTrue(actual.CompareTo(other) < 0)
 		.Otherwise(actual, "is not smaller than", other);
 
 	/// <summary>
@@ -65,7 +65,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T> => Return
-		.Check(actual.CompareTo(other) >= 0)
+		.IsTrue(actual.CompareTo(other) >= 0)
 		.Otherwise(actual, "is smaller than", other);
 
 	/// <summary>
@@ -75,7 +75,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T> => Return
-		.Check(actual.CompareTo(other) <= 0)
+		.IsTrue(actual.CompareTo(other) <= 0)
 		.Otherwise(actual, "is greater than", other);
 
 	/// <summary>
@@ -103,7 +103,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> => Return
-		.Check(max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
+		.IsTrue(max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
 		.Otherwise(actual, $"is between {min} and {max}");
 
 	/// <summary>
@@ -113,7 +113,7 @@ public static class Comparisons
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T> => Return
-		.Check(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
+		.IsTrue(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
 		.Otherwise(actual, $"is in range of {min} and {max}");
 
 	/// <summary>
