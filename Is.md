@@ -1,7 +1,7 @@
 # Public API
 All public methods are designed as extensions methods.
 
-Lines of code: 626
+Lines of code: 625
 ## Classes
 - __AssertionContext__: _Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred._
 - __IsExtensionAttribute__: _Mark custom assertions with this attribute to enable proper code line detection._

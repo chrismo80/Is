@@ -261,6 +261,7 @@ Use the built-in **`Check`** fluent API to insert the assertion into the feature
 ```csharp
 public static class CustomAssertions
 {
+    [IsExtension]
     public static bool IsLettersOnly(this string word) => Check
         .That(word.All(char.IsLetter))
         .Unless(word, "does not contain only letters");
