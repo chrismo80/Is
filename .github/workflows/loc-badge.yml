@@ -16,9 +16,10 @@ jobs:
       - name: Generate LOC badge
         uses: DeathSy/GHA-LoC-Badge@1.0.3
         with:
-          directory: ./Is
+          debug: true
+          directory: ./Is/
           badge: loc-badge.svg
-          patterns: '*.cs|*.rs'
+          patterns: '*.cs'
           ignore: '.git'
 
       - name: Commit badge
