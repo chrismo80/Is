@@ -275,6 +275,7 @@ public static class CustomAssertions
 ```
 Results in the following error message:
 
+```
 Is.NotException :
 
 	-4 (Int32)
@@ -282,6 +283,7 @@ Is.NotException :
 	in '5 - 9' is not positive
 
 in Is.Tests.Assertions in line 639: (5 - 9).IsCustomAssertion();
+```
 
 ℹ️ Your custom assertions integrate seamlessly with the existing fluent style of the library.
 
