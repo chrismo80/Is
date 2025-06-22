@@ -35,15 +35,16 @@ public sealed class AssertionContext : IDisposable
 
 	private string? _caller;
 
-	/// <summary>
-	/// Gets the number of remaining assertion failures in the context.
-	/// </summary>
+	/// <summary>Gets the number of remaining assertion failures in the context.</summary>
 	public int Failed => _failures.Count;
 
+	/// <summary>Gets the number of passed assertions in the context.</summary>
 	public int Passed { get; private set; }
 
+	/// <summary>Gets the total number of assertions in the context.</summary>
 	public int Total => Passed + Failed;
 
+	/// <summary>Gets the ratio of passed assertions.</summary>
 	public double Ratio => (double)Passed / Total;
 
 	public static AssertionContext? Current => current.Value;

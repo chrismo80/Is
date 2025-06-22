@@ -6,6 +6,9 @@ All public methods are designed as extensions methods.
 ## Properties
 #### <u>AssertionContext</u>
 - __Failed__: _Gets the number of remaining assertion failures in the context._
+- __Passed__: _Gets the number of passed assertions in the context._
+- __Total__: _Gets the total number of assertions in the context._
+- __Ratio__: _Gets the ratio of passed assertions._
 #### <u>Configuration</u>
 - __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
 - __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
