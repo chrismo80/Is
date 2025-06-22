@@ -261,19 +261,28 @@ Use the built-in **`Check`** fluent API to insert the assertion into the feature
 ```csharp
 public static class CustomAssertions
 {
-    [IsExtension]
-    public static bool IsLettersOnly(this string word) => Check
-        .That(word.All(char.IsLetter))
-        .Unless(word, "does not contain only letters");
+	[IsExtension]
+	public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
+		Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 }
 ```
 
 ✅ Usage Example
 
 ```csharp
-"hello".IsLettersOnly();        // ✅
-"hello world".IsLettersOnly();  // ❌
+(9 - 5).IsCustomAssertion(); // ✅
+(5 - 9).IsCustomAssertion(); // ❌
 ```
+Results in the following error message:
+
+Is.NotException :
+
+	-4 (Int32)
+
+	in '5 - 9' is not positive
+
+in Is.Tests.Assertions in line 639: (5 - 9).IsCustomAssertion();
+
 ℹ️ Your custom assertions integrate seamlessly with the existing fluent style of the library.
 
 

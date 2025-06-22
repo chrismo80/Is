@@ -637,7 +637,7 @@ public class Assertions
 	[AssertionContext]
 	public void CustomAssertion()
 	{
-		(5 > 6).IsCustomAssertion();
+		(5 - 9).IsCustomAssertion();
 
 		AssertionContext.Current?.NextFailure();
 	}
@@ -646,6 +646,6 @@ public class Assertions
 public static class CustomAssertions
 {
 	[IsExtension]
-	public static bool IsCustomAssertion(this bool value, [CallerArgumentExpression("value")] string? expr = null) =>
-		Check.That(value).Unless(value, $"in {expr} is wrong");
+	public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
+		Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 }
