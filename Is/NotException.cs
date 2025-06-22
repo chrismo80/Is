@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Collections.Concurrent;
+using Is.Core;
 
-namespace Is.Core;
+namespace Is;
 
 /// <summary>
 /// This exception is thrown when an assertion fails and <c>ThrowOnFailure</c> is enabled.

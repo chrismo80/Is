@@ -298,16 +298,6 @@ public static class CustomAssertions
 
 
 
-
-
-
-
-
-
-
-
-
-
 ## 📝 License
 
 MIT – use freely.
@@ -319,3 +309,5 @@ Ideas, bug reports, or pull requests are always welcome.
 ## ❤️ Author
 
 Developed with care by chrismo80
+
+Lines of Code: 617
