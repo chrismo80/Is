@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace Is.Core;
 
@@ -31,4 +32,9 @@ public static class Configuration
 	/// Controls the maximum depth of recursion when parsing deeply nested objects
 	/// </summary>
 	public static int MaxRecursionDepth { get; set; } = 20;
+
+	/// <summary>
+	/// Controls the binding flags to use when parsing deeply nested objects
+	/// </summary>
+	public static BindingFlags ParsingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 }

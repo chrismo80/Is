@@ -8,8 +8,6 @@ namespace Is.Tools;
 [DebuggerStepThrough]
 internal static class ReflectionParser
 {
-	private const BindingFlags FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
 	internal static Dictionary<string, object?> Parse(this object sut) =>
 		sut.Parse([], []);
 
@@ -37,10 +35,10 @@ internal static class ReflectionParser
 		if (IsSimple(Nullable.GetUnderlyingType(type) ?? type))
 			return result.AddItem(path, me);
 
-		foreach (var prop in type.GetProperties(FLAGS).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead))
+		foreach (var prop in type.GetProperties(Configuration.ParsingFlags).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead))
 			prop.GetValue(me).Parse(visited, result, path.Deeper(prop.Name), depth + 1);
 
-		foreach (var field in type.GetFields(FLAGS).Where(f => !f.Name.StartsWith('<')))
+		foreach (var field in type.GetFields(Configuration.ParsingFlags).Where(f => !f.Name.StartsWith('<')))
 			field.GetValue(me).Parse(visited, result, path.Deeper(field.Name), depth + 1);
 
 		return result;
