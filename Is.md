@@ -10,6 +10,8 @@ All public methods are designed as extensions methods.
 - __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __FloatingPointComparisonFactor__: _Default value used for floating point comparisons if not specified specifically_
 - __AppendCodeLine__: _Makes code line info in `NotException` optional_
+- __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects_
+- __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects_
 ## Methods
 #### <u>Booleans</u>
 - __IsTrue__: _Asserts that a boolean value is `true`._
@@ -72,8 +74,6 @@ All public methods are designed as extensions methods.
 - __Begin__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
 - __NextFailure__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
-#### <u>#ctor(System</u>
-- __String)__: _This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately._
 #### <u>JsonFileHelper</u>
 - __SaveJson__: _Serializes an object `obj` to a JSON file to `filename`_
 - __LoadJson__: _Deserializes an object to type `T` from a JSON file at `filename`_
