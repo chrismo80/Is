@@ -23,11 +23,14 @@ file static class CallStackExtensions
 	internal static string AddCodeLine(this string text) =>
 		Configuration.AppendCodeLine ? "\n" + text + "\n" + new StackTrace(true).FindFrame()?.CodeLine() + "\n" : text;
 
-	private static StackFrame? FindFrame(this StackTrace trace) =>
-		trace.EnumerateFrames().FirstOrDefault(f => f?.IsForeignAssembly() == true && f.GetFileName() != null);
+	private static StackFrame? FindFrame(this StackTrace trace) => trace.EnumerateFrames()
+		.FirstOrDefault(f => f?.IsExtensionCall() ?? false);
 
 	private static IEnumerable<StackFrame?> EnumerateFrames(this StackTrace trace) =>
 		Enumerable.Range(0, trace.FrameCount).Select(trace.GetFrame);
+
+	private static bool IsExtensionCall(this StackFrame frame) =>
+		frame.IsForeignAssembly() && frame.GetFileName() != null && !Attribute.IsDefined(frame.GetMethod()!, typeof(IsExtensionAttribute));
 
 	private static bool IsForeignAssembly(this StackFrame frame) =>
 		frame.GetMethod()?.DeclaringType?.Assembly != Mine;

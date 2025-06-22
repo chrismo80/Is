@@ -42,4 +42,10 @@ public readonly struct Failure<TResult>(bool condition, TResult? result)
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(message, text),
 	};
+
+	public TResult? Unless(string message) => condition switch
+	{
+		true => Assertion.Passed(result),
+		false => Assertion.Failed<TResult>(message),
+	};
 }

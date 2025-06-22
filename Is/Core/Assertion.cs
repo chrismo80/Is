@@ -15,7 +15,7 @@ internal static class Assertion
 		return result;
 	}
 
-	private static T? Failed<T>(string message)
+	internal static T? Failed<T>(string message)
 	{
 		var ex = new NotException(message);
 

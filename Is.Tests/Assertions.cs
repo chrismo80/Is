@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Is.Core;
 using Is.Assertions;
 
@@ -619,9 +620,33 @@ public class Assertions
 		5.Is(5);        // ✅
 		6.Is(6);        // ✅
 
-		var ctx = AssertionContext.Current;
-
 		AssertionContext.Current?.NextFailure();
 		AssertionContext.Current?.NextFailure();
 	}
+
+
+	[Test]
+	public void Check_That_Unless()
+	{
+		const bool value = true;
+
+		Check.That(value).Unless(value, "is false");
+	}
+
+	[Test]
+	[AssertionContext]
+	public void CustomAssertion()
+	{
+		(5 > 6).IsCustomAssertion();
+
+		AssertionContext.Current?.NextFailure();
+	}
+}
+
+public static class CustomAssertions
+{
+	[IsExtension]
+	public static bool IsCustomAssertion(this bool value,
+		[CallerArgumentExpression("value")] string? expr = null) =>
+		Check.That(value).Unless($"{expr} is wrong");
 }
