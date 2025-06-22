@@ -20,7 +20,7 @@ public static class Configuration
 
 	/// <summary>
 	/// Comparison factor used for floating point comparisons if not specified specifically.
-	/// Default value is 1e-6
+	/// Default value is 1e-6 (0.000001)
 	/// </summary>
 	public static double FloatingPointComparisonFactor { get; set; } = 1e-6;
 
