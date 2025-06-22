@@ -278,9 +278,9 @@ Results in the following error message:
 ```
 Is.NotException :
 
-	-4 (Int32)
+    -4 (Int32)
 
-	in '5 - 9' is not positive
+    in '5 - 9' is not positive
 
 in Is.Tests.Assertions in line 639: (5 - 9).IsCustomAssertion();
 ```
