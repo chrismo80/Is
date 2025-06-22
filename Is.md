@@ -1,7 +1,7 @@
 # Public API
 All public methods are designed as extensions methods.
 
-Lines of code: 621
+Lines of code: 616
 ## Classes
 - __AssertionContext__: _Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred._
 - __NotException__: _This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately._

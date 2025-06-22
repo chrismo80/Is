@@ -11,12 +11,7 @@ namespace Is;
 /// are collected instead of being thrown immediately.
 /// </summary>
 [DebuggerStepThrough]
-public class NotException : Exception
-{
-	public NotException(string message)
-		: base(message.AddCodeLine())
-	{ }
-}
+public class NotException(string message) : Exception(message.AddCodeLine());
 
 [DebuggerStepThrough]
 file static class CallStackExtensions
