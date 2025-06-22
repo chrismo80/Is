@@ -2,6 +2,7 @@
 All public methods are designed as extensions methods.
 ## Classes
 - __AssertionContext__: _Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred._
+- __NotException__: _This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately._
 ## Properties
 #### <u>AssertionContext</u>
 - __Failed__: _Gets the number of remaining assertion failures in the context._
