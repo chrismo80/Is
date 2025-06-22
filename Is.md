@@ -13,12 +13,12 @@ Lines of code: 625
 - __Total__: _Gets the total number of assertions in the context._
 - __Ratio__: _Gets the ratio of passed assertions._
 #### <u>Configuration</u>
-- __ThrowOnFailure__: _Gets or sets a value indicating whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
-- __Logger__: _Gets or sets the logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
-- __FloatingPointComparisonFactor__: _Default value used for floating point comparisons if not specified specifically_
+- __ThrowOnFailure__: _Controls whether assertion failures should throw a `NotException`. Default is true. If set to false, assertions will return false on failure and log the message._
+- __Logger__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
+- __FloatingPointComparisonFactor__: _Comparison factor used for floating point comparisons if not specified specifically Default value is 1e-6_
 - __AppendCodeLine__: _Makes code line info in `NotException` optional_
-- __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects_
-- __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects_
+- __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects Default value is 20_
+- __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects Default is public | non-public | instance_
 ## Methods
 #### <u>Booleans</u>
 - __IsTrue__: _Asserts that a boolean value is `true`._

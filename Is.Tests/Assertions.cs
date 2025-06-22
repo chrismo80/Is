@@ -646,7 +646,6 @@ public class Assertions
 public static class CustomAssertions
 {
 	[IsExtension]
-	public static bool IsCustomAssertion(this bool value,
-		[CallerArgumentExpression("value")] string? expr = null) =>
-		Check.That(value).Unless($"{expr} is wrong");
+	public static bool IsCustomAssertion(this bool value, [CallerArgumentExpression("value")] string? expr = null) =>
+		Check.That(value).Unless(value, $"in {expr} is wrong");
 }
