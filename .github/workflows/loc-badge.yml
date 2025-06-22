@@ -1,0 +1,30 @@
+name: Generate LOC Badge
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  count-lines:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate LOC badge
+        uses: alexispurslane/GHA-LoC-Badge@2.0.0
+        with:
+          directory: .
+          badge: loc-badge.svg
+          patterns: '*.cs|*.rs'
+          ignore: '.git'
+
+      - name: Commit badge
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add loc-badge.svg
+          git commit -m "Update LOC badge [skip ci]" || echo "No changes to commit"
+          git push
