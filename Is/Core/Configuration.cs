@@ -19,24 +19,24 @@ public static class Configuration
 	public static Action<string?>? Logger { get; set; } = msg => Debug.WriteLine(msg);
 
 	/// <summary>
-	/// Comparison factor used for floating point comparisons if not specified specifically
+	/// Comparison factor used for floating point comparisons if not specified specifically.
 	/// Default value is 1e-6
 	/// </summary>
 	public static double FloatingPointComparisonFactor { get; set; } = 1e-6;
 
 	/// <summary>
-	/// Makes code line info in <see cref="NotException"/> optional
+	/// Makes code line info in <see cref="NotException"/> optional.
 	/// </summary>
 	public static bool AppendCodeLine { get; set; } = true;
 
 	/// <summary>
-	/// Controls the maximum depth of recursion when parsing deeply nested objects
+	/// Controls the maximum depth of recursion when parsing deeply nested objects.
 	/// Default value is 20
 	/// </summary>
 	public static int MaxRecursionDepth { get; set; } = 20;
 
 	/// <summary>
-	/// Controls the binding flags to use when parsing deeply nested objects
+	/// Controls the binding flags to use when parsing deeply nested objects.
 	/// Default is public | non-public | instance
 	/// </summary>
 	public static BindingFlags ParsingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
