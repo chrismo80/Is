@@ -13,7 +13,7 @@ public static class Types
 	/// <returns>The cast object to the type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static T? Is<T>(this object actual) => Check
-		.That(actual, obj => obj is T)
+		.That(actual, _ => actual is T)
 		.Yields(_ => (T)actual)
 		.Unless(actual, "is no", typeof(T));
 

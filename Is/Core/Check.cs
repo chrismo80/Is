@@ -5,17 +5,17 @@ namespace Is.Core;
 [DebuggerStepThrough]
 public static class Check
 {
-	public static Result<T> That<T>(T value, Func<T, bool> predicate) =>
-		new(predicate(value), value);
-
 	public static Failure<bool> That(bool condition) =>
 		new(condition, true);
+
+	public static Result<TValue> That<TValue>(TValue value, Func<TValue, bool> predicate) =>
+		new(predicate(value), value);
 }
 
 [DebuggerStepThrough]
-public readonly struct Result<T>(bool condition, T value)
+public readonly struct Result<TValue>(bool condition, TValue value)
 {
-	public Failure<TResult> Yields<TResult>(Func<T, TResult> result) => condition switch
+	public Failure<TResult> Yields<TResult>(Func<TValue, TResult> result) => condition switch
 	{
 		true => new Failure<TResult>(true, result(value)),
 		false => new Failure<TResult>(false, default)
