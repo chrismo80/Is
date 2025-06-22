@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Is.Core;
 
 namespace Is.Tools;
 
 [DebuggerStepThrough]
 public static class JsonParser
 {
-	private const int MAX_RECURSION_DEPTH = 20;
 	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
 
 	internal static string ToJson<T>(this T me, JsonSerializerOptions? options = null) =>
@@ -21,7 +21,7 @@ public static class JsonParser
 
 	private static Dictionary<string, object?> Parse(this JsonNode? node, Dictionary<string, object?> result, string path = "", int depth = 0)
 	{
-		if (depth > MAX_RECURSION_DEPTH)
+		if (depth > Configuration.MaxRecursionDepth)
 			return result.AddItem(path, $"path too deep (length limit {depth} exceeded)");
 
 		return node switch

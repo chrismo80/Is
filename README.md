@@ -310,4 +310,4 @@ Ideas, bug reports, or pull requests are always welcome.
 
 Developed with care by chrismo80
 
-Lines of Code: 617
+Lines of Code: 616

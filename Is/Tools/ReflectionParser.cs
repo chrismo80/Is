@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
+using Is.Core;
 
 namespace Is.Tools;
 
 [DebuggerStepThrough]
 internal static class ReflectionParser
 {
-	private const int MAX_RECURSION_DEPTH = 20;
 	private const BindingFlags FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 	internal static Dictionary<string, object?> Parse(this object sut) =>
@@ -15,7 +15,7 @@ internal static class ReflectionParser
 
 	private static Dictionary<string, object?> Parse(this object? sut, HashSet<object> visited, Dictionary<string, object?> result, string path = "", int depth = 0)
 	{
-		if (depth > MAX_RECURSION_DEPTH)
+		if (depth > Configuration.MaxRecursionDepth)
 			return result.AddItem(path, $"path too deep (length limit {depth} exceeded)");
 
 		return sut switch

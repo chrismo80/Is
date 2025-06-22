@@ -26,4 +26,9 @@ public static class Configuration
 	/// Makes code line info in <see cref="NotException"/> optional
 	/// </summary>
 	public static bool AppendCodeLine { get; set; } = true;
+
+	/// <summary>
+	/// Controls the maximum depth of recursion when parsing deeply nested objects
+	/// </summary>
+	public static int MaxRecursionDepth { get; set; } = 20;
 }
