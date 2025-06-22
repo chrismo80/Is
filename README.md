@@ -261,9 +261,9 @@ Use the built-in **`Check`** fluent API to insert the assertion into the feature
 ```csharp
 public static class CustomAssertions
 {
-	[IsExtension]
-	public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
-		Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
+    [IsExtension] 
+    public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) => 
+        Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 }
 ```
 
