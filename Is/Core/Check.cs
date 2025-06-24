@@ -10,12 +10,6 @@ public static class Check
 
 	public static Result<TValue> That<TValue>(TValue value, Func<TValue, bool> predicate) =>
 		new(predicate(value), value);
-
-	public static bool That(bool condition, string message) => condition switch
-	{
-		true => Assertion.Passed(),
-		false => Assertion.Failed<bool>(message),
-	};
 }
 
 [DebuggerStepThrough]

@@ -13,18 +13,16 @@ public static class Delegates
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T? IsThrowing<T>(this Action action) where T : Exception => Check
-		.That(action.CatchException()?.Is<T>(), ex => ex != null)
-		.Yields(ex => ex)
-		.Unless(typeof(T), "is not thrown");
+	public static T? IsThrowing<T>(this Action action) where T : Exception =>
+		action.CatchException()?.Is<T>() ?? Assertion.Failed<T>(typeof(T), "is not thrown");
 
 	/// <summary>
 	/// Asserts that the given <paramref name="action" /> does not throw
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotThrowing<T>(this Action action) where T : Exception => Check
-		.That(action.CatchException()?.IsNot<T>() ?? true, "N/A");
+	public static bool IsNotThrowing<T>(this Action action) where T : Exception =>
+		action.CatchException()?.IsNot<T>() ?? true;
 
 	/// <summary>
 	/// Asserts that the given synchronous <paramref name="action"/> throws
