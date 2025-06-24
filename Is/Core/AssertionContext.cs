@@ -79,7 +79,7 @@ public sealed class AssertionContext : IDisposable
 		if (_failures.Count == 0)
 			return;
 
-		var s = _failures.Count == 1 ? "" : "s";
+		var s = Total == 1 ? "" : "s";
 
 		throw new AggregateException($"{_failures.Count} of {Total} assertion{s} failed in '{_caller}'", _failures);
 	}
