@@ -13,38 +13,18 @@ public static class Delegates
 	/// </summary>
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T? IsThrowing<T>(this Action action) where T : Exception
-	{
-		try
-		{
-			action();
-		}
-		catch (Exception ex)
-		{
-			return ex.Is<T>();
-		}
-
-		return Assertion.Failed<T>(typeof(T), "is not thrown");
-	}
+	public static T? IsThrowing<T>(this Action action) where T : Exception => Check
+		.That(action.CatchException()?.Is<T>(), ex => ex != null)
+		.Yields(ex => ex)
+		.Unless(typeof(T), "is not thrown");
 
 	/// <summary>
 	/// Asserts that the given <paramref name="action" /> does not throw
 	/// an exception of type <typeparamref name="T" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotThrowing<T>(this Action action) where T : Exception
-	{
-		try
-		{
-			action();
-		}
-		catch (Exception ex)
-		{
-			return ex.IsNot<T>();
-		}
-
-		return Assertion.Passed();
-	}
+	public static bool IsNotThrowing<T>(this Action action) where T : Exception => Check
+		.That(action.CatchException()?.IsNot<T>() ?? true, "N/A");
 
 	/// <summary>
 	/// Asserts that the given synchronous <paramref name="action"/> throws
@@ -127,4 +107,11 @@ public static class Delegates
 
 	private static Action ToAction(this Func<Task> function) =>
 		() => function().GetAwaiter().GetResult();
+
+	private static Exception? CatchException(this Action action)
+	{
+		try { action(); }
+		catch (Exception ex) { return ex; }
+		return null;
+	}
 }
