@@ -22,7 +22,7 @@ public static class Delegates
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsNotThrowing<T>(this Action action) where T : Exception =>
-		action.CatchException()?.IsNot<T>() ?? true;
+		action.CatchException()?.IsNot<T>() ?? Assertion.Passed();
 
 	/// <summary>
 	/// Asserts that the given synchronous <paramref name="action"/> throws
