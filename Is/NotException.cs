@@ -12,7 +12,11 @@ namespace Is;
 /// are collected instead of being thrown immediately.
 /// </summary>
 [DebuggerStepThrough]
-public class NotException(string message) : Exception(message.AppendCodeLine());
+public class NotException(string message, object? actual = null, object? expected = null) : Exception(message.AppendCodeLine())
+{
+	public object? Actual => actual;
+	public object? Expected => expected;
+}
 
 [DebuggerStepThrough]
 file static class CallStackExtensions

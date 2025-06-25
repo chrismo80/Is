@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 636
+Lines of code: 640
 ## Is
 #### <u>NotException</u>
 This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.

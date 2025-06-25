@@ -15,9 +15,9 @@ internal static class Assertion
 		return result;
 	}
 
-	internal static T? Failed<T>(string message)
+	internal static T? Failed<T>(string message, object? actual = null, object? expected = null)
 	{
-		var ex = new NotException(message);
+		var ex = new NotException(message, actual, expected);
 
 		if (Configuration.ThrowOnFailure && !AssertionContext.IsActive)
 			throw ex;
@@ -30,10 +30,10 @@ internal static class Assertion
 	}
 
 	internal static T? Failed<T>(object? actual, string equality, object? expected) =>
-		Failed<T>(actual.Actually(equality, expected));
+		Failed<T>(actual.Actually(equality, expected), actual, expected);
 
 	internal static T? Failed<T>(object? actual, string equality) =>
-		Failed<T>(actual.Actually(equality));
+		Failed<T>(actual.Actually(equality), actual);
 
 	internal static T? Failed<T>(string message, List<string> text, int max = 100) =>
 		Failed<T>($"{message}\n\n\t{string.Join("\n\t", text.Truncate(max))}\n");

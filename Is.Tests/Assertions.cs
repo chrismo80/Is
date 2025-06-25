@@ -648,7 +648,10 @@ public class Assertions
 		6.Is(6);        // ✅
 
 		AssertionContext.Current?.NextFailure();
-		AssertionContext.Current?.NextFailure();
+		var ex = AssertionContext.Current?.NextFailure();
+
+		ex.Actual.Is(4);
+		ex.Expected.Is(5);
 	}
 
 	[Test]
