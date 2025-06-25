@@ -113,7 +113,7 @@ Exception messages
 
 ![plot](Docs/ComplexErrorMessage.png)
 
-## ⚖️ Design Philosophy: Clarity over Chaining
+## Design Philosophy: Clarity over Chaining
 
 - No ```.Should()```, no fluent bloat
 - Focus on positive assertions
