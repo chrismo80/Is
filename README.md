@@ -1,4 +1,4 @@
-![plot](Is.png)
+![plot](Docs/Is.png)
 # Minimalistic Assertion Extensions for .NET
 
 **Simple. Readable. Opinionated.**
