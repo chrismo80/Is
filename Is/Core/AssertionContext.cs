@@ -64,7 +64,7 @@ public sealed class AssertionContext : IDisposable
 		if (IsActive)
 			throw new InvalidOperationException("AssertionContext already active on this async context.");
 
-		current.Value = new AssertionContext() { _caller = method };
+		current.Value = new AssertionContext { _caller = method };
 
 		return current.Value;
 	}
