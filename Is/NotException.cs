@@ -28,10 +28,13 @@ file static class CallStackExtensions
 		trace.GetFrames().FirstOrDefault(f => f.IsExtensionCall() && f.GetFileName() != null);
 
 	private static bool IsExtensionCall(this StackFrame frame) =>
-		frame.GetMethod()?.IsForeignAssembly() ?? false;
+		(frame.GetMethod()?.IsForeignAssembly() ?? false) && (frame.GetMethod()?.HasNotAttribute() ?? false);
 
 	private static bool IsForeignAssembly(this MethodBase method) =>
 		method.DeclaringType?.Assembly != Mine && !Attribute.IsDefined(method, typeof(IsExtensionAttribute));
+
+	private static bool HasNotAttribute(this MethodBase method) =>
+		!Attribute.IsDefined(method, typeof(IsExtensionAttribute)) && !Attribute.IsDefined(method.DeclaringType, typeof(IsExtensionsAttribute));
 
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.GetLine(frame.GetFileLineNumber());

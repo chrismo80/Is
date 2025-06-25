@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 610
+Lines of code: 614
 ## Is
 #### <u>NotException</u>
 This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
@@ -72,7 +72,9 @@ Offers a fluent API to assert conditions and create return values and error mess
 - __Yields()__: _Projects a result from the original value if the initial predicate condition was true._
 - __Unless()__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
 #### <u>IsExtensionAttribute</u>
-Mark custom assertions with this attribute to enable proper code line detection.
+Mark custom assertion methods with this attribute to enable proper code line detection.
+#### <u>IsExtensionsAttribute</u>
+Mark custom assertions class with this attribute to enable proper code line detection.
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __SaveJson()__: _Serializes an object `obj` to a JSON file to `filename`_

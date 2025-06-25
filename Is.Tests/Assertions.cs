@@ -642,9 +642,9 @@ public class Assertions
 	}
 }
 
+[IsExtensions]
 public static class CustomAssertions
 {
-	[IsExtension]
 	public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
 		Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 }
