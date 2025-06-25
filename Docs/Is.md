@@ -1,15 +1,22 @@
 # Public API
-Lines of code: 640
+Lines of code: 654
 ## Is
-#### <u>NotException</u>
-This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
 #### <u>Configuration</u>
+Global configurations that control assertion behaviour
 - __ThrowOnFailure__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
 - __Logger__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __AppendCodeLine__: _Makes code line info in `NotException` optional._
 - __FloatingPointComparisonPrecision__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
+#### <u>NotException</u>
+This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
+- __Actual__: _The actual value that caused the assertion to fail._
+- __Expected__: _The expected value that was compared during the assertion and caused the failure._
+- __Method__: _The name of the method where the stack frame originates, or null if unavailable._
+- __File__: _The name of the file in which the exception occurred, if available._
+- __Line__: _The line number in the source file where the exception occurred._
+- __Code__: _The specific line of source code of the assertion failure._
 ## Is.Assertions
 #### <u>Booleans</u>
 - __IsTrue()__: _Asserts that a boolean value is `true`._

@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Is;
 
+/// <summary>
+/// Global configurations that control assertion behaviour
+/// </summary>
 [DebuggerStepThrough]
 public static class Configuration
 {
