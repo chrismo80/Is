@@ -287,12 +287,10 @@ public class Assertions
 		var list3 = new List<MyObject> { new() { Id = 1, Name = "A" }, new() { Id = 3, Name = "C" } };
 
 		list1.IsEquivalentTo(list2);		// ❌
-		AssertionContext.Current?.VerifyFailures(1);
-
 		list1.IsDeeplyEquivalentTo(list2);	// ✅
-
 		list1.IsDeeplyEquivalentTo(list3);	// ❌
-		AssertionContext.Current?.VerifyFailures(1);
+
+		AssertionContext.Current?.TakeFailures(2);
 	}
 
 	[Test]

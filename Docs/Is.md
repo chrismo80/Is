@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 655
+Lines of code: 657
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
@@ -87,7 +87,7 @@ Represents a scoped context that captures all assertion failures (as `NotExcepti
 - __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
 - __NextFailure()__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
-- __VerifyFailures()__: _Asserts number of `NotException`s in the queue and clears the queue._
+- __TakeFailures()__: _Dequeues as many `NotException`s specified in `count` from the queue._
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
 - __That()__: _Evaluates a boolean condition._
