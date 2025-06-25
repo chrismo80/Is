@@ -307,10 +307,12 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
 	public void Is_IEnumerable_TooShort()
 	{
-		Action action = () => new List<int> { 1, 2, 3, 5 }.Where(i => i % 2 == 0).Is(2, 4);
-		action.IsThrowing<NotException>("are not");
+		new List<int> { 1, 2, 3, 5 }.Where(i => i % 2 == 0).Is(2, 4);
+
+		AssertionContext.Current?.NextFailure().SaveJson("Is_IEnumerable_TooShort.json");
 	}
 
 	[Test]
