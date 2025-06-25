@@ -24,10 +24,10 @@ public static class Configuration
 	public static bool AppendCodeLine { get; set; } = true;
 
 	/// <summary>
-	/// Comparison factor used for floating point comparisons if not specified specifically.
+	/// Comparison precision used for floating point comparisons if not specified specifically.
 	/// Default is 1e-6 (0.000001).
 	/// </summary>
-	public static double FloatingPointComparisonFactor { get; set; } = 1e-6;
+	public static double FloatingPointComparisonPrecision { get; set; } = 1e-6;
 
 	/// <summary>
 	/// Controls the maximum depth of recursion when parsing deeply nested objects.

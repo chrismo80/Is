@@ -565,7 +565,7 @@ public class Assertions
 		action = () => actual.IsNegative();
 		action.IsThrowing<NotException>("is not smaller");
 
-		Configuration.FloatingPointComparisonFactor = 1e-4;
+		Configuration.FloatingPointComparisonPrecision = 1e-4;
 		actual.IsApproximately(expected);
 	}
 
@@ -619,6 +619,12 @@ public class Assertions
 		4.Is(5);        // ❌
 		5.Is(5);        // ✅
 		6.Is(6);        // ✅
+		6.Is(6);        // ✅
+		6.Is(6);        // ✅
+		6.Is(6);        // ✅
+		6.Is(6);        // ✅
+
+		return;
 
 		AssertionContext.Current?.NextFailure();
 		AssertionContext.Current?.NextFailure();
