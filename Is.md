@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 614
+Lines of code: 636
 ## Is
 #### <u>NotException</u>
 This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
@@ -19,7 +19,8 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __IsUnique()__: _Asserts that all elements in the sequence are unique._
 - __IsContaining()__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
 - __IsIn()__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
-- __IsEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order._
+- __IsEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Default Equality comparer of `T`._
+- __IsDeeplyEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Deeply Equality comparer of `T`._
 #### <u>Comparisons</u>
 - __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
 - __IsPositive()__: _Asserts that the `actual` numeric value is positive (greater than zero)._
@@ -66,6 +67,7 @@ Represents a scoped context that captures all assertion failures (as `NotExcepti
 - __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
 - __NextFailure()__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
+- __VerifyFailures()__: _Asserts number of `NotException`s in the queue and clears the queue._
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
 - __That()__: _Evaluates a boolean condition._

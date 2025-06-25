@@ -1,9 +1,19 @@
 ﻿using System.Collections;
 using System.Diagnostics;
-using System.Reflection;
-using Is.Core;
+using Is.Assertions;
 
 namespace Is.Tools;
+
+
+[DebuggerStepThrough]
+public class DeepEqualityComparer<T>(Func<string, bool>? ignorePaths = null)
+	: IEqualityComparer<T>
+{
+	public bool Equals(T? actual, T? expected) =>
+		!actual.Parse().Diffs(expected.Parse(), ignorePaths).Any();
+
+	public int GetHashCode(T obj) => 0;
+}
 
 [DebuggerStepThrough]
 internal static class ReflectionParser

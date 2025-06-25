@@ -59,12 +59,27 @@ public static class Collections
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> sequence matches
-	/// the <paramref name="expected"/> sequence ignoring item order.
+	/// the <paramref name="expected"/> sequence ignoring item order by using Default Equality comparer of <typeparamref name="T" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
 	{
 		var (missing, unexpected) = actual.Diff(expected);
+
+		return Check
+			.That(missing.Length == 0 && unexpected.Length == 0)
+			.Unless(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
+	}
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> sequence matches
+	/// the <paramref name="expected"/> sequence ignoring item order by using Deeply Equality comparer of <typeparamref name="T" />.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsDeeplyEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected,
+		Func<string, bool>? ignorePaths = null) where T : notnull
+	{
+		var (missing, unexpected) = actual.Diff(expected, new DeepEqualityComparer<T>(ignorePaths));
 
 		return Check
 			.That(missing.Length == 0 && unexpected.Length == 0)
@@ -99,7 +114,7 @@ public static class Collections
 		return (false, default);
 	}
 
-	private static List<string> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
+	internal static List<string> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
 		where TKey : notnull
 	{
 		if (ignoreKeys is not null)
@@ -128,9 +143,9 @@ public static class Collections
 	private static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>
 		items.Where(item => !(predicate?.Invoke(item) ?? false));
 
-	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
+	private static (T[] Missing, T[] Unexpected) Diff<T>(this IEnumerable<T> actual, IEnumerable<T> expected, IEqualityComparer<T>? comparer = null) where T : notnull
 	{
-		var histogram = new Dictionary<T, int>();
+		var histogram = new Dictionary<T, int>(comparer);
 
 		histogram.CountItems(actual, 1);
 		histogram.CountItems(expected, -1);

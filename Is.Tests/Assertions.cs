@@ -268,6 +268,31 @@ public class Assertions
 		action.IsThrowing<NotException>();
 	}
 
+	private class MyObject
+	{
+		public int Id { get; set; }
+		public string Name { get; set; }
+
+		public override string ToString() => $"{Id}:{Name}";
+	}
+
+	[Test]
+	[AssertionContext]
+	public void IsDeeplyEquivalentTo()
+	{
+		var list1 = new List<MyObject> { new() { Id = 1, Name = "A" }, new() { Id = 2, Name = "B" } };
+		var list2 = new List<MyObject> { new() { Id = 2, Name = "B" }, new() { Id = 1, Name = "A" } };
+		var list3 = new List<MyObject> { new() { Id = 1, Name = "A" }, new() { Id = 3, Name = "C" } };
+
+		list1.IsEquivalentTo(list2);		// ❌
+		AssertionContext.Current?.VerifyFailures(1);
+
+		list1.IsDeeplyEquivalentTo(list2);	// ✅
+
+		list1.IsDeeplyEquivalentTo(list3);	// ❌
+		AssertionContext.Current?.VerifyFailures(1);
+	}
+
 	[Test]
 	public void Is_DifferentArrayDepths()
 	{
