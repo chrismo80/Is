@@ -624,7 +624,6 @@ public class Assertions
 		AssertionContext.Current?.NextFailure();
 	}
 
-
 	[Test]
 	public void Check_That_Unless()
 	{
