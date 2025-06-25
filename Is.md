@@ -1,6 +1,8 @@
 # Public API
 Lines of code: 609
-## 
+## Is
+#### <u>NotException</u>
+This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
 #### <u>Configuration</u>
 - __ThrowOnFailure__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
 - __Logger__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
@@ -8,9 +10,7 @@ Lines of code: 609
 - __FloatingPointComparisonFactor__: _Comparison factor used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
-#### <u>NotException</u>
-This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
-## .Assertions
+## Is.Assertions
 #### <u>Booleans</u>
 - __IsTrue()__: _Asserts that a boolean value is `true`._
 - __IsFalse()__: _Asserts that a boolean value is `false`._
@@ -68,19 +68,19 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 #### <u>Types</u>
 - __Is()__: _Asserts that the actual object is of type `T`._
 - __IsNot()__: _Asserts that the actual object is not of type `T`._
-## .Core
+## Is.Core
 #### <u>AssertionContext</u>
 Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred.
-- __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
-- __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
-- __NextFailure()__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
 - __Failed__: _Gets the number of remaining assertion failures in the context._
 - __Passed__: _Gets the number of passed assertions in the context._
 - __Total__: _Gets the total number of assertions in the context._
 - __Ratio__: _Gets the ratio of passed assertions._
+- __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
+- __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
+- __NextFailure()__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
 #### <u>IsExtensionAttribute</u>
 Mark custom assertions with this attribute to enable proper code line detection.
-## .Tools
+## Is.Tools
 #### <u>JsonFileHelper</u>
 - __SaveJson()__: _Serializes an object `obj` to a JSON file to `filename`_
 - __LoadJson()__: _Deserializes an object to type `T` from a JSON file at `filename`_
