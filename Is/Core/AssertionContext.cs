@@ -81,7 +81,9 @@ public sealed class AssertionContext : IDisposable
 
 		var s = Total == 1 ? "" : "s";
 
-		throw new AggregateException($"{_failures.Count} of {Total} assertion{s} failed in '{_caller}'", _failures);
+		var message = $"{_failures.Count} of {Total} assertion{s} ({Ratio:P1}) failed in '{_caller}'";
+
+		throw new AggregateException(message, _failures);
 	}
 
 	/// <summary>
