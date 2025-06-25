@@ -259,6 +259,7 @@ Create a static class with an extension method that performs the desired asserti
 Use the built-in **`Check`** fluent API to insert the assertion into the features of the library, such as AssertionContext and message formatting.
 
 ```csharp
+[IsExtensions]
 public static class CustomAssertions
 {
     [IsExtension] 
@@ -266,6 +267,7 @@ public static class CustomAssertions
         Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 }
 ```
+Mark the methods or classes with one of the IsExtension attributes to enable proper user code line detection.
 
 Usage Example
 
