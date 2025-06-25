@@ -1,5 +1,5 @@
-using System.Runtime.CompilerServices;
 using Is.Assertions;
+using System.Runtime.CompilerServices;
 
 namespace Is.Core;
 

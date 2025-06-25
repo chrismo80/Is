@@ -628,8 +628,10 @@ public class Assertions
 		false.IsTrue(); // ❌
 		4.Is(5);        // ❌
 
-		context.Passed.Is(1);
+		context.Total.Is(3); // counts as passed assertion
+		context.Passed.Is(2);
 		context.Failed.Is(2);
+		context.Ratio.IsGreaterThan(0.66);
 
 		context.NextFailure().Message.IsContaining("false.IsTrue()");
 		context.NextFailure().Message.IsContaining("4.Is(5)");
