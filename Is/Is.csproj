@@ -36,7 +36,7 @@
       <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
     </AssemblyAttribute>
 
-    <None Include="..\Is.png" Pack="true" PackagePath="\" />
+    <None Include="..\Docs\Is.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\"/>
 
   </ItemGroup>

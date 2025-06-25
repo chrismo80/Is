@@ -33,7 +33,7 @@ All public methods in `Is` are:
 
 > Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
 
-The full public API and its extension methods can be [found here](https://github.com/chrismo80/Is/blob/main/Is.md)
+The full public API and its extension methods can be [found here](https://github.com/chrismo80/Is/blob/main/Docs/Is.md)
 
 
 ## Usage Examples
