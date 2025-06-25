@@ -94,17 +94,15 @@ public sealed class AssertionContext : IDisposable
 	/// <summary>
 	/// Dequeues as many <see cref="Is.Core.NotException"/>s specified in <paramref name="count"/> from the queue.
 	/// </summary>
-	public List<NotException> TakeFailures(int count)
-	{
-		var failures = new List<NotException>(count);
-
-		while(count-- > 0)
-			failures.Add(_failures.Dequeue());
-
-		return failures;
-	}
+	public List<NotException> TakeFailures(int count) => Take(count).ToList();
 
 	internal void AddFailure(NotException ex) => _failures.Enqueue(ex);
 
 	internal void AddSuccess() => Passed++;
+
+	private IEnumerable<NotException> Take(int count)
+	{
+		while(count-- > 0)
+			yield return _failures.Dequeue();
+	}
 }

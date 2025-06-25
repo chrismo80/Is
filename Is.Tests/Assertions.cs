@@ -290,7 +290,7 @@ public class Assertions
 		list1.IsDeeplyEquivalentTo(list2);	// ✅
 		list1.IsDeeplyEquivalentTo(list3);	// ❌
 
-		AssertionContext.Current?.TakeFailures(2);
+		AssertionContext.Current?.TakeFailures(2).Count.Is(2);
 	}
 
 	[Test]
