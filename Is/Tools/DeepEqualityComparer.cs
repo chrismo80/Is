@@ -4,7 +4,6 @@ using Is.Assertions;
 
 namespace Is.Tools;
 
-
 [DebuggerStepThrough]
 public class DeepEqualityComparer<T>(Func<string, bool>? ignorePaths = null)
 	: IEqualityComparer<T>

@@ -1,10 +1,6 @@
 @startuml "Is Components"
 
-scale 1
-
 !include <C4/C4_Component>
-
-' LAYOUT_LANDSCAPE()
 
 System_Ext(ca, "Custom assertions", "user can add own assertions")
         
