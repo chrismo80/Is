@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-namespace Is.Core;
+namespace Is;
 
 [DebuggerStepThrough]
 public static class Configuration
