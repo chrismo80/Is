@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Is.Core;
 using Is.Assertions;
+using Is.Tools;
 
 namespace Is.Tests;
 
@@ -207,6 +208,7 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
 	public void Matching()
 	{
 		var expectedSnapshot = new
@@ -261,11 +263,11 @@ public class Assertions
 		actualObject.IsMatching(expectedSnapshot);
 		actualObject.IsMatchingSnapshot(expectedSnapshot);
 
-		Action action = () => failingObject.IsMatching(expectedSnapshot);
-		action.IsThrowing<NotException>();
+		failingObject.IsMatching(expectedSnapshot);
+		failingObject.IsMatchingSnapshot(expectedSnapshot);
 
-		action = () => failingObject.IsMatchingSnapshot(expectedSnapshot);
-		action.IsThrowing<NotException>();
+		AssertionContext.Current?.NextFailure().SaveJson("Match.json");
+		AssertionContext.Current?.NextFailure().SaveJson("Snapshot.json");
 	}
 
 	private class MyObject

@@ -27,6 +27,12 @@ public static class Configuration
 	public static bool AppendCodeLine { get; set; } = true;
 
 	/// <summary>
+	/// Controls whether messages produced by assertions are colorized when displayed.
+	/// Default is true, enabling colorization for better readability and visual distinction.
+	/// </summary>
+	public static bool ColorizeMessages { get; set; } = false;
+
+	/// <summary>
 	/// Comparison precision used for floating point comparisons if not specified specifically.
 	/// Default is 1e-6 (0.000001).
 	/// </summary>

@@ -1,11 +1,12 @@
 # Public API
-Lines of code: 654
+Lines of code: 655
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
 - __ThrowOnFailure__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
 - __Logger__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __AppendCodeLine__: _Makes code line info in `NotException` optional._
+- __ColorizeMessages__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __FloatingPointComparisonPrecision__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
