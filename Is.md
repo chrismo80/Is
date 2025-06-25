@@ -20,9 +20,7 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __IsContaining()__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
 - __IsIn()__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
 - __IsEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order._
-- __IsEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order._
 #### <u>Comparisons</u>
-- __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
 - __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
 - __IsPositive()__: _Asserts that the `actual` numeric value is positive (greater than zero)._
 - __IsNegative()__: _Asserts that the `actual` numeric value is negative (less than zero)._
@@ -34,28 +32,18 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __IsInRange()__: _Asserts that the `actual` value is between `min` and `max` inclusive bounds._
 - __IsNotBetween()__: _Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds._
 - __IsOutOfRange()__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
-- __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
-- __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
 #### <u>Delegates</u>
 - __IsThrowing()__: _Asserts that the given `action` throws an exception of type `T`._
 - __IsNotThrowing()__: _Asserts that the given `action` does not throw an exception of type `T`._
-- __IsThrowing()__: _Asserts that the given `action` throws an exception of type `T`._
-- __IsThrowing()__: _Asserts that the given `action` throws an exception of type `T`._
-- __IsNotThrowing()__: _Asserts that the given `action` does not throw an exception of type `T`._
-- __IsThrowing()__: _Asserts that the given `action` throws an exception of type `T`._
 - __IsCompletingWithin()__: _Asserts that the given `action` did complete within a specific `timespan`._
-- __IsCompletingWithin()__: _Asserts that the given `action` did complete within a specific `timespan`._
-- __IsAllocatingAtMost()__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
 - __IsAllocatingAtMost()__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
 #### <u>Equality</u>
 - __IsExactly()__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
-- __Is()__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
 - __IsNot()__: _Asserts that the `actual` value is not equal to the `expected` value._
 - __IsSameAs()__: _Asserts that the `actual` object is the same instance as the `expected` object._
 - __IsDefault()__: _Asserts that the `actual` value is the default value of its type._
 - __IsSatisfying()__: _Asserts that the `actual` object satisfies the specified `predicate`._
 - __IsMatchingSnapshot()__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality. Optional predicate can be used to ignore specific paths._
-- __IsMatching()__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality. Optional predicate can be used to ignore specific paths._
 #### <u>Null</u>
 - __IsNull()__: _Asserts that an object is `null`._
 - __IsNotNull()__: _Asserts that the object is not `null`._
@@ -78,6 +66,11 @@ Represents a scoped context that captures all assertion failures (as `NotExcepti
 - __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
 - __NextFailure()__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
+#### <u>Check</u>
+Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
+- __That()__: _Evaluates a boolean condition._
+- __Yields()__: _Projects a result from the original value if the initial predicate condition was true._
+- __Unless()__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
 #### <u>IsExtensionAttribute</u>
 Mark custom assertions with this attribute to enable proper code line detection.
 ## Is.Tools

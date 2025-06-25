@@ -6,13 +6,13 @@
 `Is` is a lightweight assertion library for .NET that focuses on _readable_, _minimal_, and _fail-fast_ test expectations — no assertion clutter, no dependencies, no test framework lock-in.
 
 
-## ✅ Why use Is?
+## Why use Is?
 
-- 📘 Concise: One word. One assertion.
-- 💥 Opinionated: Less is more. Only core assertions relevant for real-world use cases, just fast failure and clarity.
-- 🧪 Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
-- ⚙️ Self-contained: No dependencies, no configuration, just drop it in.
-- 🔧 Useful for unit tests, guard clauses or other validation checks
+- Concise: One word. One assertion.
+- Opinionated: Less is more. Only core assertions relevant for real-world use cases, just fast failure and clarity.
+- Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
+- Self-contained: No dependencies, no configuration, just drop it in.
+- Useful for unit tests, guard clauses or other validation checks
 
 ## 📦 Get It on NuGet
 
@@ -23,20 +23,20 @@ The package is published on NuGet under the name [`AssertWithIs`](https://www.nu
 Despite the package name, the library itself uses the concise `Is` namespace and generates a single `Is.dll`, so your code stays clean and expressive:
 
 
-## 🔍 Available Methods
+## Available Methods
 
 All public methods in `Is` are:
 
-- ❗️ **Extension methods**, designed to be used fluently (`value.Is(...)`)
-- 🔤 **Named consistently**: Every method starts with `Is`, making them easy to discover with IntelliSense
-- ✂️ **Minimal and deliberate**: Only a small, opinionated set of assertions is exposed
+- **Extension methods**, designed to be used fluently (`value.Is(...)`)
+- **Named consistently**: Every method starts with `Is`, making them easy to discover with IntelliSense
+- **Minimal and deliberate**: Only a small, opinionated set of assertions is exposed
 
-> ✅ Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
+> Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
 
 The full public API and its extension methods can be [found here](https://github.com/chrismo80/Is/blob/main/Is.md)
 
 
-## 🔧 Usage Examples
+## Usage Examples
 
 ### Basic value checks
 ```csharp
@@ -103,7 +103,7 @@ groups[2].Value.Is("world");  // ✅ passes
 ```
 
 
-## ❌ Error messages
+## Error messages
 
 Exception messages
 - uses colors to highlight important parts
@@ -115,12 +115,12 @@ Exception messages
 
 ## ⚖️ Design Philosophy: Clarity over Chaining
 
-- ❌ No ```.Should()```, no fluent bloat
-- ✅ Focus on positive assertions
-- 📢 Failure messages like: ```42 (System.Int32) is not 41 (System.Int32)```
-- 🧠 Designed to make tests read like intentions, not machinery
+- No ```.Should()```, no fluent bloat
+- Focus on positive assertions
+- Failure messages like: ```42 (System.Int32) is not 41 (System.Int32)```
+- Designed to make tests read like intentions, not machinery
 
-❌ Avoid Chaining
+Avoid Chaining
 
 While fluent-style chaining such as:
 
@@ -132,10 +132,10 @@ value
 ```
 can look elegant, it introduces trade-offs that conflict with design goals:
 
-- 🧩 Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
-- 🔄 Useful patterns like .All(x => x.IsPositive()) require boolean-returning extensions — chaining breaks this.
-- 📏 Chaining implies stateful assertion objects; this library favors stateless, minimal assertions for predictability and simplicity.
-- ✅ Recommended calling assertions directly and explicitly:
+- Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
+- Useful patterns like .All(x => x.IsPositive()) require boolean-returning extensions — chaining breaks this.
+- Chaining implies stateful assertion objects; this library favors stateless, minimal assertions for predictability and simplicity.
+- Recommended calling assertions directly and explicitly:
 
 ```csharp
 value.IsPositive();
@@ -148,7 +148,7 @@ list.All(item => item.IsPositive());
 ```
 
 
-## ⚙️ Configuration: Enable/Disable Exception Throwing
+## Configuration: Enable/Disable Exception Throwing
 
 The `Is` library allows users to control whether assertion failures throw exceptions or not.
 By default, assertion failures throw a `NotException`.
@@ -169,7 +169,7 @@ Configuration.ThrowOnFailure = true;
 - **`ThrowOnFailure`**: A `bool` indicating whether assertions throw exceptions on failure. Default is `true`.
 - **`Logger`**: An optional delegate to handle log messages when exceptions are disabled. Defaults to writing messages to `System.Diagnostics.Debug.WriteLine`.
 
-## 🔄 Grouped Assertion Evaluation with AssertionContext
+## Grouped Assertion Evaluation with AssertionContext
 
 Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The AssertionContext provides exactly that capability.
 
@@ -203,11 +203,11 @@ catch (AggregateException ex)
 ```
 
 
-🔒 Scoped Context:
+Scoped Context:
 
 Only one context can be active per async-flow at a time. It uses AsyncLocal<T> for full async test compatibility.
 
-🧪 Designed for Integration:
+Designed for Integration:
 
 Works with NUnit, xUnit, or MSTest, either manually via using or with custom test base classes or attributes.
 To keep the package dependency-free, such implementations are out of scope for the library, but here is an example for such an Attribute for NUnit.
@@ -254,7 +254,7 @@ public void ContextTest_WithAttribute()
 
 
 
-## 🔧 Custom Assertions
+## Custom Assertions
 Create a static class with an extension method that performs the desired assertion.
 Use the built-in **`Check`** fluent API to insert the assertion into the features of the library, such as AssertionContext and message formatting.
 
@@ -267,7 +267,7 @@ public static class CustomAssertions
 }
 ```
 
-✅ Usage Example
+Usage Example
 
 ```csharp
 (9 - 5).IsCustomAssertion(); // ✅
@@ -285,7 +285,7 @@ Is.NotException :
 in Is.Tests.Assertions in line 639: (5 - 9).IsCustomAssertion();
 ```
 
-ℹ️ Your custom assertions integrate seamlessly with the existing fluent style of the library.
+Your custom assertions integrate seamlessly with the existing fluent style of the library.
 
 
 
@@ -293,31 +293,31 @@ in Is.Tests.Assertions in line 639: (5 - 9).IsCustomAssertion();
 
 
 
-## 🔍 Key Advantages of Is
+## Key Advantages of Is
 
-- 🧠 Ultra-Concise Syntax with Natural Readability
-- 🧵 Minimal Dependencies / Fast Startup
+- Ultra-Concise Syntax with Natural Readability
+- Minimal Dependencies / Fast Startup
     - Lean and dependency-free — ideal for CI pipelines or constrained environments.
-- 🧪 Focused on Behavior, Not Chaining
+- Focused on Behavior, Not Chaining
     - Prioritizes clarity over fluent DSL chaining.
-- 🔧 Extensible and Easy to Maintain
+- Extensible and Easy to Maintain
     - Simple to audit, fork, and adapt for your team or test infrastructure.
 
+## Architecture
+
+![plot](Docs/Architecture.png)
 
 
 
 
-
-
-
-## 📝 License
+## License
 
 MIT – use freely.
 
-## 🙌 Contributing
+## Contributing
 
 Ideas, bug reports, or pull requests are always welcome.
 
-## ❤️ Author
+## Author
 
 Developed with care by chrismo80
