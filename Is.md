@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 609
+Lines of code: 610
 ## Is
 #### <u>NotException</u>
 This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
@@ -7,7 +7,7 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __ThrowOnFailure__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
 - __Logger__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __AppendCodeLine__: _Makes code line info in `NotException` optional._
-- __FloatingPointComparisonFactor__: _Comparison factor used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
+- __FloatingPointComparisonPrecision__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __MaxRecursionDepth__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __ParsingFlags__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
 ## Is.Assertions
