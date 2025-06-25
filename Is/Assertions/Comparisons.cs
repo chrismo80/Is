@@ -10,16 +10,16 @@ public static class Comparisons
 {
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> floating point
-	/// is approximately equal to <paramref name="expected"/> considering an <paramref name="factor"/>.
+	/// is approximately equal to <paramref name="expected"/> considering an <paramref name="precision"/>.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsApproximately<T>(this T actual, T expected, T factor) where T : IFloatingPoint<T> => Check
-		.That(T.Abs(actual - expected) <= factor * T.Max(T.One, T.Abs(expected)))
+	public static bool IsApproximately<T>(this T actual, T expected, T precision) where T : IFloatingPoint<T> => Check
+		.That(T.Abs(actual - expected) <= precision * T.Max(T.One, T.Abs(expected)))
 		.Unless(actual, "is not approximately", expected);
 
 	/// <summary>
-	/// uses default value from configuration
+	/// Uses default precision from configuration
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsApproximately<T>(this T actual, T expected) where T : IFloatingPoint<T> =>

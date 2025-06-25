@@ -21,8 +21,10 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __IsIn()__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
 - __IsEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Default Equality comparer of `T`._
 - __IsDeeplyEquivalentTo()__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Deeply Equality comparer of `T`._
+- __IsEquivalentTo()__: _Asserts that the `actual` dictionary matches the `expected` dictionary ignoring order. Optional predicate can be used to ignore specific keys._
 #### <u>Comparisons</u>
-- __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `factor`._
+- __IsApproximately()__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `precision`._
+- __IsApproximately()__: _Uses default precision from configuration_
 - __IsPositive()__: _Asserts that the `actual` numeric value is positive (greater than zero)._
 - __IsNegative()__: _Asserts that the `actual` numeric value is negative (less than zero)._
 - __IsGreaterThan()__: _Asserts that the `actual` value is greater than the given `other` value._
@@ -33,18 +35,28 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __IsInRange()__: _Asserts that the `actual` value is between `min` and `max` inclusive bounds._
 - __IsNotBetween()__: _Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds._
 - __IsOutOfRange()__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
+- __IsApproximately()__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
+- __IsApproximately()__: _Asserts that the difference between two `TimeSpan` is within the specified `tolerance`._
 #### <u>Delegates</u>
 - __IsThrowing()__: _Asserts that the given `action` throws an exception of type `T`._
 - __IsNotThrowing()__: _Asserts that the given `action` does not throw an exception of type `T`._
+- __IsThrowing()__: _Asserts that the given synchronous `action` throws an exception of type `T` and that the exception message contains the specified `message` substring._
+- __IsThrowing()__: _Asserts that the given async `function` throws an exception of type `T`._
+- __IsNotThrowing()__: _Asserts that the given async `function` does not throw an exception of type `T`._
+- __IsThrowing()__: _Asserts that the given asynchronous `function` throws an exception of type `T` and that the exception message contains the specified `message` substring._
 - __IsCompletingWithin()__: _Asserts that the given `action` did complete within a specific `timespan`._
+- __IsCompletingWithin()__: _Asserts that the given async `function` did complete within a specific `timespan`._
 - __IsAllocatingAtMost()__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
+- __IsAllocatingAtMost()__: _Asserts that the given async `function` is allocating not more than `kiloBytes`._
 #### <u>Equality</u>
 - __IsExactly()__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
+- __Is()__: _Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)_
 - __IsNot()__: _Asserts that the `actual` value is not equal to the `expected` value._
 - __IsSameAs()__: _Asserts that the `actual` object is the same instance as the `expected` object._
 - __IsDefault()__: _Asserts that the `actual` value is the default value of its type._
 - __IsSatisfying()__: _Asserts that the `actual` object satisfies the specified `predicate`._
 - __IsMatchingSnapshot()__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality. Optional predicate can be used to ignore specific paths._
+- __IsMatching()__: _Asserts that the given `actual` object matches the `other` by running a deep reflection-based object comparison on their properties and fields for equality. Optional predicate can be used to ignore specific paths._
 #### <u>Null</u>
 - __IsNull()__: _Asserts that an object is `null`._
 - __IsNotNull()__: _Asserts that the object is not `null`._
