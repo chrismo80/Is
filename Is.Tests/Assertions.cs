@@ -619,12 +619,6 @@ public class Assertions
 		4.Is(5);        // ❌
 		5.Is(5);        // ✅
 		6.Is(6);        // ✅
-		6.Is(6);        // ✅
-		6.Is(6);        // ✅
-		6.Is(6);        // ✅
-		6.Is(6);        // ✅
-
-		return;
 
 		AssertionContext.Current?.NextFailure();
 		AssertionContext.Current?.NextFailure();
