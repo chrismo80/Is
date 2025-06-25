@@ -30,7 +30,7 @@ public static class Configuration
 	/// Controls whether messages produced by assertions are colorized when displayed.
 	/// Default is true, enabling colorization for better readability and visual distinction.
 	/// </summary>
-	public static bool ColorizeMessages { get; set; } = false;
+	public static bool ColorizeMessages { get; set; } = true;
 
 	/// <summary>
 	/// Comparison precision used for floating point comparisons if not specified specifically.
