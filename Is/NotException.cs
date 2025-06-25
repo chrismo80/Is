@@ -11,7 +11,7 @@ namespace Is;
 /// are collected instead of being thrown immediately.
 /// </summary>
 [DebuggerStepThrough]
-public class NotException(string message) : Exception(message.AddCodeLine());
+public class NotException(string message) : Exception(message.AppendCodeLine());
 
 [DebuggerStepThrough]
 file static class CallStackExtensions
@@ -20,7 +20,7 @@ file static class CallStackExtensions
 
 	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
 
-	internal static string AddCodeLine(this string text) =>
+	internal static string AppendCodeLine(this string text) =>
 		Configuration.AppendCodeLine ? "\n" + text + "\n" + new StackTrace(true).FindFrame()?.CodeLine() + "\n" : text;
 
 	private static StackFrame? FindFrame(this StackTrace trace) =>
