@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Concurrent;
 using Is.Core;
+using Is.Tools;
 
 namespace Is;
 
