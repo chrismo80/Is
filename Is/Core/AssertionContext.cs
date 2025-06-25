@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Is.Assertions;
 
 namespace Is.Core;
 
@@ -90,6 +91,15 @@ public sealed class AssertionContext : IDisposable
 	/// Dequeues an <see cref="Is.Core.NotException"/> from the queue to not be thrown at the end of the context.
 	/// </summary>
 	public NotException NextFailure() => _failures.Dequeue();
+
+	/// <summary>
+	/// Asserts number of <see cref="Is.Core.NotException"/>s in the queue and clears the queue.
+	/// </summary>
+	public void VerifyFailures(int count)
+	{
+		_failures.Count.Is(count);
+		_failures.Clear();
+	}
 
 	internal void AddFailure(NotException ex) => _failures.Enqueue(ex);
 
