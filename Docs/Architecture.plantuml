@@ -1,13 +1,15 @@
-@startuml "Is Components"
+@startuml "Architecture"
 
 !include <C4/C4_Component>
 
+' left to right direction
+
 System_Ext(ca, "Custom assertions", "user can add own assertions")
-        
+System_Ext(cta, "Custom TestAdapter", "user can plug in custom test adapter to throw framework exception types")
+
 System_Boundary(Is, "Is") {
     Component(ex, "NotException", "Custom exception", "uses call stack to append exact line of user code")
     Component(conf, "Configuration", "Global settings", "control library behaviour, such as ThrowOnFailure, AppendCodeLine, etc.")
-    Component(confext, "Configuration", "Global settings", "control assertion behaviour, such as MaxRecursionDepth, FloatingPointComparisonPrecision, etc.")
 
     System_Boundary(Assertions, "Assertions") {
         Component(ext, "Extension methods", "Public assertions", "actual implementation of different assertions")
@@ -17,22 +19,26 @@ System_Boundary(Is, "Is") {
         Component(ass, "Assertion", "Passed / Failed", "single entry point for failure behaviour")
         Component(check, "Check", "That / (Yields) / Unless", "fluent API to simplify condition check and error message creation")
         Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
+        Component(ita, "ITestAdapter", "Report Failure(s)", "reports success and failure(s) to throw exceptions")
         }
     }
 }
 
-Rel(ass, ex, "throws on failure")
+Rel(ass, ita, "reports on failure")
 Rel(ctx, ex, "collects failures")
+Rel(ita, ex, "throws exceptions")
+Rel_R(cta, ita, "implements")
 
-Rel(ext, check, "uses")
+Rel_U(ext, check, "uses")
 Rel(ext, ass, "uses")
-Rel_R(ca, check, "uses")
+Rel_L(ca, check, "uses")
 
-Rel_R(check, ass, "uses")
-Rel_R(ass, ctx, "adds successes / failures")
+Rel(check, ass, "uses")
+Rel(ass, ctx, "adds successes / failures")
 
-Rel_U(conf, ass, "controls")
-Rel_R(conf, ex, "controls")
-Rel_L(confext, ext, "controls")
+Rel_R(conf, ass, "controls")
+Rel(conf, ita, "controls")
+Rel_U(conf, ext, "controls")
+
 
 @enduml
