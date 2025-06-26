@@ -4,8 +4,7 @@ namespace Is.Tests;
 
 public class NUnitTestAdapter : ITestAdapter
 {
-	public void ReportSuccess()
-	{ }
+	public void ReportSuccess() { }
 
 	public void ReportFailure(NotException ex) =>
 		throw new AssertionException(ex.Message, ex);

@@ -236,18 +236,22 @@ The ITestAdapter interface acts as a hook for custom test frameworks to handle a
 
 You can configure your custom test adapter via Configuration.TestAdapter.
 
-Default implentation looks like this.
+For NUnit an implementation could looks like this.
 
 ```csharp
-public class DefaultTestAdapter : ITestAdapter
-{
-    public void ReportSuccess() {}
+public class NUnitTestAdapter : ITestAdapter
+{ 
+    public void ReportSuccess() { }
     
     public void ReportFailure(NotException ex) => 
-        throw ex;
+        throw new AssertionException(ex.Message, ex);
     
-    public void ReportFailures(string message, List<NotException> failures) => 
-        throw new AggregateException(message, failures);
+    public void ReportFailures(string message, List<NotException> failures) 
+    { 
+        var messages = string.Join("\n", failures.Select(f => f.Message));
+        
+        throw new AssertionException($"{message}\n{messages}"); 
+    }
 }
 ```
 
