@@ -80,6 +80,8 @@ public sealed class AssertionContext : IDisposable
 	/// </summary>
 	public void Dispose()
 	{
+		var testAdapter = Configuration.Active.TestAdapter;
+
 		current.Value = null;
 
 		if (_failures.Count == 0)
@@ -89,7 +91,7 @@ public sealed class AssertionContext : IDisposable
 
 		var message = $"{_failures.Count} of {Total} assertion{s} ({Ratio:P1}) failed in '{_caller}'";
 
-		Configuration.Active.TestAdapter.ReportFailures(message, _failures.ToList());
+		testAdapter.ReportFailures(message, _failures.ToList());
 	}
 
 	/// <summary>
