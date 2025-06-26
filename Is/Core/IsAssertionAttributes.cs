@@ -6,16 +6,16 @@ namespace Is.Core;
 /// <remarks>
 /// Usage:
 /// <code>
-/// [IsExtension]
+/// [IsAssertion]
 /// public static bool IsCustomAssertion(this bool value, [CallerArgumentExpression("value")] string? expr = null) =>
 ///		Check.That(value).Unless($"{expr} is wrong");
 /// </code>
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method)]
-public class IsExtensionAttribute : Attribute;
+public class IsAssertionAttribute : Attribute;
 
 /// <summary>
 /// Mark custom assertions class with this attribute to enable proper code line detection.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class IsExtensionsAttribute : Attribute;
+public class IsAssertionsAttribute : Attribute;

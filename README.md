@@ -259,15 +259,15 @@ Create a static class with an extension method that performs the desired asserti
 Use the built-in **`Check`** fluent API to insert the assertion into the features of the library, such as AssertionContext and message formatting.
 
 ```csharp
-[IsExtensions]
+[IsAssertions]
 public static class CustomAssertions
 {
-    [IsExtension] 
+    [IsAssertion] 
     public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) => 
         Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 }
 ```
-Mark the methods or classes with one of the IsExtension attributes to enable proper user code line detection.
+Mark the methods or classes with one of the IsAssertion attributes to enable proper user code line detection.
 
 Usage Example
 

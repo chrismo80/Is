@@ -66,8 +66,8 @@ file static class StackFrameExtensions
 		(frame.GetMethod()?.IsForeignAssembly() ?? false) && (frame.GetMethod()?.HasNotAttribute() ?? false);
 
 	private static bool IsForeignAssembly(this MethodBase method) =>
-		method.DeclaringType?.Assembly != Mine && !Attribute.IsDefined(method, typeof(IsExtensionAttribute));
+		method.DeclaringType?.Assembly != Mine && !Attribute.IsDefined(method, typeof(IsAssertionAttribute));
 
 	private static bool HasNotAttribute(this MethodBase method) =>
-		!Attribute.IsDefined(method, typeof(IsExtensionAttribute)) && !Attribute.IsDefined(method.DeclaringType, typeof(IsExtensionsAttribute));
+		!Attribute.IsDefined(method, typeof(IsAssertionAttribute)) && !Attribute.IsDefined(method.DeclaringType, typeof(IsAssertionsAttribute));
 }

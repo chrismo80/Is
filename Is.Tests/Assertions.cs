@@ -693,7 +693,7 @@ public class Assertions
 	}
 }
 
-[IsExtensions]
+[IsAssertions]
 public static class CustomAssertions
 {
 	public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
