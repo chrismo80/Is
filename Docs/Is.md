@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 690
+Lines of code: 696
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
@@ -105,7 +105,7 @@ Mark custom assertions class with this attribute to enable proper code line dete
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Can be set via Configuration.TestAdapter.
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
 - __`ReportFailure(ex)`__: _Reports a failed test result to the configured test adapter._
-- __`ReportFailures(message, messages)`__: _Reports multiple test failures to the configured test adapter._
+- __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_

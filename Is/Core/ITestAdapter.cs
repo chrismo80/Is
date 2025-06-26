@@ -8,16 +8,23 @@ namespace Is.Core;
 public interface ITestAdapter
 {
 	/// <summary>Reports a successful test result to the configured test adapter.</summary>
-	void ReportSuccess()
-	{ }
+	void ReportSuccess();
 
 	/// <summary>Reports a failed test result to the configured test adapter.</summary>
-	void ReportFailure(NotException ex) =>
-		throw ex;
+	void ReportFailure(NotException ex);
 
 	/// <summary>Reports multiple test failures to the configured test adapter.</summary>
-	void ReportFailures(string message, List<NotException> messages) =>
-		throw new AggregateException(message, messages);
+	void ReportFailures(string message, List<NotException> failures);
 }
 
-public class TestAdapter : ITestAdapter;
+public class TestAdapter : ITestAdapter
+{
+	public void ReportSuccess()
+	{ }
+
+	public void ReportFailure(NotException ex) =>
+		throw ex;
+
+	public void ReportFailures(string message, List<NotException> failures) =>
+		throw new AggregateException(message, failures);
+}
