@@ -103,13 +103,13 @@ public static class Equality
 
 	private static bool IsEqualTo<T>(this T? actual, T? expected)
 	{
-		if (actual.IsExactlyEqualTo(expected) || actual.IsCloseTo(expected))
+		if (actual.IsExactlyEqualTo(expected))
 			return Assertion.Passed();
 
-		if(actual == null || expected == null)
-			return Assertion.Failed<bool>(actual, "is not", expected);
+		if(actual.IsCloseTo(expected))
+			return Assertion.Passed();
 
-		return actual.IsMatching(expected);
+		return Assertion.Failed<bool>(actual, "is not", expected);
 	}
 
 	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
