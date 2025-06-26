@@ -12,8 +12,9 @@ internal static class Assertion
 
 	internal static T Passed<T>(T result)
 	{
-		AssertionContext.Current?.AddSuccess();
 		Configuration.Active.TestAdapter.ReportSuccess();
+
+		AssertionContext.Current?.AddSuccess();
 
 		return result;
 	}

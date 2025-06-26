@@ -2,7 +2,8 @@ namespace Is.Core;
 
 /// <summary>
 /// Represents an interface for handling test result reporting.
-/// Can be set via Configuration.TestAdapter
+/// Serves as a hook for custom test frameworks to throw custom exception types.
+/// Can be set via Configuration.TestAdapter.
 /// </summary>
 public interface ITestAdapter
 {
