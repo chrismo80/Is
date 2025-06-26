@@ -12,7 +12,7 @@ namespace Is;
 /// are collected instead of being thrown immediately.
 /// </summary>
 [DebuggerStepThrough]
-public class NotException(string message, StackFrame? frame, object? actual = null, object? expected = null)
+public class NotException(string message, string? assertion, StackFrame? frame, object? actual = null, object? expected = null)
 	: Exception(message.AppendCodeLine(frame))
 {
 	/// <summary>
@@ -26,7 +26,12 @@ public class NotException(string message, StackFrame? frame, object? actual = nu
 	public object? Expected => expected;
 
 	/// <summary>
-	/// The name of the method where the stack frame originates, or null if unavailable.
+	/// The name of the assertion that failed.
+	/// </summary>
+	public string? Assertion => assertion;
+
+	/// <summary>
+	/// The name of the method that called the assertion, or null if unavailable.
 	/// </summary>
 	public string? Method => frame?.GetMethod()?.Name;
 
@@ -54,8 +59,8 @@ file static class CodeLineExtensions
 	internal static string AppendCodeLine(this string text, StackFrame? frame) =>
 		Configuration.Active.AppendCodeLine ? "\n" + text + "\n" + frame?.CodeLine() + "\n" : text;
 
-	private static string CodeLine(this StackFrame frame) => "in " +
-		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.CreateLine(frame.GetFileLineNumber());
+	private static string CodeLine(this StackFrame frame) =>
+		"in " + frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.CreateLine(frame.GetFileLineNumber());
 
 	private static string CreateLine(this string fileName, int lineNumber) =>
 		" in line " + lineNumber.Color(1) + ": " + fileName.GetLine(lineNumber).Color(93);

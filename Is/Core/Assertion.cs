@@ -19,12 +19,9 @@ internal static class Assertion
 
 	internal static T? Failed<T>(string message, object? actual = null, object? expected = null)
 	{
-		StackFrame? frame = null;
+		var (assertionFrame, codeFrame) = FindFrames();
 
-		if(Configuration.Active.AppendCodeLine)
-			frame = new StackTrace(true).FindFrame();
-
-		var ex = new NotException(message, frame, actual, expected);
+		var ex = new NotException(message, assertionFrame?.GetMethod()?.Name, codeFrame, actual, expected);
 
 		if (Configuration.Active.ThrowOnFailure && !AssertionContext.IsActive)
 			throw ex;
@@ -44,6 +41,17 @@ internal static class Assertion
 
 	internal static T? Failed<T>(string message, List<string> text, int max = 100) =>
 		Failed<T>($"{message}\n\n\t{string.Join("\n\t", text.Truncate(max))}\n");
+
+	private static (StackFrame? CodeFrame, StackFrame? Assertion) FindFrames()
+	{
+		if (!Configuration.Active.AppendCodeLine)
+			return (null, null);
+
+		var frames = new StackTrace(true).GetFrames();
+		var codeFrame = frames.FindFrame();
+
+		return (frames[Array.IndexOf(frames, codeFrame) - 1], codeFrame);
+	}
 }
 
 [DebuggerStepThrough]
@@ -51,8 +59,8 @@ file static class StackFrameExtensions
 {
 	private static readonly Assembly Mine = Assembly.GetExecutingAssembly();
 
-	internal static StackFrame? FindFrame(this StackTrace trace) =>
-		trace.GetFrames().FirstOrDefault(f => f.IsExtensionCall() && f.GetFileName() != null);
+	internal static StackFrame? FindFrame(this StackFrame[] frames) =>
+		frames.FirstOrDefault(f => f.IsExtensionCall() && f.GetFileName() != null);
 
 	private static bool IsExtensionCall(this StackFrame frame) =>
 		(frame.GetMethod()?.IsForeignAssembly() ?? false) && (frame.GetMethod()?.HasNotAttribute() ?? false);

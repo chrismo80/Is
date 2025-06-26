@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 667
+Lines of code: 674
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
@@ -14,7 +14,8 @@ Global configurations that control assertion behaviour
 This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
 - __Actual__: _The actual value that caused the assertion to fail._
 - __Expected__: _The expected value that was compared during the assertion and caused the failure._
-- __Method__: _The name of the method where the stack frame originates, or null if unavailable._
+- __Assertion__: _The name of the assertion that failed._
+- __Method__: _The name of the method that called the assertion, or null if unavailable._
 - __File__: _The name of the file in which the exception occurred, if available._
 - __Line__: _The line number in the source file where the exception occurred._
 - __Code__: _The specific line of source code of the assertion failure._

@@ -263,6 +263,8 @@ public class Assertions
 		actualObject.IsMatching(expectedSnapshot);
 		actualObject.IsMatchingSnapshot(expectedSnapshot);
 
+		Configuration.Active.ColorizeMessages = false;
+
 		failingObject.IsMatching(expectedSnapshot);
 		failingObject.IsMatchingSnapshot(expectedSnapshot);
 
