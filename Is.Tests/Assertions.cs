@@ -660,6 +660,17 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
+	public void Configuration_Local_Global()
+	{
+		100.1.IsApproximately(100); // ❌
+		AssertionContext.Current?.NextFailure();
+
+		Configuration.Active.FloatingPointComparisonPrecision = 0.01;
+		100.1.IsApproximately(100); // ✅
+	}
+
+	[Test]
 	public void Check_That_Unless()
 	{
 		const bool value = true;
