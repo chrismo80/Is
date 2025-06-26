@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Is.Core;
+using Is.Tools;
 
 namespace Is;
 
@@ -59,7 +60,10 @@ public class Configuration
 
 	public Configuration Clone()
 	{
-		var clone = (Configuration)MemberwiseClone();
+		var clone = this.ToJson().FromJson<Configuration>();
+
+		if(clone is null)
+			throw new InvalidOperationException("Failed to clone configuration.");
 
 		if(Logger is not null)
 			clone.Logger = Logger.Invoke;
