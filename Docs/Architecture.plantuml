@@ -2,7 +2,7 @@
 
 !include <C4/C4_Component>
 
-!theme reddress-darkblue
+' !theme reddress-darkblue
 ' !theme plain
 ' !theme metal
 ' !theme materia
