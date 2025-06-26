@@ -95,9 +95,9 @@ Offers a fluent API to assert conditions and create return values and error mess
 - __That()__: _Evaluates a boolean condition._
 - __Yields()__: _Projects a result from the original value if the initial predicate condition was true._
 - __Unless()__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
-#### <u>IsExtensionAttribute</u>
+#### <u>IsAssertionAttribute</u>
 Mark custom assertion methods with this attribute to enable proper code line detection.
-#### <u>IsExtensionsAttribute</u>
+#### <u>IsAssertionsAttribute</u>
 Mark custom assertions class with this attribute to enable proper code line detection.
 ## Is.Tools
 #### <u>JsonFileHelper</u>

@@ -689,7 +689,7 @@ public class Assertions
 	{
 		(5 - 9).IsCustomAssertion();
 
-		AssertionContext.Current?.NextFailure();
+		AssertionContext.Current?.NextFailure().SaveJson("custom.json");
 	}
 }
 
