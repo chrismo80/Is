@@ -58,7 +58,7 @@ public class Configuration
 	/// </summary>
 	public BindingFlags ParsingFlags { get; set; } = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-	public Configuration Clone()
+	internal Configuration Clone()
 	{
 		var clone = this.ToJson().FromJson<Configuration>();
 
