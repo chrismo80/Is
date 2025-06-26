@@ -13,6 +13,7 @@ internal static class Assertion
 	internal static T Passed<T>(T result)
 	{
 		AssertionContext.Current?.AddSuccess();
+		Configuration.Active.TestAdapter.ReportSuccess();
 
 		return result;
 	}
@@ -24,11 +25,11 @@ internal static class Assertion
 		var ex = new NotException(message, assertionFrame?.GetMethod()?.Name, codeFrame, actual, expected);
 
 		if (Configuration.Active.ThrowOnFailure && !AssertionContext.IsActive)
-			throw ex;
+			Configuration.Active.TestAdapter.ReportFailure(ex);
 
 		AssertionContext.Current?.AddFailure(ex);
 
-		Configuration.Active.Logger?.Invoke(ex.Message);
+		Configuration.Active.Logger(ex.Message);
 
 		return default;
 	}

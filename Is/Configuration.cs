@@ -17,6 +17,13 @@ public class Configuration
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
 	/// <summary>
+	/// Specifies the adapter responsible for handling assertion results,
+	/// including reporting successes, failures, and multiple failures.
+	/// By default, this is set to <see cref="DefaultTestAdapter"/>.
+	/// </summary>
+	public ITestAdapter TestAdapter { get; set; } = new DefaultTestAdapter();
+
+	/// <summary>
 	/// Controls whether assertion failures should throw a <see cref="NotException"/>.
 	/// Default is true. If not set, assertions will return false on failure and log the message.
 	/// </summary>
@@ -27,7 +34,7 @@ public class Configuration
 	/// Default case, messages will be written to <c>Debug.WriteLine</c>.
 	/// </summary>
 	[JsonIgnore]
-	public Action<string?>? Logger { get; set; } = msg => Debug.WriteLine(msg);
+	public Action<string?> Logger { get; set; } = msg => Debug.WriteLine(msg);
 
 	/// <summary>
 	/// Makes code line info in <see cref="NotException"/> optional.
@@ -58,16 +65,15 @@ public class Configuration
 	/// </summary>
 	public BindingFlags ParsingFlags { get; set; } = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-	internal Configuration Clone()
+	internal Configuration Clone() => new()
 	{
-		var clone = this.ToJson().FromJson<Configuration>();
-
-		if(clone is null)
-			throw new InvalidOperationException("Failed to clone configuration.");
-
-		if(Logger is not null)
-			clone.Logger = Logger.Invoke;
-
-		return clone;
-	}
+		TestAdapter = TestAdapter,
+		ThrowOnFailure = ThrowOnFailure,
+		Logger = msg => Logger(msg),
+		AppendCodeLine = AppendCodeLine,
+		ColorizeMessages = ColorizeMessages,
+		FloatingPointComparisonPrecision = FloatingPointComparisonPrecision,
+		MaxRecursionDepth = MaxRecursionDepth,
+		ParsingFlags = ParsingFlags,
+	};
 }

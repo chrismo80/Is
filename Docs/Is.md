@@ -1,8 +1,9 @@
 # Public API
-Lines of code: 676
+Lines of code: 694
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
+- __TestAdapter__: _Specifies the adapter responsible for handling assertion results, including reporting successes, failures, and multiple failures. By default, this is set to `DefaultTestAdapter`._
 - __ThrowOnFailure__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
 - __Logger__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __AppendCodeLine__: _Makes code line info in `NotException` optional._
@@ -99,6 +100,8 @@ Offers a fluent API to assert conditions and create return values and error mess
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
 Mark custom assertions class with this attribute to enable proper code line detection.
+#### <u>ITestAdapter</u>
+Represents an interface for handling test result reporting. Can be set via Configuration.TestAdapter
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __SaveJson()__: _Serializes an object `obj` to a JSON file to `filename`_

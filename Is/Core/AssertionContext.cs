@@ -45,7 +45,7 @@ public sealed class AssertionContext : IDisposable
 	public int Total => Passed + Failed;
 
 	/// <summary>The ratio of passed assertions.</summary>
-	public double Ratio => (double)Passed / Total;
+	public double Ratio => Total > 0 ? (double)Passed / Total : 1;
 
 	/// <summary>Local configuration settings (copy of global <see cref="Configuration"/>) only active during the <see cref="AssertionContext"/>.</summary>
 	internal Configuration Configuration { get; } = Configuration.Default.Clone();
@@ -89,7 +89,7 @@ public sealed class AssertionContext : IDisposable
 
 		var message = $"{_failures.Count} of {Total} assertion{s} ({Ratio:P1}) failed in '{_caller}'";
 
-		throw new AggregateException(message, _failures);
+		Configuration.Active.TestAdapter.ReportFailures(message, _failures.ToList());
 	}
 
 	/// <summary>
