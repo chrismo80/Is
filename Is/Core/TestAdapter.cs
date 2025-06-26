@@ -1,5 +1,16 @@
 namespace Is.Core;
 
+public class TestAdapter : ITestAdapter
+{
+	public void ReportSuccess() {}
+
+	public void ReportFailure(NotException ex) =>
+		throw ex;
+
+	public void ReportFailures(string message, List<NotException> failures) =>
+		throw new AggregateException(message, failures);
+}
+
 /// <summary>
 /// Represents an interface for handling test result reporting.
 /// Serves as a hook for custom test frameworks to throw custom exception types.
@@ -15,15 +26,4 @@ public interface ITestAdapter
 
 	/// <summary>Reports multiple test failures to the configured test adapter.</summary>
 	void ReportFailures(string message, List<NotException> messages);
-}
-
-public class DefaultTestAdapter : ITestAdapter
-{
-	public void ReportSuccess() {}
-
-	public void ReportFailure(NotException ex) =>
-		throw ex;
-
-	public void ReportFailures(string message, List<NotException> failures) =>
-		throw new AggregateException(message, failures);
 }
