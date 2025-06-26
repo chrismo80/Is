@@ -52,7 +52,7 @@ file static class CodeLineExtensions
 	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
 
 	internal static string AppendCodeLine(this string text, StackFrame? frame) =>
-		Configuration.Default.AppendCodeLine ? "\n" + text + "\n" + frame?.CodeLine() + "\n" : text;
+		Configuration.Active.AppendCodeLine ? "\n" + text + "\n" + frame?.CodeLine() + "\n" : text;
 
 	private static string CodeLine(this StackFrame frame) => "in " +
 		frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.CreateLine(frame.GetFileLineNumber());

@@ -29,7 +29,7 @@ internal static class MessageExtensions
 
 	// https://ss64.com/nt/syntax-ansi.html
 	internal static string? Color<T>(this T text, int color) =>
-		Configuration.Default.ColorizeMessages && ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
+		Configuration.Active.ColorizeMessages && ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
 
 	internal static string FormatValue(this object? value) =>
 		value switch

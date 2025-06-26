@@ -21,7 +21,7 @@ internal static class JsonParser
 
 	private static Dictionary<string, object?> Parse(this JsonNode? node, Dictionary<string, object?> result, string path = "", int depth = 0)
 	{
-		if (depth > Configuration.Default.MaxRecursionDepth)
+		if (depth > Configuration.Active.MaxRecursionDepth)
 			return result.AddItem(path, $"path too deep (length limit {depth} exceeded)");
 
 		return node switch

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Is.Core;
 
 namespace Is;
 
@@ -10,7 +11,9 @@ namespace Is;
 [DebuggerStepThrough]
 public class Configuration
 {
-	public static Configuration Default { get; } = new();
+	internal static Configuration Default { get; } = new();
+
+	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
 	/// <summary>
 	/// Controls whether assertion failures should throw a <see cref="NotException"/>.
@@ -53,4 +56,14 @@ public class Configuration
 	/// Default is public | non-public | instance.
 	/// </summary>
 	public BindingFlags ParsingFlags { get; set; } = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+	public Configuration Clone()
+	{
+		var clone = (Configuration)MemberwiseClone();
+
+		if(Logger is not null)
+			clone.Logger = Logger.Invoke;
+
+		return clone;
+	}
 }

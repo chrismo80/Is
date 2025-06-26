@@ -592,7 +592,7 @@ public class Assertions
 		action = () => actual.IsNegative();
 		action.IsThrowing<NotException>("is not smaller");
 
-		Configuration.Default.FloatingPointComparisonPrecision = 1e-4;
+		Configuration.Active.FloatingPointComparisonPrecision = 1e-4;
 		actual.IsApproximately(expected);
 	}
 
@@ -600,13 +600,16 @@ public class Assertions
 	[NonParallelizable]
 	public void Configuration_DoNotThrow_JustLog()
 	{
-		Configuration.Default.Logger = Console.WriteLine;
+		Configuration.Active.Logger = Console.WriteLine;
 
-		Configuration.Default.ThrowOnFailure = false;
+		Configuration.Active.ThrowOnFailure = false;
+
+		Configuration.Default.SaveJson("default.json");
+		Configuration.Active.SaveJson("active.json");
 
 		3.Is(4); // ❌
 
-		Configuration.Default.ThrowOnFailure = true;
+		Configuration.Active.ThrowOnFailure = true;
 	}
 
 	[Test]
