@@ -148,28 +148,10 @@ list.All(item => item.IsPositive());
 ```
 
 
-## Configuration: Enable/Disable Exception Throwing
 
-The `Is` library allows users to control whether assertion failures throw exceptions or not.
-By default, assertion failures throw a `NotException`.
-However, you can modify this behavior using the `Configuration.ThrowOnFailure` flag.
-If disabled, assertions will instead return `false` on failure and log the exception message using the configured logger.
 
-```csharp
-Configuration.Active.Logger = Console.WriteLine;
 
-Configuration.Active.ThrowOnFailure = false;
-
-3.Is(4); // ❌
-
-Configuration.Active.ThrowOnFailure = true;
-```
-    
-### Key Properties
-- **`ThrowOnFailure`**: A `bool` indicating whether assertions throw exceptions on failure. Default is `true`.
-- **`Logger`**: An optional delegate to handle log messages when exceptions are disabled. Defaults to writing messages to `System.Diagnostics.Debug.WriteLine`.
-
-## Grouped Assertion Evaluation with AssertionContext
+## AssertionContext
 
 Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The AssertionContext provides exactly that capability.
 
@@ -207,7 +189,7 @@ Scoped Context:
 
 Only one context can be active per async-flow at a time. It uses AsyncLocal<T> for full async test compatibility.
 
-Designed for Integration:
+## TestFramework Integration
 
 Works with NUnit, xUnit, or MSTest, either manually via using or with custom test base classes or attributes.
 To keep the package dependency-free, such implementations are out of scope for the library, but here is an example for such an Attribute for NUnit.
@@ -250,7 +232,24 @@ public void ContextTest_WithAttribute()
 }
 ```
 
+The ITestAdapter interface acts as a hook for custom test frameworks to handle and throw their own exception types.
 
+You can configure your custom test adapter via Configuration.TestAdapter.
+
+Default implentation looks like this.
+
+```csharp
+public class DefaultTestAdapter : ITestAdapter
+{
+	public void ReportSuccess() {}
+
+	public void ReportFailure(NotException ex) =>
+		throw ex;
+
+	public void ReportFailures(string message, List<NotException> failures) =>
+		throw new AggregateException(message, failures);
+}
+```
 
 
 
