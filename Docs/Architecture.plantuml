@@ -2,7 +2,8 @@
 
 !include <C4/C4_Component>
 
-!theme crt-amber
+' !theme metal
+!theme materia
 
 ' left to right direction
 
