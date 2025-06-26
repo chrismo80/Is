@@ -241,13 +241,13 @@ Default implentation looks like this.
 ```csharp
 public class DefaultTestAdapter : ITestAdapter
 {
-	public void ReportSuccess() {}
-
-	public void ReportFailure(NotException ex) =>
-		throw ex;
-
-	public void ReportFailures(string message, List<NotException> failures) =>
-		throw new AggregateException(message, failures);
+    public void ReportSuccess() {}
+    
+    public void ReportFailure(NotException ex) => 
+        throw ex;
+    
+    public void ReportFailures(string message, List<NotException> failures) => 
+        throw new AggregateException(message, failures);
 }
 ```
 
