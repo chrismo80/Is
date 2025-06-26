@@ -84,6 +84,7 @@ Represents a scoped context that captures all assertion failures (as `NotExcepti
 - __Passed__: _The number of passed assertions in the context._
 - __Total__: _The total number of assertions in the context._
 - __Ratio__: _The ratio of passed assertions._
+- __Configuration__: _Local configuration settings (copy of global `Configuration`) only active during the `AssertionContext`._
 - __Current__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
 - __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._

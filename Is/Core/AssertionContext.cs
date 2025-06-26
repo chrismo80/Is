@@ -47,6 +47,7 @@ public sealed class AssertionContext : IDisposable
 	/// <summary>The ratio of passed assertions.</summary>
 	public double Ratio => (double)Passed / Total;
 
+	/// <summary>Local configuration settings (copy of global <see cref="Configuration"/>) only active during the <see cref="AssertionContext"/>.</summary>
 	public Configuration Configuration { get; } = Configuration.Default.Clone();
 
 	/// <summary>
