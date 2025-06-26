@@ -2,8 +2,10 @@
 
 !include <C4/C4_Component>
 
+!theme reddress-darkblue
+' !theme plain
 ' !theme metal
-!theme materia
+' !theme materia
 
 ' left to right direction
 
