@@ -19,7 +19,6 @@ public class Configuration
 	/// <summary>
 	/// Specifies the adapter responsible for handling assertion results,
 	/// including reporting successes, failures, and multiple failures.
-	/// By default, this is set to <see cref="Core.TestAdapter"/>.
 	/// </summary>
 	public ITestAdapter TestAdapter { get; set; } = new TestAdapter();
 

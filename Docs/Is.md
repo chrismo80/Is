@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 694
+Lines of code: 690
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
