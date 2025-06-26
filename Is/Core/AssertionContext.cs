@@ -48,7 +48,7 @@ public sealed class AssertionContext : IDisposable
 	public double Ratio => (double)Passed / Total;
 
 	/// <summary>Local configuration settings (copy of global <see cref="Configuration"/>) only active during the <see cref="AssertionContext"/>.</summary>
-	public Configuration Configuration { get; } = Configuration.Default.Clone();
+	internal Configuration Configuration { get; } = Configuration.Default.Clone();
 
 	/// <summary>
 	/// The current active <see cref="AssertionContext"/> for the asynchronous operation, or null if no context is active.

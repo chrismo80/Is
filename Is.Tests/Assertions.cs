@@ -663,10 +663,13 @@ public class Assertions
 	[AssertionContext]
 	public void Configuration_Local_Global()
 	{
+		AssertionContext.Current?.Configuration.FloatingPointComparisonPrecision.Is(0.000001);
 		100.1.IsApproximately(100); // ❌
 		AssertionContext.Current?.NextFailure();
 
 		Configuration.Active.FloatingPointComparisonPrecision = 0.01;
+
+		AssertionContext.Current?.Configuration.FloatingPointComparisonPrecision.Is(0.01);
 		100.1.IsApproximately(100); // ✅
 	}
 
