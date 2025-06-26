@@ -675,6 +675,16 @@ public class Assertions
 		100.1.IsApproximately(100); // ✅
 	}
 
+
+	[Test]
+	public void TestAdapter()
+	{
+		Configuration.Active.TestAdapter.Is<TestAdapter>();
+		Configuration.Active.TestAdapter = new NUnitTestAdapter();
+		Configuration.Active.TestAdapter.Is<NUnitTestAdapter>();
+	}
+
+
 	[Test]
 	public void Check_That_Unless()
 	{
