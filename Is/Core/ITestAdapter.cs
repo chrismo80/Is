@@ -19,8 +19,7 @@ public interface ITestAdapter
 
 public class TestAdapter : ITestAdapter
 {
-	public void ReportSuccess()
-	{ }
+	public void ReportSuccess() { }
 
 	public void ReportFailure(NotException ex) =>
 		throw ex;
