@@ -2,6 +2,8 @@
 
 !include <C4/C4_Component>
 
+!theme crt-amber
+
 ' left to right direction
 
 System_Ext(ca, "Custom assertions", "user can add own assertions")
@@ -38,9 +40,9 @@ Rel_L(ctx, ita, "reports failures to")
 Rel(check, ass, "pass / fail")
 Rel(ass, ctx, "adds successes / failures")
 
-Rel_R(conf, ass, "controls")
-Rel(conf, ita, "controls")
-Rel_U(conf, ext, "controls")
+Rel_R(conf, ass, "configures")
+Rel(conf, ita, "configures")
+Rel_U(conf, ext, "configures")
 
 
 @enduml
