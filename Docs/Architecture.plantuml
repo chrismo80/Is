@@ -9,7 +9,7 @@ System_Ext(cta, "Custom TestAdapter", "user can plug in custom test adapter to t
 
 System_Boundary(Is, "Is") {
     Component(ex, "NotException", "Custom exception", "uses call stack to append exact line of user code")
-    Component(conf, "Configuration", "Global settings", "control library behaviour, such as ThrowOnFailure, AppendCodeLine, etc.")
+    Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
 
     System_Boundary(Assertions, "Assertions") {
         Component(ext, "Extension methods", "Public assertions", "actual implementation of different assertions")
@@ -24,16 +24,18 @@ System_Boundary(Is, "Is") {
     }
 }
 
-Rel(ass, ita, "reports on failure")
-Rel(ctx, ex, "collects failures")
-Rel(ita, ex, "throws exceptions")
+Rel(ass, ita, "reports failure to")
+Rel(ctx, ex, "collects")
+Rel(ita, ex, "throws")
 Rel_R(cta, ita, "implements")
 
 Rel_U(ext, check, "uses")
-Rel(ext, ass, "uses")
+Rel(ext, ass, "pass / fail")
 Rel_L(ca, check, "uses")
 
-Rel(check, ass, "uses")
+Rel_L(ctx, ita, "reports failures to")
+
+Rel(check, ass, "pass / fail")
 Rel(ass, ctx, "adds successes / failures")
 
 Rel_R(conf, ass, "controls")
