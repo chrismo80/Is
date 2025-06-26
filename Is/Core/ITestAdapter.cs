@@ -6,10 +6,13 @@ namespace Is.Core;
 /// </summary>
 public interface ITestAdapter
 {
+	/// <summary>Reports a successful test result to the configured test adapter.</summary>
 	void ReportSuccess();
 
+	/// <summary>Reports a failed test result to the configured test adapter.</summary>
 	void ReportFailure(NotException ex);
 
+	/// <summary>Reports multiple test failures to the configured test adapter.</summary>
 	void ReportFailures(string message, List<NotException> messages);
 }
 

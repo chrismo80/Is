@@ -102,6 +102,9 @@ Mark custom assertion methods with this attribute to enable proper code line det
 Mark custom assertions class with this attribute to enable proper code line detection.
 #### <u>ITestAdapter</u>
 Represents an interface for handling test result reporting. Can be set via Configuration.TestAdapter
+- __ReportSuccess()__: _Reports a successful test result to the configured test adapter._
+- __ReportFailure()__: _Reports a failed test result to the configured test adapter._
+- __ReportFailures()__: _Reports multiple test failures to the configured test adapter._
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __SaveJson()__: _Serializes an object `obj` to a JSON file to `filename`_
