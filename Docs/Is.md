@@ -3,7 +3,7 @@ Lines of code: 696
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
-- __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results, including reporting successes, failures, and multiple failures. By default, this is set to `DefaultTestAdapter`._
+- __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results, including throwing exceptions. Default is throwing `NotException`._
 - __`ThrowOnFailure`__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
 - __`Logger`__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __`AppendCodeLine`__: _Makes code line info in `NotException` optional._

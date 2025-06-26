@@ -18,7 +18,7 @@ public class Configuration
 
 	/// <summary>
 	/// Specifies the adapter responsible for handling assertion results,
-	/// including reporting successes, failures, and multiple failures.
+	/// including throwing exceptions. Default is throwing <see cref="NotException"/>.
 	/// </summary>
 	public ITestAdapter TestAdapter { get; set; } = new TestAdapter();
 
