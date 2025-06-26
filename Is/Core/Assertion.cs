@@ -21,17 +21,17 @@ internal static class Assertion
 	{
 		StackFrame? frame = null;
 
-		if(Configuration.AppendCodeLine)
+		if(Configuration.Default.AppendCodeLine)
 			frame = new StackTrace(true).FindFrame();
 
 		var ex = new NotException(message, frame, actual, expected);
 
-		if (Configuration.ThrowOnFailure && !AssertionContext.IsActive)
+		if (Configuration.Default.ThrowOnFailure && !AssertionContext.IsActive)
 			throw ex;
 
 		AssertionContext.Current?.AddFailure(ex);
 
-		Configuration.Logger?.Invoke(ex.Message);
+		Configuration.Default.Logger?.Invoke(ex.Message);
 
 		return default;
 	}

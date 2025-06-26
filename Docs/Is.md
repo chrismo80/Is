@@ -1,5 +1,5 @@
 # Public API
-Lines of code: 656
+Lines of code: 658
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
@@ -80,10 +80,11 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 ## Is.Core
 #### <u>AssertionContext</u>
 Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred.
-- __Failed__: _Gets the number of remaining assertion failures in the context._
-- __Passed__: _Gets the number of passed assertions in the context._
-- __Total__: _Gets the total number of assertions in the context._
-- __Ratio__: _Gets the ratio of passed assertions._
+- __Failed__: _The number of remaining assertion failures in the context._
+- __Passed__: _The number of passed assertions in the context._
+- __Total__: _The total number of assertions in the context._
+- __Ratio__: _The ratio of passed assertions._
+- __Current__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
 - __Begin()__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
 - __Dispose()__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
 - __NextFailure()__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._

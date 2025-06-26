@@ -22,7 +22,7 @@ internal static class ReflectionParser
 
 	private static Dictionary<string, object?> Parse(this object? sut, HashSet<object> visited, Dictionary<string, object?> result, string path = "", int depth = 0)
 	{
-		if (depth > Configuration.MaxRecursionDepth)
+		if (depth > Configuration.Default.MaxRecursionDepth)
 			return result.AddItem(path, $"path too deep (length limit {depth} exceeded)");
 
 		return sut switch
@@ -44,10 +44,10 @@ internal static class ReflectionParser
 		if (IsSimple(Nullable.GetUnderlyingType(type) ?? type))
 			return result.AddItem(path, me);
 
-		foreach (var prop in type.GetProperties(Configuration.ParsingFlags).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead))
+		foreach (var prop in type.GetProperties(Configuration.Default.ParsingFlags).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead))
 			prop.GetValue(me).Parse(visited, result, path.Deeper(prop.Name), depth + 1);
 
-		foreach (var field in type.GetFields(Configuration.ParsingFlags).Where(f => !f.Name.StartsWith('<')))
+		foreach (var field in type.GetFields(Configuration.Default.ParsingFlags).Where(f => !f.Name.StartsWith('<')))
 			field.GetValue(me).Parse(visited, result, path.Deeper(field.Name), depth + 1);
 
 		return result;

@@ -23,7 +23,7 @@ public static class Comparisons
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsApproximately<T>(this T actual, T expected) where T : IFloatingPoint<T> =>
-		actual.IsApproximately(expected, T.CreateChecked(Configuration.FloatingPointComparisonPrecision));
+		actual.IsApproximately(expected, T.CreateChecked(Configuration.Default.FloatingPointComparisonPrecision));
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> numeric value is positive (greater than zero).
