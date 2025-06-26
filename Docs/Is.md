@@ -21,6 +21,7 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __`Line`__: _The line number in the source file where the exception occurred._
 - __`Code`__: _The specific line of source code of the assertion failure._
 ## Is.Assertions
+All assertions are implemented as extension methods.
 #### <u>Booleans</u>
 - __`IsTrue(actual)`__: _Asserts that a boolean value is `true`._
 - __`IsFalse(actual)`__: _Asserts that a boolean value is `false`._
