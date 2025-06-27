@@ -727,11 +727,17 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
 	public void TestAdapter()
 	{
 		Configuration.Active.TestAdapter.Is<TestAdapter>();
 		Configuration.Active.TestAdapter = new NUnitTestAdapter();
 		Configuration.Active.TestAdapter.Is<NUnitTestAdapter>();
+
+		3.Is(3.0);
+		5.0.IsApproximately(6.0);
+
+		AssertionContext.Current?.TakeFailures(2);
 	}
 
 	[Test]

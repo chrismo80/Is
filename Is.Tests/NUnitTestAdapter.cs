@@ -1,4 +1,5 @@
 using Is.Core;
+using Is.Tools;
 
 namespace Is.Tests;
 
@@ -11,7 +12,7 @@ public class NUnitTestAdapter : ITestAdapter
 
 	public void ReportFailures(string message, List<NotException> failures)
 	{
-		var messages = string.Join("\n", failures.Select(f => f.Message));
+		var messages = string.Join("", failures.Select(f => f.Message.RemoveLineBreaks()));
 
 		throw new AssertionException($"{message}\n{messages}");
 	}

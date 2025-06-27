@@ -44,6 +44,9 @@ internal static class MessageExtensions
 	internal static string Format(this object? value) =>
 		value.FormatValue() + value.FormatType();
 
+	internal static string RemoveLineBreaks(this string text) =>
+		text.Replace("\n\n\t", " ").Replace("\n\n", " ");
+
 	private static string FormatType(this object? value) =>
 		value is null or Type ? "" : $" ({value.GetType().Name})";
 
