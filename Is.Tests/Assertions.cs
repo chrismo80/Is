@@ -661,6 +661,8 @@ public class Assertions
 
 		"hello".Is<string>(); // ✅
 		"hello".Is<int>(); // ❌
+
+		AssertionContext.Current?.TakeFailures(10);
 	}
 
 	[Test]
