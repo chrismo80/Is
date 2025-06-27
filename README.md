@@ -319,7 +319,7 @@ public class NUnitTestAdapter : ITestAdapter
 }
 ```
 
-
+You could even implement your own `ITestAdapter`, that simply exports the `NotException`s to json for further analysis tools.
 
 
 

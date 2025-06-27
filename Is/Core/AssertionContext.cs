@@ -17,10 +17,10 @@ namespace Is.Core;
 /// false.IsTrue();
 /// 4.Is(5);
 ///
-/// context.FailureCount.Is(2);
+/// context.Failed.Is(2);
 /// context.NextFailure().Message.IsContaining("false.IsTrue()");
 ///
-/// context.FailureCount.Is(1);
+/// context.Failed.Is(1);
 /// context.NextFailure().Message.IsContaining("4.Is(5)");
 /// </code>
 ///
