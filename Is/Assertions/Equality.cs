@@ -25,7 +25,7 @@ public static class Equality
 	/// (array unwrapping, approximately for floating points)
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool Is(this object actual, params object[]? expected) =>
+	public static bool Is(this object? actual, params object?[]? expected) =>
 		actual.ShouldBe(expected?.Unwrap());
 
 	/// <summary>
@@ -77,7 +77,7 @@ public static class Equality
 	public static bool IsMatching(this object actual, object other, Func<string, bool>? ignorePaths = null) =>
 		actual.Parse().IsEquivalentTo(other.Parse(), ignorePaths);
 
-	private static bool ShouldBe(this object actual, object[]? expected) =>
+	private static bool ShouldBe(this object? actual, object?[]? expected) =>
 		expected?.Length switch
 		{
 			null => actual.IsEqualTo(null),
@@ -93,7 +93,7 @@ public static class Equality
 		return array;
 	}
 
-	private static bool Are(this object[] values, object[] expected)
+	private static bool Are(this object?[] values, object?[] expected)
 	{
 		if (values.Length == expected.Length)
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
@@ -124,9 +124,9 @@ public static class Equality
 			_ => false
 		};
 
-	private static bool IsEnumerable(this object value) =>
+	private static bool IsEnumerable(this object? value) =>
 		value is IEnumerable and not string;
 
-	private static object[] ToArray(this object value) =>
+	private static object[] ToArray(this object? value) =>
 		Enumerable.ToArray(value.Is<IEnumerable>().Cast<object>());
 }
