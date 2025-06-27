@@ -9,8 +9,6 @@ Global configurations that control assertion behaviour
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __`MaxRecursionDepth`__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __`ParsingFlags`__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
-#### <u>NotException</u>
-- __`Failure`__: _The failure that caused the assertion to fail._
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
@@ -89,6 +87,16 @@ Offers a fluent API to assert conditions and create return values and error mess
 - __`That(condition)`__: _Evaluates a boolean condition._
 - __`Yields<TResult>(result)`__: _Projects a result from the original value if the initial predicate condition was true._
 - __`Unless(actual, message, other)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
+#### <u>Failure</u>
+Represents a failure encountered during an assrtion or test execution. Contains detailed information about the failure, including message, actual and expected values, assertion details, and location in source code.
+- __`Message`__: _The failure message._
+- __`Actual`__: _The actual value that caused the assertion to fail._
+- __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
+- __`Assertion`__: _The name of the assertion that failed._
+- __`Method`__: _The name of the method that called the assertion, or null if unavailable._
+- __`File`__: _The name of the file in which the exception occurred, if available._
+- __`Line`__: _The line number in the source file where the exception occurred._
+- __`Code`__: _The specific line of source code of the assertion failure._
 #### <u>IsAssertionAttribute</u>
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
@@ -98,15 +106,10 @@ Represents an interface for handling test result reporting. Serves as a hook for
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
-#### <u>Failure</u>
-- __`Message`__: _The failure message._
-- __`Actual`__: _The actual value that caused the assertion to fail._
-- __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
-- __`Assertion`__: _The name of the assertion that failed._
-- __`Method`__: _The name of the method that called the assertion, or null if unavailable._
-- __`File`__: _The name of the file in which the exception occurred, if available._
-- __`Line`__: _The line number in the source file where the exception occurred._
-- __`Code`__: _The specific line of source code of the assertion failure._
+#### <u>DefaultTestAdapter</u>
+Provides a default implementation of the ITestAdapter interface. Throws exceptions for test failures, specifically NotException for single failures and AggregateException for multiple failures.
+#### <u>SilentTestAdapter</u>
+A test adapter implementation that suppresses specific output for test assertions. Provides minimal reporting behaviour by silencing failure messages. Serves as a silent alternative to more verbose test adapters.
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_

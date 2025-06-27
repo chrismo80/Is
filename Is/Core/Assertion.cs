@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using Is.Tools;
 
@@ -23,10 +22,10 @@ internal static class Assertion
 	{
 		var failure = new Failure(message, actual, expected);
 
-		if (!AssertionContext.IsActive)
+		if (AssertionContext.IsActive)
+			AssertionContext.Current?.AddFailure(failure);
+		else
 			Configuration.Active.TestAdapter.ReportFailure(failure);
-
-		AssertionContext.Current?.AddFailure(failure);
 
 		return default;
 	}

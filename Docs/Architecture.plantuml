@@ -8,7 +8,6 @@ System_Ext(ca, "Custom assertions", "user can add own assertions")
 System_Ext(cta, "Custom TestAdapter", "user can plug in custom test adapter to throw framework exception types")
 
 System_Boundary(Is, "Is") {
-    Component(ex, "NotException", "Custom exception", "holds infos like actual / expected values and source code location")
     Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
 
     System_Boundary(Assertions, "Assertions") {
@@ -20,20 +19,21 @@ System_Boundary(Is, "Is") {
         Component(check, "Check", "That / (Yields) / Unless", "fluent API to simplify condition check and error message creation")
         Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
         Component(ita, "ITestAdapter", "Report Failure(s)", "reports success and failure(s) to throw exceptions")
+        Component(fail, "Failure", "Reported object", "holds infos like actual / expected values and source code location")
         }
     }
 }
 
-Rel(ass, ita, "reports failure to")
-Rel(ctx, ex, "collects")
-Rel(ita, ex, "throws")
+Rel(ass, ita, "sends failure to")
+Rel(ctx, fail, "collects")
+Rel(ita, fail, "reports")
 Rel_R(cta, ita, "implements")
 
 Rel_U(ext, check, "uses")
 Rel(ext, ass, "pass / fail")
 Rel_L(ca, check, "uses")
 
-Rel_L(ctx, ita, "reports failures to")
+Rel_L(ctx, ita, "sends failures to")
 
 Rel(check, ass, "pass / fail")
 Rel(ass, ctx, "adds successes / failures")
