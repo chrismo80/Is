@@ -354,12 +354,14 @@ Example with `IsAssertion` attribute
 public static class MyCustomAssertions
 {
     [IsAssertion] // Or mark individual methods
-    public static bool IsEmail(this string value) =>
-        .That(Regex.Match(value, "^(.*)\@(.*)\.(.*)$").Success).Unless(value, "is no email");
+    public static bool IsEmail(this string value) => Check
+        .That(Regex.Match(value, "^(.*)\@(.*)\.(.*)$").Success)
+        .Unless(value, "is no email");
 
     [IsAssertion]
-    public static bool IsDigitsOnly(this string value) =>
-        Check.That(value.All(char.IsDigit)).Unless(value, "contains non-digit characters");
+    public static bool IsDigitsOnly(this string value) => Check
+        .That(value.All(char.IsDigit))
+        .Unless(value, "contains non-digit characters");
 }
 ```
 
