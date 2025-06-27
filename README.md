@@ -23,10 +23,11 @@
   - [Strings](#strings)
   - [Types](#types)
 - [Soft Assertions](#soft-assertions)
-  - [Example with `using` statement](#example-with-using-statement)
-  - [Example with NUnit Attribute](#example-with-nunit-attribute)
+  - [Globally with `Configuration`](#assertioncontext-with-using-statement)
+  - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
+  - [`AssertionContext` with NUnit Attribute](#assertioncontext-with-nunit-attribute)
 - [Test Framework Integration](#test-framework-integration)
-  - [NUnit Example](#nunit-example)
+  - [`ITestAdapter` with NUnit Example](#itestadapter-with-nunit-example)
 - [Custom Assertions](#custom-assertions)
 
 
@@ -183,9 +184,29 @@ If any assertion failures remain unhandled (i.e., not manually dequeued using `N
 
 
 
+### Globally with `Configuration`
+
+In the `Configuration` you can disable throwing exceptions or reporting to test adapters entirely with `ThrowOnFailure`. Instead the failures are logged to the configured `Logger` delegate.
+
+If disabled, assertions will instead return `false` on failure and log the exception message using the configured logger.
+
+```csharp
+Configuration.Logger = Console.WriteLine;
+
+Configuration.ThrowOnFailure = false;
+
+3.Is(4); // ❌
+
+Configuration.ThrowOnFailure = true;
+```
+The default logger delagate is `System.Diagnostics.Debug.WriteLine`.
 
 
-### Example with `using` statement
+
+
+
+
+### AssertionContext with `using` statement
 
 ```csharp
 using Is.Core;
@@ -216,7 +237,7 @@ catch (AggregateException ex)
 
 The `AssertionContext` uses `AsyncLocal` for full async test compatibility, ensuring that only one context is active per async flow at a time.
 
-### Example with NUnit Attribute
+### AssertionContext with NUnit Attribute
 
 For test frameworks like NUnit, you can integrate `AssertionContext` using a custom attribute to automatically manage the context lifetime for test methods or classes.
 
@@ -276,7 +297,7 @@ By default, `Is` uses a basic `TestAdapter` that throws `Is.Core.NotException` d
 
 You can configure your custom test adapter via `Configuration.TestAdapter`.
 
-### NUnit Example
+### ITestAdapter with NUnit Example
 
 
 ```csharp
