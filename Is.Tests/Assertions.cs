@@ -91,6 +91,10 @@ public class Assertions
 		action.IsThrowing<NotException>();
 
 		"hello".IsNot<int>();
+
+		var ex = new ArgumentException("hello", new InvalidCastException("world"));
+
+		ex.IsHavingInner<InvalidCastException>();
 	}
 
 	[Test]
@@ -671,7 +675,7 @@ public class Assertions
 
 		"hello world".IsContaining("hell"); // ✅
 		"hello world".IsStartingWith("hell"); // ✅
-		
+
 		"hello".Is<string>(); // ✅
 		"hello".Is<int>(); // ❌
 

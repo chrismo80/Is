@@ -1,5 +1,5 @@
 # Public API
-Lines of code < 700
+Lines of code < 800
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
@@ -80,6 +80,7 @@ All assertions are implemented as extension methods.
 #### <u>Types</u>
 - __`Is<T>(actual)`__: _Asserts that the actual object is of type `T`._
 - __`IsNot<T>(actual)`__: _Asserts that the actual object is not of type `T`._
+- __`IsHavingInner<T>(ex)`__: _Asserts that the given exception has an inner exception of type `T`._
 ## Is.Core
 #### <u>AssertionContext</u>
 Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred.
