@@ -199,7 +199,7 @@ Configuration.ThrowOnFailure = false;
 
 Configuration.ThrowOnFailure = true;
 ```
-The default logger delagate is `System.Diagnostics.Debug.WriteLine`.
+The default logger delegate is `System.Diagnostics.Debug.WriteLine`.
 
 
 
@@ -230,8 +230,8 @@ try
 }
 catch (AggregateException ex)
 {
-    ex.InnerExceptions[0].Is<Is.NotException>();
-    ex.InnerExceptions[1].Is<Is.NotException>();
+    ex.InnerExceptions[0].Is<NotException>(); // ✅
+    ex.InnerExceptions[1].Is<NotException>(); // ✅
 }
 ```
 
@@ -279,7 +279,7 @@ public void ContextTest_WithAttribute()
     4.Is(5);        // ❌
 
     // Verify expected count and dequeue failures
-    AssertionContext.Current?.TakeFailures(2).All(ex => ex.Is<Is.NotException>());
+    AssertionContext.Current?.TakeFailures(2).All(ex => ex.Is<Is.NotException>()); // ✅
 }
 ```
 
