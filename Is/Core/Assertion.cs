@@ -23,12 +23,10 @@ internal static class Assertion
 	{
 		var failure = new Failure(message, actual, expected);
 
-		if (Configuration.Active.ThrowOnFailure && !AssertionContext.IsActive)
+		if (!AssertionContext.IsActive)
 			Configuration.Active.TestAdapter.ReportFailure(failure);
 
 		AssertionContext.Current?.AddFailure(failure);
-
-		Configuration.Active.Logger(failure.Message);
 
 		return default;
 	}

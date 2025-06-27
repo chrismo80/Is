@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Collections.Concurrent;
-using Is.Core;
 using Is.Tools;
 
-namespace Is;
+namespace Is.Core;
 
 [DebuggerStepThrough]
 public class Failure
@@ -64,6 +63,8 @@ public class Failure
 		Actual = actual;
 		Expected = expected;
 	}
+
+	public override string ToString() => Message;
 
 	private static (StackFrame? code, StackFrame? assertion) FindFrames()
 	{

@@ -605,22 +605,6 @@ public class Assertions
 	}
 
 	[Test]
-	[NonParallelizable]
-	public void Configuration_DoNotThrow_JustLog()
-	{
-		Configuration.Active.Logger = Console.WriteLine;
-
-		Configuration.Active.ThrowOnFailure = false;
-
-		Configuration.Default.SaveJson("default.json");
-		Configuration.Active.SaveJson("active.json");
-
-		3.Is(4); // ❌
-
-		Configuration.Active.ThrowOnFailure = true;
-	}
-
-	[Test]
 	[AssertionContext]
 	public void Examples()
 	{
@@ -747,7 +731,7 @@ public class Assertions
 	[AssertionContext]
 	public void TestAdapter()
 	{
-		Configuration.Active.TestAdapter.Is<TestAdapter>();
+		Configuration.Active.TestAdapter.Is<DefaultTestAdapter>();
 		Configuration.Active.TestAdapter = new NUnitTestAdapter();
 		Configuration.Active.TestAdapter.Is<NUnitTestAdapter>();
 
@@ -755,6 +739,12 @@ public class Assertions
 		5.0.IsApproximately(6.0);
 
 		AssertionContext.Current?.TakeFailures(2);
+
+		Configuration.Active.TestAdapter = new SilentTestAdapter();
+		Configuration.Active.TestAdapter.Is<SilentTestAdapter>();
+
+		3.Is(3.0);
+		5.0.IsApproximately(6.0);
 	}
 
 	[Test]

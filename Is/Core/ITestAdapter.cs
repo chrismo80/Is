@@ -1,3 +1,5 @@
+using Is.Tools;
+
 namespace Is.Core;
 
 /// <summary>
@@ -17,7 +19,7 @@ public interface ITestAdapter
 	void ReportFailures(string message, List<Failure> failures);
 }
 
-public class TestAdapter : ITestAdapter
+public class DefaultTestAdapter : ITestAdapter
 {
 	public void ReportSuccess() { }
 
@@ -26,4 +28,18 @@ public class TestAdapter : ITestAdapter
 
 	public void ReportFailures(string message, List<Failure> failures) =>
 		throw new AggregateException(message, failures.Select(f => new NotException(f)));
+}
+
+public class SilentTestAdapter : ITestAdapter
+{
+	public void ReportSuccess() { }
+
+	public void ReportFailure(Failure failure) =>
+		Console.WriteLine(failure.Message.RemoveLineBreaks());
+
+	public void ReportFailures(string message, List<Failure> failures)
+	{
+		foreach (var failure in failures)
+			ReportFailure(failure);
+	}
 }
