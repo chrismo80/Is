@@ -2,6 +2,8 @@
 
 !include <C4/C4_Component>
 
+!theme materia
+
 System_Ext(ca, "Custom assertions", "user can add own assertions")
 System_Ext(cta, "Custom TestAdapter", "user can plug in custom test adapter to throw framework exception types")
 

@@ -306,7 +306,7 @@ public void ContextTest_WithAttribute()
 
 By default, `Is` uses a basic `TestAdapter` that throws `Is.Core.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
 
-You can configure your custom test adapter via `Configuration.TestAdapter`.
+You can hook your custom test adapter via `Configuration.TestAdapter`.
 
 ### ITestAdapter with NUnit Example
 
