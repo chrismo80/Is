@@ -126,6 +126,9 @@ Enumerable.Range(1, 3).IsEquivalentTo(Enumerable.Range(1, 3).Reverse()); // ✅
 5.IsInRange(2, 5); // ✅
 5.IsGreaterThan(5); // ❌
 5.IsAtLeast(5); // ✅
+
+TimeSpan.Parse("1:23").IsApproximately(TimeSpan.Parse("1:24"), TimeSpan.FromMinutes(1)); // ✅
+TimeSpan.Parse("1:23").IsApproximately(TimeSpan.Parse("1:25"), TimeSpan.FromMinutes(1)); // ❌
 ```
 
 ### Delegates
@@ -136,6 +139,11 @@ action.IsThrowing<DivideByZeroException>(); // ✅
 
 Action action = () => 5.IsGreaterThan(6);
 action.IsNotThrowing<Is.NotException>(); // ❌
+
+byte[] buffer = [];
+Action action = () => buffer = new byte[1024 * 1024 * 10]; // 10 MB
+action.IsAllocatingAtMost(10_300); // ✅
+action.IsAllocatingAtMost(10_200); // ❌
 ```
 
 ### Equality
@@ -145,7 +153,9 @@ action.IsNotThrowing<Is.NotException>(); // ❌
 2.999999f.Is(3f); // ✅
 783.0123.Is(783.0124); // ✅
 
-Enumerable.Range(1, 3).Is(1, 2, 3); // ✅
+Enumerable.Range(1, 4).Is(1, 2, 3, 4); // ✅
+Enumerable.Range(1, 4).Where(x => x % 2 == 0).Is(2, 4); // ✅
+Enumerable.Range(1, 4).Where(x => x % 3 == 0).Is(3); // ✅
 ```
 
 ### Null
@@ -163,6 +173,7 @@ groups[1].Value.Is("world"); // ❌
 groups[2].Value.Is("world"); // ✅
 
 "hello world".IsContaining("hell"); // ✅
+"hello world".IsStartingWith("hell"); // ✅
 ```
 
 ### Types

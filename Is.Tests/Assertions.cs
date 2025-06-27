@@ -155,6 +155,8 @@ public class Assertions
 	[Test]
 	public void Is_List()
 	{
+		((int?[])[1, 2, null, 4]).Is(1, 2, null, 4);
+
 		List<int?> list = [1, 2, null, 4];
 
 		list.Is(1, 2, null, 4);
@@ -634,6 +636,9 @@ public class Assertions
 		5.IsGreaterThan(5); // ❌
 		5.IsAtLeast(5); // ✅
 
+		TimeSpan.Parse("1:23").IsApproximately(TimeSpan.Parse("1:24"), TimeSpan.FromMinutes(1)); // ✅
+		TimeSpan.Parse("1:23").IsApproximately(TimeSpan.Parse("1:25"), TimeSpan.FromMinutes(1)); // ❌
+
 		static int DivideByZero(int value) => value / 0;
 		Action action1 = () => _ = DivideByZero(1);
 		action1.IsThrowing<DivideByZeroException>(); // ✅
@@ -641,12 +646,19 @@ public class Assertions
 		Action action = () => 5.IsGreaterThan(6);
 		action.IsNotThrowing<Is.NotException>(); // ❌
 
+		byte[] buffer = [];
+		Action action3 = () => buffer = new byte[1024 * 1024 * 10]; // 10 MB
+		action3.IsAllocatingAtMost(10_300); // ✅
+		action3.IsAllocatingAtMost(10_200); // ❌
+
 		(0.1 + 0.2).IsExactly(0.3); // ❌
 		(0.1 + 0.2).Is(0.3); // ✅ (automatically checks Approximately)
 		2.999999f.Is(3f); // ✅
 		783.0123.Is(783.0124); // ✅
 
-		Enumerable.Range(1, 3).Is(1, 2, 3); // ✅
+		Enumerable.Range(1, 4).Is(1, 2, 3, 4); // ✅
+		Enumerable.Range(1, 4).Where(x => x % 2 == 0).Is(2, 4); // ✅
+		Enumerable.Range(1, 4).Where(x => x % 3 == 0).Is(3); // ✅
 
 		List<int>? list = null;
 		list.IsNull(); // ✅
@@ -658,11 +670,12 @@ public class Assertions
 		groups[2].Value.Is("world"); // ✅
 
 		"hello world".IsContaining("hell"); // ✅
-
+		"hello world".IsStartingWith("hell"); // ✅
+		
 		"hello".Is<string>(); // ✅
 		"hello".Is<int>(); // ❌
 
-		AssertionContext.Current?.TakeFailures(10);
+		AssertionContext.Current?.TakeFailures(12);
 	}
 
 	[Test]
