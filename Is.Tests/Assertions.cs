@@ -703,7 +703,7 @@ public class Assertions
 		false.IsTrue(); // ❌
 		4.Is(5);        // ❌
 
-		context.Total.Is(3); // counts as passed assertion
+		context.Total.Is(3); // counts as passed an assertion
 		context.Passed.Is(2);
 		context.Failed.Is(2);
 		context.Ratio.IsGreaterThan(0.66);
@@ -723,10 +723,10 @@ public class Assertions
 		6.Is(6);        // ✅
 
 		AssertionContext.Current?.NextFailure();
-		var ex = AssertionContext.Current?.NextFailure();
+		var failure = AssertionContext.Current?.NextFailure();
 
-		ex.Actual.Is(4);
-		ex.Expected.Is(5);
+		failure.Actual.Is(4);
+		failure.Expected.Is(5);
 	}
 
 	[Test]

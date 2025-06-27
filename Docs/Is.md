@@ -11,8 +11,8 @@ Global configurations that control assertion behaviour
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __`MaxRecursionDepth`__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __`ParsingFlags`__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
-#### <u>NotException</u>
-This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
+#### <u>Failure</u>
+- __`Message`__: _The failure message._
 - __`Actual`__: _The actual value that caused the assertion to fail._
 - __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
 - __`Assertion`__: _The name of the assertion that failed._
@@ -20,6 +20,8 @@ This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled
 - __`File`__: _The name of the file in which the exception occurred, if available._
 - __`Line`__: _The line number in the source file where the exception occurred._
 - __`Code`__: _The specific line of source code of the assertion failure._
+#### <u>NotException</u>
+- __`Failure`__: _The failure that caused the assertion to fail._
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
@@ -90,9 +92,9 @@ Represents a scoped context that captures all assertion failures (as `NotExcepti
 - __`Ratio`__: _The ratio of passed assertions._
 - __`Current`__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
 - __`Begin(method)`__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
-- __`Dispose()`__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
-- __`NextFailure()`__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
-- __`TakeFailures(count)`__: _Dequeues as many `NotException`s specified in `count` from the queue._
+- __`Dispose()`__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `Failure`s._
+- __`NextFailure()`__: _Dequeues an `Failure` from the queue to not be thrown at the end of the context._
+- __`TakeFailures(count)`__: _Dequeues as many `Failure`s specified in `count` from the queue._
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
 - __`That(condition)`__: _Evaluates a boolean condition._
@@ -105,7 +107,7 @@ Mark custom assertions class with this attribute to enable proper code line dete
 #### <u>ITestAdapter</u>
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Can be set via Configuration.TestAdapter.
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
-- __`ReportFailure(ex)`__: _Reports a failed test result to the configured test adapter._
+- __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
 ## Is.Tools
 #### <u>JsonFileHelper</u>

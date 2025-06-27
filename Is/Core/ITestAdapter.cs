@@ -11,19 +11,19 @@ public interface ITestAdapter
 	void ReportSuccess();
 
 	/// <summary>Reports a failed test result to the configured test adapter.</summary>
-	void ReportFailure(NotException ex);
+	void ReportFailure(Failure failure);
 
 	/// <summary>Reports multiple test failures to the configured test adapter.</summary>
-	void ReportFailures(string message, List<NotException> failures);
+	void ReportFailures(string message, List<Failure> failures);
 }
 
 public class TestAdapter : ITestAdapter
 {
 	public void ReportSuccess() { }
 
-	public void ReportFailure(NotException ex) =>
-		throw ex;
+	public void ReportFailure(Failure failure) =>
+		throw new NotException(failure);
 
-	public void ReportFailures(string message, List<NotException> failures) =>
-		throw new AggregateException(message, failures);
+	public void ReportFailures(string message, List<Failure> failures) =>
+		throw new AggregateException(message, failures.Select(f => new NotException(f)));
 }

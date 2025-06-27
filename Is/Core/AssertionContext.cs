@@ -31,7 +31,7 @@ public sealed class AssertionContext : IDisposable
 {
 	private static readonly AsyncLocal<AssertionContext?> current = new();
 
-	private readonly Queue<NotException> _failures = [];
+	private readonly Queue<Failure> _failures = [];
 
 	private string? _caller;
 
@@ -76,7 +76,7 @@ public sealed class AssertionContext : IDisposable
 
 	/// <summary>
 	/// Ends the assertion context and validates all collected failures.
-	/// If any assertions failed, throws an <see cref="AggregateException"/> containing all collected <see cref="Is.NotException"/>s.
+	/// If any assertions failed, throws an <see cref="AggregateException"/> containing all collected <see cref="Failure"/>s.
 	/// </summary>
 	public void Dispose()
 	{
@@ -95,20 +95,20 @@ public sealed class AssertionContext : IDisposable
 	}
 
 	/// <summary>
-	/// Dequeues an <see cref="Is.NotException"/> from the queue to not be thrown at the end of the context.
+	/// Dequeues an <see cref="Failure"/> from the queue to not be thrown at the end of the context.
 	/// </summary>
-	public NotException NextFailure() => _failures.Dequeue();
+	public Failure NextFailure() => _failures.Dequeue();
 
 	/// <summary>
-	/// Dequeues as many <see cref="Is.NotException"/>s specified in <paramref name="count"/> from the queue.
+	/// Dequeues as many <see cref="Failure"/>s specified in <paramref name="count"/> from the queue.
 	/// </summary>
-	public List<NotException> TakeFailures(int count) => Take(count).ToList();
+	public List<Failure> TakeFailures(int count) => Take(count).ToList();
 
-	internal void AddFailure(NotException ex) => _failures.Enqueue(ex);
+	internal void AddFailure(Failure failure) => _failures.Enqueue(failure);
 
 	internal void AddSuccess() => Passed++;
 
-	private IEnumerable<NotException> Take(int count)
+	private IEnumerable<Failure> Take(int count)
 	{
 		while(count-- > 0)
 			yield return _failures.Dequeue();
