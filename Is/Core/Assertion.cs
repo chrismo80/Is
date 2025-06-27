@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using Is.Tools;
 
@@ -21,16 +20,12 @@ internal static class Assertion
 
 	internal static T? Failed<T>(string message, object? actual = null, object? expected = null)
 	{
-		var (assertionFrame, codeFrame) = FindFrames();
+		var failure = new Failure(message, actual, expected);
 
-		var ex = new NotException(message, assertionFrame?.GetMethod()?.Name, codeFrame, actual, expected);
-
-		if (Configuration.Active.ThrowOnFailure && !AssertionContext.IsActive)
-			Configuration.Active.TestAdapter.ReportFailure(ex);
-
-		AssertionContext.Current?.AddFailure(ex);
-
-		Configuration.Active.Logger(ex.Message);
+		if (AssertionContext.IsActive)
+			AssertionContext.Current?.AddFailure(failure);
+		else
+			Configuration.Active.TestAdapter.ReportFailure(failure);
 
 		return default;
 	}
@@ -43,17 +38,6 @@ internal static class Assertion
 
 	internal static T? Failed<T>(string message, List<string> text, int max = 100) =>
 		Failed<T>($"{message}\n\n\t{string.Join("\n\t", text.Truncate(max))}\n");
-
-	private static (StackFrame? CodeFrame, StackFrame? Assertion) FindFrames()
-	{
-		if (!Configuration.Active.AppendCodeLine)
-			return (null, null);
-
-		var frames = new StackTrace(true).GetFrames();
-		var codeFrame = frames.FindFrame();
-
-		return (frames[Array.IndexOf(frames, codeFrame) - 1], codeFrame);
-	}
 }
 
 [DebuggerStepThrough]

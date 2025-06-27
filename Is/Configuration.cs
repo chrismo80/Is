@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
+﻿using Is.Core;
+using System.Diagnostics;
 using System.Reflection;
-using System.Text.Json.Serialization;
-using Is.Core;
-using Is.Tools;
 
 namespace Is;
 
@@ -20,20 +18,7 @@ public class Configuration
 	/// Specifies the adapter responsible for handling assertion results,
 	/// including throwing exceptions. Default is throwing <see cref="NotException"/>.
 	/// </summary>
-	public ITestAdapter TestAdapter { get; set; } = new TestAdapter();
-
-	/// <summary>
-	/// Controls whether assertion failures should throw a <see cref="NotException"/>.
-	/// Default is true. If not set, assertions will return false on failure and log the message.
-	/// </summary>
-	public bool ThrowOnFailure { get; set; } = true;
-
-	/// <summary>
-	/// A logger delegate to use when <see cref="ThrowOnFailure"/> is false.
-	/// Default case, messages will be written to <c>Debug.WriteLine</c>.
-	/// </summary>
-	[JsonIgnore]
-	public Action<string?> Logger { get; set; } = msg => Debug.WriteLine(msg);
+	public ITestAdapter TestAdapter { get; set; } = new DefaultTestAdapter();
 
 	/// <summary>
 	/// Makes code line info in <see cref="NotException"/> optional.
@@ -67,8 +52,6 @@ public class Configuration
 	internal Configuration Clone() => new()
 	{
 		TestAdapter = TestAdapter,
-		ThrowOnFailure = ThrowOnFailure,
-		Logger = msg => Logger(msg),
 		AppendCodeLine = AppendCodeLine,
 		ColorizeMessages = ColorizeMessages,
 		FloatingPointComparisonPrecision = FloatingPointComparisonPrecision,

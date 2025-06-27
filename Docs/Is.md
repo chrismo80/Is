@@ -4,22 +4,11 @@ Lines of code < 800
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
 - __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results, including throwing exceptions. Default is throwing `NotException`._
-- __`ThrowOnFailure`__: _Controls whether assertion failures should throw a `NotException`. Default is true. If not set, assertions will return false on failure and log the message._
-- __`Logger`__: _A logger delegate to use when `ThrowOnFailure` is false. Default case, messages will be written to `Debug.WriteLine`._
 - __`AppendCodeLine`__: _Makes code line info in `NotException` optional._
 - __`ColorizeMessages`__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __`MaxRecursionDepth`__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __`ParsingFlags`__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
-#### <u>NotException</u>
-This exception is thrown when an assertion fails and `ThrowOnFailure` is enabled. When used inside an `AssertionContext`, instances of `NotException` are collected instead of being thrown immediately.
-- __`Actual`__: _The actual value that caused the assertion to fail._
-- __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
-- __`Assertion`__: _The name of the assertion that failed._
-- __`Method`__: _The name of the method that called the assertion, or null if unavailable._
-- __`File`__: _The name of the file in which the exception occurred, if available._
-- __`Line`__: _The line number in the source file where the exception occurred._
-- __`Code`__: _The specific line of source code of the assertion failure._
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
@@ -90,14 +79,24 @@ Represents a scoped context that captures all assertion failures (as `NotExcepti
 - __`Ratio`__: _The ratio of passed assertions._
 - __`Current`__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
 - __`Begin(method)`__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
-- __`Dispose()`__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `NotException`s._
-- __`NextFailure()`__: _Dequeues an `NotException` from the queue to not be thrown at the end of the context._
-- __`TakeFailures(count)`__: _Dequeues as many `NotException`s specified in `count` from the queue._
+- __`Dispose()`__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `Failure`s._
+- __`NextFailure()`__: _Dequeues an `Failure` from the queue to not be thrown at the end of the context._
+- __`TakeFailures(count)`__: _Dequeues as many `Failure`s specified in `count` from the queue._
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
 - __`That(condition)`__: _Evaluates a boolean condition._
 - __`Yields<TResult>(result)`__: _Projects a result from the original value if the initial predicate condition was true._
 - __`Unless(actual, message, other)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
+#### <u>Failure</u>
+Represents a failure encountered during an assrtion or test execution. Contains detailed information about the failure, including message, actual and expected values, assertion details, and location in source code.
+- __`Message`__: _The failure message._
+- __`Actual`__: _The actual value that caused the assertion to fail._
+- __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
+- __`Assertion`__: _The name of the assertion that failed._
+- __`Method`__: _The name of the method that called the assertion, or null if unavailable._
+- __`File`__: _The name of the file in which the exception occurred, if available._
+- __`Line`__: _The line number in the source file where the exception occurred._
+- __`Code`__: _The specific line of source code of the assertion failure._
 #### <u>IsAssertionAttribute</u>
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
@@ -105,8 +104,12 @@ Mark custom assertions class with this attribute to enable proper code line dete
 #### <u>ITestAdapter</u>
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Can be set via Configuration.TestAdapter.
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
-- __`ReportFailure(ex)`__: _Reports a failed test result to the configured test adapter._
+- __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
+#### <u>DefaultTestAdapter</u>
+Provides a default implementation of the ITestAdapter interface. Throws exceptions for test failures, specifically NotException for single failures and AggregateException for multiple failures.
+#### <u>SilentTestAdapter</u>
+A test adapter implementation that suppresses specific output for test assertions. Provides minimal reporting behaviour by silencing failure messages. Serves as a silent alternative to more verbose test adapters.
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_
