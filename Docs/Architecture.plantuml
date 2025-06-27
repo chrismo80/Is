@@ -2,18 +2,11 @@
 
 !include <C4/C4_Component>
 
-' !theme reddress-darkblue
-' !theme plain
-' !theme metal
-' !theme materia
-
-' left to right direction
-
 System_Ext(ca, "Custom assertions", "user can add own assertions")
 System_Ext(cta, "Custom TestAdapter", "user can plug in custom test adapter to throw framework exception types")
 
 System_Boundary(Is, "Is") {
-    Component(ex, "NotException", "Custom exception", "holds infos like acutal / expected values and source code location")
+    Component(ex, "NotException", "Custom exception", "holds infos like actual / expected values and source code location")
     Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
 
     System_Boundary(Assertions, "Assertions") {
@@ -46,6 +39,5 @@ Rel(ass, ctx, "adds successes / failures")
 Rel_U(conf, ext, "configures")
 Rel_R(conf, ass, "configures")
 Rel(conf, ita, "configures")
-
 
 @enduml

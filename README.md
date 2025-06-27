@@ -6,106 +6,83 @@
 `Is` is a lightweight assertion library for .NET that focuses on _readable_, _minimal_, and _fail-fast_ test expectations — no assertion clutter, no dependencies, no test framework lock-in.
 
 
+
+# Table of content
+
+- [Why use Is?](#why-use-is)
+- [Get It on NuGet](#get-it-on-nuget)
+- [Architecture](#architecture)
+- [Error Messages](#error-messages)
+- [Built-in Assertions](#built-in-assertions)
+  - [Booleans](#booleans)
+  - [Collections](#collections)
+  - [Comparisons](#comparisons)
+  - [Delegates](#delegates)
+  - [Equality](#equality)
+  - [Null](#null)
+  - [Strings](#strings)
+  - [Types](#types)
+- [Soft Assertions](#soft-assertions)
+  - [Example with `using` statement](#example-with-using-statement)
+  - [Example with NUnit Attribute](#example-with-nunit-attribute)
+- [Test Framework Integration](#test-framework-integration)
+  - [NUnit Example](#nunit-example)
+- [Custom Assertions](#custom-assertions)
+
+
+
+
+
 ## Why use Is?
 
 - Concise: One word. One assertion.
-- Opinionated: Less is more. Only core assertions relevant for real-world use cases, just fast failure and clarity.
+- Opinionated: Prioritizes clarity over fluent DSL chaining.
 - Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
 - Self-contained: No dependencies, no configuration, just drop it in.
-- Useful for unit tests, guard clauses or other validation checks
+- Versatile: Useful for unit tests, guard clauses or other validation checks within your applications.
 
-## 📦 Get It on NuGet
+
+All public methods in `Is` are:
+
+- Extension methods: Designed to be used fluently (e.g., `value.Is(...)`).
+
+- Consistently named: Every method starts with `Is`, making them easy to discover with IntelliSense.
+
+
+
+
+
+## Get It on NuGet
 
 [![NuGet](https://img.shields.io/nuget/v/AssertWithIs.svg)](https://www.nuget.org/packages/AssertWithIs/)
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue)](https://www.nuget.org/packages/AssertWithIs/)
 
 The package is published on NuGet under the name [`AssertWithIs`](https://www.nuget.org/packages/AssertWithIs/) because shorter IDs like `Is` or `Is.Assertions` were already taken or reserved.  
-Despite the package name, the library itself uses the concise `Is` namespace and generates a single `Is.dll`, so your code stays clean and expressive:
+Despite the package name, the library itself uses the concise `Is` namespace and generates a single `Is.dll`.
 
 
-## Available Methods
-
-All public methods in `Is` are:
-
-- **Extension methods**, designed to be used fluently (`value.Is(...)`)
-- **Named consistently**: Every method starts with `Is`, making them easy to discover with IntelliSense
-- **Minimal and deliberate**: Only a small, opinionated set of assertions is exposed
-
-> Because all methods start with `Is`, you can type `.` and just filter by `Is` in IntelliSense. Fast and frictionless.
-
-The full public API and its extension methods can be [found here](https://github.com/chrismo80/Is/blob/main/Docs/Is.md)
 
 
-## Usage Examples
-
-### Basic value checks
-```csharp
-42.Is(42);       // ✅ passes
-42.Is(41);       // ❌ throws Is.NotException: 42 (System.Int32) is not 41 (System.Int32)
-42.Is(42.0);     // ❌ throws Is.NotException: 42 (System.Int32) is not 42 (System.Double)
-
-"test".Is("test");               // ✅ passes
-```
-
-### Collection checks
-```csharp
-new[] { 1, 2, 3 }.Is(1, 2, 3);   // ✅ passes (enumerable values check)
-
-new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 2 == 0).Is(2, 4, 6);     // ✅ passes
-new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 3 == 0).Is(3, 6);        // ✅ passes
-new List<int> { 1, 2, 3, 4, 5, 6 }.Where(i => i % 4 == 0).Is(4);           // ✅ passes
-
-new List<int> { 1, 2, 3, 4 }.IsContaining(1, 2);    // ✅ passes
-new List<int> { 1, 2 }.IsIn(1, 2, 3, 4);            // ✅ passes
-```
-
-### Type checks
-```csharp
-"hello".Is<string>();     // ✅ passes
-"hello".Is<int>();        // ❌ throws Is.NotException: "hello" (System.String) is no System.Int32
-```
-
-### Numeric comparisons
-```csharp
-2.999999f.Is(3f)         // ✅ passes
-783.0123.Is(783.0124)    // ✅ passes
-
-5.IsSmallerThan(6);      // ✅ passes
-6.IsGreaterThan(5.0);    // ✅ passes
-5.IsGreaterThan(6);      // ❌ throws Is.NotException: 5 (System.Int32) is not greater than 6 (System.Int32)
-2.IsBetween(1, 3);       // ✅ passes
-
-(0.1 + 0.2).Is(0.3);                // ✅ passes
-(0.1 + 0.2).IsExactly(0.3);         // ❌ fails
-(0.1 + 0.2).IsApproximately(0.3);   // ✅ passes
-
-(1.0 / 3.0).Is(0.333333);     // ✅ passes
-(1.0 / 3.0).Is(0.33333);      // ❌ throws Is.NotException: 0,33333 (System.Double) is not close to 0,3333333333333333 (System.Double)
-```
-
-### Exception assertions
-```csharp
-static int DivideByZero(int value) => value / 0;
-Action action = () => _ = DivideByZero(1);
-action.IsThrowing<DivideByZeroException>();  // ✅ passes
-
-Action action = () => 5.IsGreaterThan(6);
-action.IsThrowing<Is.NotException>("is not greater than");    // ✅ passes
-```
-
-### String checks
-```csharp
-var groups = "hello world".IsMatching("(.*) (.*)");  // ✅ passes
-groups[1].Value.Is("hello");  // ✅ passes
-groups[2].Value.Is("world");  // ✅ passes
-
-"hello world".IsContaining("hello");    // ✅ passes
-```
 
 
-## Error messages
 
-Exception messages
+
+## Architecture
+
+`Is` is built with a clear, modular architecture designed for extensibility and maintainability. Its core components manage assertions, failure reporting, and provide hooks for custom behaviors.
+
+![plot](Docs/Architecture.png)
+
+
+
+
+
+
+## Error Messages
+
+`Is` provides clear and concise error messages designed to help you quickly identify issues. Failure messages highlight important parts, display the source of the error (line number and code), and typically follow the pattern: `actual (Type) is not expected (Type)`.
+
+Messages
 - uses colors to highlight important parts
 - displays the source of the error (line number and code)
 
@@ -113,184 +90,248 @@ Exception messages
 
 ![plot](Docs/ErrorMessage-Complex.png)
 
-## Design Philosophy: Clarity over Chaining
 
-- No ```.Should()```, no fluent bloat
-- Focus on positive assertions
-- Failure messages like: ```42 (System.Int32) is not 41 (System.Int32)```
-- Designed to make tests read like intentions, not machinery
 
-Avoid Chaining
 
-While fluent-style chaining such as:
 
+
+
+## Built-in Assertions
+
+Is offers a focused set of built-in assertion categories.
+
+The full public API and its extension methods can be [found here](https://github.com/chrismo80/Is/blob/main/Docs/Is.md)
+
+### Booleans
 ```csharp
-value
-    .IsPositive()
-    .IsGreaterThan(6)
-    .IsBetween(6, 12);
-```
-can look elegant, it introduces trade-offs that conflict with design goals:
-
-- Supporting both chaining and boolean-returning methods would mean duplicating logic, making the library harder to maintain.
-- Useful patterns like .All(x => x.IsPositive()) require boolean-returning extensions — chaining breaks this.
-- Chaining implies stateful assertion objects; this library favors stateless, minimal assertions for predictability and simplicity.
-- Recommended calling assertions directly and explicitly:
-
-```csharp
-value.IsPositive();
-value.IsGreaterThan(6);
-value.IsBetween(6, 12);
-```
-Enables collection assertion like:
-```csharp
-list.All(item => item.IsPositive());
+((1.0 / 3.0) == 0.33333).IsTrue(); // ❌
+((1.0 / 3.0) == 0.33333).IsFalse(); // ✅
 ```
 
-
-
-
-
-## AssertionContext
-
-Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The AssertionContext provides exactly that capability.
-
+### Collections
 ```csharp
-using var context = AssertionContext.Begin();
-
-false.IsTrue();       // ❌ fails
-4.Is(5);              // ❌ fails
-
-context.FailureCount.Is(2);
-
-// You can inspect failures manually:
-context.NextFailure().Message.IsContaining("false.IsTrue()");
-context.NextFailure().Message.IsContaining("4.Is(5)");
+Enumerable.Range(1, 3).IsUnique(); // ✅
+Enumerable.Range(1, 3).IsEmpty(); // ❌
+Enumerable.Range(1, 3).IsIn(0, 1, 2, 3, 4); // ✅
+Enumerable.Range(1, 3).IsEquivalentTo(Enumerable.Range(1, 3).Reverse()); // ✅
 ```
 
-If any assertion failures remain unhandled when the context is disposed, an AggregateException is thrown containing all captured NotExceptions:
+### Comparisons
+```csharp
+(1.0 / 3.0).IsApproximately(0.33333); // ❌
+(1.0 / 3.0).IsApproximately(0.33333, 0.01); // ✅
+
+5.IsBetween(2, 5); // ❌
+5.IsInRange(2, 5); // ✅
+5.IsGreaterThan(5); // ❌
+5.IsAtLeast(5); // ✅
+```
+
+### Delegates
+```csharp
+static int DivideByZero(int value) => value / 0;
+Action action = () => _ = DivideByZero(1);
+action.IsThrowing<DivideByZeroException>(); // ✅
+
+Action action = () => 5.IsGreaterThan(6);
+action.IsNotThrowing<Is.NotException>(); // ❌
+```
+
+### Equality
+```csharp
+(0.1 + 0.2).IsExactly(0.3); // ❌
+(0.1 + 0.2).Is(0.3); // ✅ (automatically checks Approximately)
+2.999999f.Is(3f); // ✅
+783.0123.Is(783.0124); // ✅
+
+Enumerable.Range(1, 3).Is(1, 2, 3); // ✅
+```
+
+### Null
+```csharp
+List<int>? list = null;
+list.IsNull(); // ✅
+list.IsDefault(); // ✅
+list.IsNotNull(); // ❌
+```
+
+### Strings
+```csharp
+var groups = "hello world".IsMatching("(.*) (.*)"); // ✅
+groups[1].Value.Is("world"); // ❌
+groups[2].Value.Is("world"); // ✅
+
+"hello world".IsContaining("hell"); // ✅
+```
+
+### Types
+```csharp
+"hello".Is<string>(); // ✅
+"hello".Is<int>(); // ❌
+```
+
+
+
+
+## Soft Assertions
+
+Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The `AssertionContext` provides exactly that capability, enabling "soft assertions" or "assert all" behavior.
+
+The `AssertionContext` acts as a temporary scope. When active, any assertion failures are collected internally as `NotException` instances instead of immediately throwing. This allows your test code to continue executing and gather all relevant failures.
+
+If any assertion failures remain unhandled (i.e., not manually dequeued using `NextFailure()` or `TakeFailures()`) when the `AssertionContext` is disposed, a single `AggregateException` is thrown containing all captured `NotException` instances.
+
+
+
+
+
+### Example with `using` statement
 
 ```csharp
+using Is.Core;
+
+using var ctx = AssertionContext.Begin();
+
+"abc".IsContaining("xyz"); // ❌
+42.Is(0);                  // ❌
+true.IsTrue();             // ✅
+
+ctx.NextFailure().Message.IsContaining("abc"); // Dequeues first failure
+ctx.NextFailure().Message.IsContaining("42");  // Dequeues second failure
+// At this point, the context is empty. No AggregateException will be thrown on Dispose.
+
 try
 {
     using var context = AssertionContext.Begin();
 
-    "abc".IsContaining("xyz"); // ❌
-    42.Is(0);                  // ❌
+    "foo".Is("bar");     // ❌
+    10.IsSmallerThan(5); // ❌
 }
 catch (AggregateException ex)
 {
-    ex.InnerExceptions.Count.Is(2);
+    ex.InnerExceptions[0].Is<Is.NotException>();
+    ex.InnerExceptions[1].Is<Is.NotException>();
 }
 ```
 
+The `AssertionContext` uses `AsyncLocal` for full async test compatibility, ensuring that only one context is active per async flow at a time.
 
-Scoped Context:
+### Example with NUnit Attribute
 
-Only one context can be active per async-flow at a time. It uses AsyncLocal<T> for full async test compatibility.
-
-## TestFramework Integration
-
-Works with NUnit, xUnit, or MSTest, either manually via using or with custom test base classes or attributes.
-To keep the package dependency-free, such implementations are out of scope for the library, but here is an example for such an Attribute for NUnit.
+For test frameworks like NUnit, you can integrate `AssertionContext` using a custom attribute to automatically manage the context lifetime for test methods or classes.
 
 ```csharp
+using Is.Core;
+using System.Reflection;
+
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class AssertionContextAttribute
-    : NUnitAttribute, NUnit.Framework.Interfaces.IWrapTestMethod
+public sealed class AssertionContextAttribute : NUnitAttribute, IWrapTestMethod
 {
-    public NUnit.Framework.Internal.Commands.TestCommand Wrap(NUnit.Framework.Internal.Commands.TestCommand command) =>
+    public TestCommand Wrap(TestCommand command) =>
         new AssertionContextCommand(command);
 
-    private sealed class AssertionContextCommand(NUnit.Framework.Internal.Commands.TestCommand innerCommand)
-        : NUnit.Framework.Internal.Commands.DelegatingTestCommand(innerCommand)
+    private sealed class AssertionContextCommand(TestCommand innerCommand)
+        : DelegatingTestCommand(innerCommand)
     {
-        public override NUnit.Framework.Internal.TestResult Execute(NUnit.Framework.Internal.TestExecutionContext testContext)
+        public override TestResult Execute(TestExecutionContext testContext)
         {
             var caller = testContext.CurrentTest.Method?.MethodInfo.Name ?? testContext.CurrentTest.Name;
 
+            // Begin the assertion context for the test method
             using var assertionContext = AssertionContext.Begin(caller);
 
+            // Execute the actual test method logic
             return innerCommand.Execute(testContext);
         }
     }
 }
 ```
 
-This allows you to verify NotException like this:
+You can then apply this attribute to your NUnit tests:
 
 ```csharp
 [Test]
-[AssertionContext]
+[AssertionContext] // This attribute manages the AssertionContext for the test
 public void ContextTest_WithAttribute()
 {
-    false.IsTrue();
-    4.Is(5);
+    false.IsTrue(); // ❌
+    4.Is(5);        // ❌
 
-    AssertionContext.Current?.NextFailure();
-    AssertionContext.Current?.NextFailure();
+    // Verify expected count and dequeue failures
+    AssertionContext.Current?.TakeFailures(2).All(ex => ex.Is<Is.NotException>());
 }
 ```
 
-The ITestAdapter interface acts as a hook for custom test frameworks to handle and throw their own exception types.
 
-You can configure your custom test adapter via Configuration.TestAdapter.
 
-For NUnit an implementation could looks like this.
+
+
+
+
+## Test Framework Integration
+
+`Is` is designed to be framework-agnostic. It achieves this through the `ITestAdapter` interface. This acts as a hook, allowing you to plug in custom logic to handle and throw exceptions that are specific to your chosen test framework (e.g., NUnit.Framework.AssertionException, Xunit.Sdk.XunitException).
+
+By default, `Is` uses a basic `TestAdapter` that throws `Is.Core.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
+
+You can configure your custom test adapter via `Configuration.TestAdapter`.
+
+### NUnit Example
+
 
 ```csharp
+// To use this adapter, configure it at the start of your tests (e.g., in a TestFixtureSetUp or static constructor):
+// Configuration.TestAdapter = new NUnitTestAdapter();
 public class NUnitTestAdapter : ITestAdapter
-{ 
-    public void ReportSuccess() { }
-    
-    public void ReportFailure(NotException ex) => 
+{
+    public void ReportSuccess()
+    { }
+
+    public void ReportFailure(NotException ex) =>
         throw new AssertionException(ex.Message, ex);
-    
-    public void ReportFailures(string message, List<NotException> failures) 
-    { 
+
+    public void ReportFailures(string message, List<NotException> failures)
+    {
         var messages = string.Join("\n", failures.Select(f => f.Message));
-        
-        throw new AssertionException($"{message}\n{messages}"); 
+        throw new AssertionException($"{message}\n{messages}");
     }
 }
 ```
 
 
 
+
+
+
+
+
 ## Custom Assertions
-Create a static class with an extension method that performs the desired assertion.
-Use the built-in **`Check`** fluent API to insert the assertion into the features of the library, such as AssertionContext and message formatting.
+
+`Is` makes it straightforward to create your own custom assertions that integrate seamlessly with the library's features, including `AssertionContext` support and consistent error message formatting.
+
+You'll primarily use the `Check` fluent API within your custom extension methods.
+
+Syntax: `Check.That(condition).Unless(message)`.
+
+To ensure proper source code line detection in error messages, mark your custom assertion methods or their containing class with either `[IsAssertion]` or `[IsAssertions]` attributes from the `Is.Core` namespace.
+
+Example with `IsAssertion` attribute
 
 ```csharp
-[IsAssertions]
-public static class CustomAssertions
+[IsAssertions] // Mark all methods via class attribute
+public static class MyCustomAssertions
 {
-    [IsAssertion] 
-    public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) => 
-        Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
+    [IsAssertion] // Or mark individual methods
+    public static bool IsEmail(this string value) =>
+        .That(Regex.Match(value, "^(.*)\@(.*)\.(.*)$").Success).Unless(value, "is no email");
+
+    [IsAssertion]
+    public static bool IsDigitsOnly(this string value) =>
+        Check.That(value.All(char.IsDigit)).Unless(value, "contains non-digit characters");
 }
 ```
-Mark the methods or classes with one of the IsAssertion attributes to enable proper user code line detection.
 
-Usage Example
-
-```csharp
-(9 - 5).IsCustomAssertion(); // ✅
-(5 - 9).IsCustomAssertion(); // ❌
-```
-Results in the following error message:
-
-```
-Is.NotException :
-
-    -4 (Int32)
-
-    in '5 - 9' is not positive
-
-in Is.Tests.Assertions in line 639: (5 - 9).IsCustomAssertion();
-```
-
-Your custom assertions integrate seamlessly with the existing fluent style of the library.
+Your custom assertions integrate seamlessly with the existing fluent style of the library, providing consistent error reporting and soft assertion capabilities.
 
 
 
@@ -298,19 +339,17 @@ Your custom assertions integrate seamlessly with the existing fluent style of th
 
 
 
-## Key Advantages of Is
 
-- Ultra-Concise Syntax with Natural Readability
-- Minimal Dependencies / Fast Startup
-    - Lean and dependency-free — ideal for CI pipelines or constrained environments.
-- Focused on Behavior, Not Chaining
-    - Prioritizes clarity over fluent DSL chaining.
-- Extensible and Easy to Maintain
-    - Simple to audit, fork, and adapt for your team or test infrastructure.
 
-## Architecture
 
-![plot](Docs/Architecture.png)
+
+
+
+
+
+
+
+
 
 
 
