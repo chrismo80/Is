@@ -23,7 +23,6 @@
   - [Strings](#strings)
   - [Types](#types)
 - [Soft Assertions](#soft-assertions)
-  - [Globally with `Configuration`](#assertioncontext-with-using-statement)
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with NUnit Attribute](#assertioncontext-with-nunit-attribute)
 - [Test Framework Integration](#test-framework-integration)
