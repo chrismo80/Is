@@ -25,6 +25,7 @@
 - [Soft Assertions](#soft-assertions)
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with NUnit Attribute](#assertioncontext-with-nunit-attribute)
+  - [`ITestAdapter` with Logger](#itestadapter-with-logger)
 - [Test Framework Integration](#test-framework-integration)
   - [`ITestAdapter` with NUnit](#itestadapter-with-nunit-example)
 - [Custom Assertions](#custom-assertions)
