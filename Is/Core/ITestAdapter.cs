@@ -34,7 +34,9 @@ public class DefaultTestAdapter : ITestAdapter;
 /// </summary>
 public class ConsoleTestAdapter : ITestAdapter
 {
-	public void ReportFailure(Failure failure) => Console.WriteLine(failure.Message.RemoveLineBreaks());
+	public void ReportFailure(Failure failure) =>
+		Console.WriteLine(failure.Message.RemoveLineBreaks());
 
-	public void ReportFailures(string message, List<Failure> failures) => failures.ForEach(ReportFailure);
+	public void ReportFailures(string message, List<Failure> failures) =>
+		failures.ForEach(ReportFailure);
 }

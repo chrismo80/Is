@@ -24,7 +24,7 @@ public class Configuration
 	public ITestAdapter TestAdapter { get; set; } = new DefaultTestAdapter();
 
 	/// <summary>
-	/// Makes code line info in <see cref="NotException"/> optional.
+	/// Makes code line info in <see cref="Failure"/> optional.
 	/// </summary>
 	public bool AppendCodeLine { get; set; } = true;
 
