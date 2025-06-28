@@ -299,7 +299,7 @@ You could even implement your own `ITestAdapter`, that simply exports the `Failu
 
 `Is` is designed to be framework-agnostic. It achieves this through the `ITestAdapter` interface. This acts as a hook, allowing you to plug in custom logic to handle and throw exceptions that are specific to your chosen test framework (e.g., NUnit.Framework.AssertionException, Xunit.Sdk.XunitException).
 
-By default, `Is` uses a `DefaultTestAdapter` that throws `Is.Core.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
+By default, `Is` uses a `DefaultTestAdapter` that throws `Is.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
 
 You can hook your custom test adapter via `Configuration.TestAdapter`.
 If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
