@@ -304,7 +304,7 @@ public class NUnitTestAdapter : ITestAdapter
         var messages = string.Join("\n\n", failures.Select(f => f.Message));
 
         throw new AssertionException($"{message}\n{messages}");
-	}
+    }
 }
 ```
 
