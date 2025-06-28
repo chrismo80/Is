@@ -10,7 +10,7 @@ Component_Ext(cta, "Custom TestAdapter", "ITestAdapter", "user can plug in custo
 Container_Boundary(Is, "Is") {
 
     Container_Boundary(Assertions, "Assertions") {
-        Component(ext, "Extension methods", "Public assertions", "actual implementation of different assertions")
+        Component(ext, "Built-in assertions", "extension methods", "actual implementation of different base assertions")
         }
 
     Container_Boundary(Core, "Core") {
