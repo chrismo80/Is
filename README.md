@@ -189,31 +189,9 @@ groups[2].Value.Is("world"); // ✅
 
 Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The `AssertionContext` provides exactly that capability, enabling "soft assertions" or "assert all" behavior.
 
-The `AssertionContext` acts as a temporary scope. When active, any assertion failures are collected internally as `NotException` instances instead of immediately throwing. This allows your test code to continue executing and gather all relevant failures.
+The `AssertionContext` acts as a temporary scope. When active, any assertion failures are collected internally instead of immediately reporting. This allows your test code to continue executing and gather all relevant failures.
 
-If any assertion failures remain unhandled (i.e., not manually dequeued using `NextFailure()` or `TakeFailures()`) when the `AssertionContext` is disposed, a single `AggregateException` is thrown containing all captured `NotException` instances.
-
-
-
-### Globally with `Configuration`
-
-In the `Configuration` you can disable throwing exceptions or reporting to test adapters entirely with `ThrowOnFailure`. Instead the failures are logged to the configured `Logger` delegate.
-
-If disabled, assertions will instead return `false` on failure and log the exception message using the configured logger.
-
-```csharp
-Configuration.Logger = Console.WriteLine;
-
-Configuration.ThrowOnFailure = false;
-
-3.Is(4); // ❌
-
-Configuration.ThrowOnFailure = true;
-```
-The default logger delegate is `System.Diagnostics.Debug.WriteLine`.
-
-
-
+If any assertion failures remain unhandled (i.e., not manually dequeued using `NextFailure()` or `TakeFailures()`) when the `AssertionContext` is disposed, they are reported in bulk.
 
 
 
@@ -304,9 +282,10 @@ public void ContextTest_WithAttribute()
 
 `Is` is designed to be framework-agnostic. It achieves this through the `ITestAdapter` interface. This acts as a hook, allowing you to plug in custom logic to handle and throw exceptions that are specific to your chosen test framework (e.g., NUnit.Framework.AssertionException, Xunit.Sdk.XunitException).
 
-By default, `Is` uses a basic `TestAdapter` that throws `Is.Core.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
+By default, `Is` uses a `DefaultTestAdapter` that throws `Is.Core.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
 
 You can hook your custom test adapter via `Configuration.TestAdapter`.
+If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
 
 ### ITestAdapter with NUnit Example
 

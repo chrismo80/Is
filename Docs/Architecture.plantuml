@@ -18,16 +18,16 @@ System_Boundary(Is, "Is") {
         Component(ass, "Assertion", "Passed / Failed", "single entry point for failure behaviour")
         Component(check, "Check", "That / (Yields) / Unless", "fluent API to simplify condition check and error message creation")
         Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
-        Component(ita, "ITestAdapter", "Report Failure(s)", "reports success and failure(s) to throw exceptions")
+        Component(ita, "ITestAdapter", "Handles Failure(s)", "reports success and failure(s) (e.g. as thrown exceptions, log entries, data exports, etc.")
         Component(fail, "Failure", "Reported object", "holds infos like actual / expected values and source code location")
         }
     }
 }
 
 Rel(ass, ita, "sends failure to")
-Rel(ctx, fail, "collects")
-Rel(ita, fail, "reports")
-Rel_R(cta, ita, "implements")
+Rel_R(ass, fail, "creates")
+Rel_U(ctx, fail, "collects")
+Rel_U(cta, ita, "implements")
 
 Rel_U(ext, check, "uses")
 Rel(ext, ass, "pass / fail")
