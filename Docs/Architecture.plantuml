@@ -4,21 +4,21 @@
 
 !theme materia
 
-System_Ext(ca, "Custom assertions", "user can add own assertions")
-System_Ext(cta, "Custom TestAdapter", "user can plug in custom test adapter to throw framework exception types")
+Component_Ext(ca, "Custom assertions", "extension methods", "user can add own assertions")
+Component_Ext(cta, "Custom TestAdapter", "ITestAdapter", "user can plug in custom test adapter to throw framework exception types (or silently create log entries, data exports, etc.)")
 
-System_Boundary(Is, "Is") {
+Container_Boundary(Is, "Is") {
     Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
 
-    System_Boundary(Assertions, "Assertions") {
+    Container_Boundary(Assertions, "Assertions") {
         Component(ext, "Extension methods", "Public assertions", "actual implementation of different assertions")
         }
 
-    System_Boundary(Core, "Core") {
+    Container_Boundary(Core, "Core") {
         Component(ass, "Assertion", "Passed / Failed", "single entry point for failure behaviour")
         Component(check, "Check", "That / (Yields) / Unless", "fluent API to simplify condition check and error message creation")
         Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
-        Component(ita, "ITestAdapter", "Handles Failure(s)", "reports success and failure(s) (e.g. as thrown exceptions, log entries, data exports, etc.")
+        Component(ita, "ITestAdapter", "Handles Failure(s)", "reports success and failure(s)")
         Component(fail, "Failure", "Reported object", "holds infos like actual / expected values and source code location")
         }
     }
