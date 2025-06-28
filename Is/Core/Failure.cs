@@ -14,6 +14,11 @@ namespace Is.Core;
 public class Failure
 {
 	/// <summary>
+	/// The date and time when the failure instance was created.
+	/// </summary>
+	public DateTime Created { get; } = DateTime.Now;
+
+	/// <summary>
 	/// The failure message.
 	/// </summary>
 	public string Message { get; }

@@ -89,6 +89,7 @@ Offers a fluent API to assert conditions and create return values and error mess
 - __`Unless(actual, message, other)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
 #### <u>Failure</u>
 Represents a failure encountered during an assertion or test execution. Contains detailed information about the failure, including message, actual and expected values, assertion details, and location in source code.
+- __`Created`__: _The date and time when the failure instance was created._
 - __`Message`__: _The failure message._
 - __`Actual`__: _The actual value that caused the assertion to fail._
 - __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
