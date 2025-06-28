@@ -296,14 +296,15 @@ public class NUnitTestAdapter : ITestAdapter
 {
     public void ReportSuccess() { }
 
-    public void ReportFailure(NotException ex) =>
-        throw new AssertionException(ex.Message, ex);
+    public void ReportFailure(Failure failure) =>
+        throw new AssertionException(failure.Message);
 
-    public void ReportFailures(string message, List<NotException> failures)
+    public void ReportFailures(string message, List<Failure> failures)
     {
         var messages = string.Join("\n", failures.Select(f => f.Message));
+
         throw new AssertionException($"{message}\n{messages}");
-    }
+	}
 }
 ```
 
