@@ -202,8 +202,8 @@ using Is.Core;
 using var ctx = AssertionContext.Begin();
 
 "abc".IsContaining("xyz"); // ❌
-42.Is(0);                  // ❌
-true.IsTrue();             // ✅
+42.Is(0); // ❌
+true.IsTrue(); // ✅
 
 ctx.NextFailure().Message.IsContaining("abc"); // Dequeues first failure
 ctx.NextFailure().Message.IsContaining("42");  // Dequeues second failure
@@ -213,7 +213,7 @@ try
 {
     using var context = AssertionContext.Begin();
 
-    "foo".Is("bar");     // ❌
+    "foo".Is("bar"); // ❌
     10.IsSmallerThan(5); // ❌
 }
 catch (AggregateException ex)
@@ -264,7 +264,7 @@ You can then apply this attribute to your NUnit tests:
 public void ContextTest_WithAttribute()
 {
     false.IsTrue(); // ❌
-    4.Is(5);        // ❌
+    4.Is(5); // ❌
 
     // Verify expected count and dequeue failures
     AssertionContext.Current?.TakeFailures(2).All(ex => ex.Is<Is.NotException>()); // ✅
