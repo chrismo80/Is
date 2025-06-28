@@ -24,13 +24,4 @@ public static class Types
 	public static bool IsNot<T>(this object actual) => Check
 		.That(actual is not T)
 		.Unless(actual, "is a", typeof(T));
-
-	/// <summary>
-	/// Asserts that the given exception has an inner exception of type <typeparamref name="T" />.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static T IsHavingInner<T>(this Exception ex) where T : Exception => Check
-		.That(ex, _ => ex.InnerException is T)
-		.Yields(_ => (T)ex.InnerException!)
-		.Unless(ex, "is not having in inner exception of", typeof(T));
 }

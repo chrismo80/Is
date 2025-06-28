@@ -94,7 +94,7 @@ public class Assertions
 
 		var ex = new ArgumentException("hello", new InvalidCastException("world"));
 
-		ex.IsHavingInner<InvalidCastException>();
+		ex.InnerException.Is<InvalidCastException>();
 	}
 
 	[Test]
