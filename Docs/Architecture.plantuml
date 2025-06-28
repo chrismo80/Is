@@ -8,38 +8,39 @@ Component_Ext(ca, "Custom assertions", "extension methods", "user can add own as
 Component_Ext(cta, "Custom TestAdapter", "ITestAdapter", "user can plug in custom test adapter to throw framework exception types (or silently create log entries, data exports, etc.)")
 
 Container_Boundary(Is, "Is") {
-    Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
 
     Container_Boundary(Assertions, "Assertions") {
         Component(ext, "Extension methods", "Public assertions", "actual implementation of different assertions")
         }
 
     Container_Boundary(Core, "Core") {
-        Component(ass, "Assertion", "Passed / Failed", "single entry point for failure behaviour")
         Component(check, "Check", "That / (Yields) / Unless", "fluent API to simplify condition check and error message creation")
-        Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
-        Component(ita, "ITestAdapter", "Handles Failure(s)", "reports success and failure(s)")
+        Component(ass, "Assertion", "Passed / Failed", "single entry point for failure behaviour")
         Component(fail, "Failure", "Reported object", "holds infos like actual / expected values and source code location")
+        Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
+        Component(ita, "ITestAdapter", "Handles Failure(s)", "reports success and failure(s) to \n - test frameworks \n - loggers \n - data exports")
         }
-    }
+
+    Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
 }
 
-Rel(ass, ita, "sends failure to")
-Rel_R(ass, fail, "creates")
-Rel_U(ctx, fail, "collects")
-Rel_U(cta, ita, "implements")
 
-Rel_U(ext, check, "uses")
+Rel_L(ass, ita, "sends failure to")
+Rel(ass, fail, "creates")
+
+Rel_R(ext, check, "uses")
 Rel(ext, ass, "pass / fail")
-Rel_L(ca, check, "uses")
 
-Rel_L(ctx, ita, "sends failures to")
+Rel(ctx, ita, "sends failures to")
 
 Rel(check, ass, "pass / fail")
 Rel(ass, ctx, "adds successes / failures")
 
 Rel_U(conf, ext, "configures")
-Rel_R(conf, ass, "configures")
-Rel(conf, ita, "configures")
+Rel_R(conf, fail, "configures")
+
+Rel_L(ca, check, "uses")
+Rel_U(cta, ita, "implements")
+
 
 @enduml

@@ -301,7 +301,7 @@ public class NUnitTestAdapter : ITestAdapter
 
     public void ReportFailures(string message, List<Failure> failures)
     {
-        var messages = string.Join("\n", failures.Select(f => f.Message));
+        var messages = string.Join("\n\n", failures.Select(f => f.Message));
 
         throw new AssertionException($"{message}\n{messages}");
 	}
