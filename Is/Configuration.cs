@@ -15,8 +15,11 @@ public class Configuration
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
 	/// <summary>
-	/// Specifies the adapter responsible for handling assertion results,
-	/// including throwing exceptions. Default is throwing <see cref="NotException"/>.
+	/// Specifies the adapter responsible for handling assertion results.
+	/// The adapter decides whether the failure should result in a thrown exception,
+	/// the type of this exception or if the failure should be silently handled
+	/// via simple logging or data export for further failure analysis
+	/// Default is throwing <see cref="NotException"/>.
 	/// </summary>
 	public ITestAdapter TestAdapter { get; set; } = new DefaultTestAdapter();
 

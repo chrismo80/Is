@@ -316,8 +316,7 @@ You can hook your custom test adapter via `Configuration.TestAdapter`.
 // Configuration.TestAdapter = new NUnitTestAdapter();
 public class NUnitTestAdapter : ITestAdapter
 {
-    public void ReportSuccess()
-    { }
+    public void ReportSuccess() { }
 
     public void ReportFailure(NotException ex) =>
         throw new AssertionException(ex.Message, ex);

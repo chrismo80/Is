@@ -3,8 +3,8 @@ using System.Runtime.CompilerServices;
 namespace Is.Core;
 
 /// <summary>
-/// Represents a scoped context that captures all assertion failures (as <see cref="NotException"/> instances)
-/// within its lifetime and throws a single <see cref="AggregateException"/> upon disposal if any failures occurred.
+/// Represents a scoped context that captures all assertion failures within its lifetime and
+/// reports the collection upon disposal if any failures occurred.
 /// </summary>
 /// <remarks>
 /// Intended for test frameworks like NUnit, xUnit, or MSTest. By using this context, tests can collect multiple
@@ -24,8 +24,7 @@ namespace Is.Core;
 /// context.NextFailure().Message.IsContaining("4.Is(5)");
 /// </code>
 ///
-/// If any failures are not dequeued or handled manually, they will be thrown in an <see cref="AggregateException"/>
-/// when the context is disposed.
+/// If any failures are not dequeued or handled manually, they will be reported when the context is disposed.
 /// </remarks>
 public sealed class AssertionContext : IDisposable
 {
@@ -62,7 +61,7 @@ public sealed class AssertionContext : IDisposable
 
 	/// <summary>
 	/// Starts a new <see cref="AssertionContext"/> on the current thread.
-	/// All assertion failures will be collected and thrown as an <see cref="AggregateException"/> when the context is disposed.
+	/// Current <see cref="Configuration"/> is cloned to enable local configurations per assertion context.
 	/// </summary>
 	public static AssertionContext Begin([CallerMemberName] string? method = null)
 	{
@@ -75,8 +74,7 @@ public sealed class AssertionContext : IDisposable
 	}
 
 	/// <summary>
-	/// Ends the assertion context and validates all collected failures.
-	/// If any assertions failed, throws an <see cref="AggregateException"/> containing all collected <see cref="Failure"/>s.
+	/// Ends the assertion context and reports all collected failures to the <see cref="ITestAdapter"/>
 	/// </summary>
 	public void Dispose()
 	{
@@ -95,7 +93,7 @@ public sealed class AssertionContext : IDisposable
 	}
 
 	/// <summary>
-	/// Dequeues an <see cref="Failure"/> from the queue to not be thrown at the end of the context.
+	/// Dequeues an <see cref="Failure"/> from the queue to not be reported at the end of the context.
 	/// </summary>
 	public Failure NextFailure() => _failures.Dequeue();
 

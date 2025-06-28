@@ -15,7 +15,7 @@ namespace Is.Core;
 public class IsAssertionAttribute : Attribute;
 
 /// <summary>
-/// Mark custom assertions class with this attribute to enable proper code line detection.
+/// Mark a custom assertions class with this attribute to enable proper code line detection.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class IsAssertionsAttribute : Attribute;

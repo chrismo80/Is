@@ -6,7 +6,7 @@ using Is.Tools;
 namespace Is.Core;
 
 /// <summary>
-/// Represents a failure encountered during an assrtion or test execution.
+/// Represents a failure encountered during an assertion or test execution.
 /// Contains detailed information about the failure, including message, actual
 /// and expected values, assertion details, and location in source code.
 /// </summary>

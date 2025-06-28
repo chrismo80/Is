@@ -3,7 +3,7 @@ Lines of code < 800
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
-- __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results, including throwing exceptions. Default is throwing `NotException`._
+- __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results. The adapter decides whether the failure should result in a thrown exception, the type of this exception or if the failure should be silently handled via simple logging or data export for further failure analysis Default is throwing `NotException`._
 - __`AppendCodeLine`__: _Makes code line info in `NotException` optional._
 - __`ColorizeMessages`__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
@@ -72,15 +72,15 @@ All assertions are implemented as extension methods.
 - __`IsHavingInner<T>(ex)`__: _Asserts that the given exception has an inner exception of type `T`._
 ## Is.Core
 #### <u>AssertionContext</u>
-Represents a scoped context that captures all assertion failures (as `NotException` instances) within its lifetime and throws a single `AggregateException` upon disposal if any failures occurred.
+Represents a scoped context that captures all assertion failures within its lifetime and reports the collection upon disposal if any failures occurred.
 - __`Failed`__: _The number of remaining assertion failures in the context._
 - __`Passed`__: _The number of passed assertions in the context._
 - __`Total`__: _The total number of assertions in the context._
 - __`Ratio`__: _The ratio of passed assertions._
 - __`Current`__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
-- __`Begin(method)`__: _Starts a new `AssertionContext` on the current thread. All assertion failures will be collected and thrown as an `AggregateException` when the context is disposed._
-- __`Dispose()`__: _Ends the assertion context and validates all collected failures. If any assertions failed, throws an `AggregateException` containing all collected `Failure`s._
-- __`NextFailure()`__: _Dequeues an `Failure` from the queue to not be thrown at the end of the context._
+- __`Begin(method)`__: _Starts a new `AssertionContext` on the current thread. Current `Configuration` is cloned to enable local configurations per assertion context._
+- __`Dispose()`__: _Ends the assertion context and reports all collected failures to the `ITestAdapter`_
+- __`NextFailure()`__: _Dequeues an `Failure` from the queue to not be reported at the end of the context._
 - __`TakeFailures(count)`__: _Dequeues as many `Failure`s specified in `count` from the queue._
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
@@ -88,7 +88,7 @@ Offers a fluent API to assert conditions and create return values and error mess
 - __`Yields<TResult>(result)`__: _Projects a result from the original value if the initial predicate condition was true._
 - __`Unless(actual, message, other)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
 #### <u>Failure</u>
-Represents a failure encountered during an assrtion or test execution. Contains detailed information about the failure, including message, actual and expected values, assertion details, and location in source code.
+Represents a failure encountered during an assertion or test execution. Contains detailed information about the failure, including message, actual and expected values, assertion details, and location in source code.
 - __`Message`__: _The failure message._
 - __`Actual`__: _The actual value that caused the assertion to fail._
 - __`Expected`__: _The expected value that was compared during the assertion and caused the failure._
@@ -100,16 +100,16 @@ Represents a failure encountered during an assrtion or test execution. Contains 
 #### <u>IsAssertionAttribute</u>
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
-Mark custom assertions class with this attribute to enable proper code line detection.
+Mark a custom assertions class with this attribute to enable proper code line detection.
 #### <u>ITestAdapter</u>
-Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Can be set via Configuration.TestAdapter.
+Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation of that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
 #### <u>DefaultTestAdapter</u>
-Provides a default implementation of the ITestAdapter interface. Throws exceptions for test failures, specifically NotException for single failures and AggregateException for multiple failures.
-#### <u>SilentTestAdapter</u>
-A test adapter implementation that suppresses specific output for test assertions. Provides minimal reporting behaviour by silencing failure messages. Serves as a silent alternative to more verbose test adapters.
+Default TestAdapter using the default implementation of the `ITestAdapter` interface
+#### <u>ConsoleTestAdapter</u>
+`ITestAdapter` that simply logs the failures to the Console, does not throw any exceptions
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_

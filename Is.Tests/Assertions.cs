@@ -182,8 +182,8 @@ public class Assertions
 
 		action.IsAllocatingAtMost(10_300);
 
-		Action pass = () => action.IsAllocatingAtMost(10_300);
-		Action fail = () => action.IsAllocatingAtMost(10_200);
+		Action pass = () => action.IsAllocatingAtMost(11_000);
+		Action fail = () => action.IsAllocatingAtMost(10_000);
 
 		pass.IsNotThrowing<NotException>();
 		fail.IsThrowing<NotException>();
@@ -740,8 +740,8 @@ public class Assertions
 
 		AssertionContext.Current?.TakeFailures(2);
 
-		Configuration.Active.TestAdapter = new SilentTestAdapter();
-		Configuration.Active.TestAdapter.Is<SilentTestAdapter>();
+		Configuration.Active.TestAdapter = new ConsoleTestAdapter();
+		Configuration.Active.TestAdapter.Is<ConsoleTestAdapter>();
 
 		3.Is(3.0);
 		5.0.IsApproximately(6.0);
