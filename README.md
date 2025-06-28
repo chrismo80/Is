@@ -26,7 +26,7 @@
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with NUnit Attribute](#assertioncontext-with-nunit-attribute)
 - [Test Framework Integration](#test-framework-integration)
-  - [`ITestAdapter` with NUnit Example](#itestadapter-with-nunit-example)
+  - [`ITestAdapter` with NUnit](#itestadapter-with-nunit-example)
 - [Custom Assertions](#custom-assertions)
 
 
@@ -271,7 +271,24 @@ public void ContextTest_WithAttribute()
 }
 ```
 
+### ITestAdapter with Logger
 
+If you don't want to throw exceptions at all, you can use the `ITestAdapter` interface to redirect failures to your logging system.
+
+```csharp
+// To use this adapter, configure it at the start of your tests (e.g., in a TestFixtureSetUp or static constructor):
+// Configuration.TestAdapter = new LoggerTestAdapter();
+public class LoggerTestAdapter : ITestAdapter
+{
+    public void ReportFailure(Failure failure) =>
+        Console.WriteLine(failure.Message);
+
+    public void ReportFailures(string message, List<Failure> failures) =>
+        failures.ForEach(ReportFailure);
+}
+```
+
+You could even implement your own `ITestAdapter`, that simply exports the `Failure`s to json for further analysis tools.
 
 
 
@@ -286,7 +303,7 @@ By default, `Is` uses a `DefaultTestAdapter` that throws `Is.Core.NotException` 
 You can hook your custom test adapter via `Configuration.TestAdapter`.
 If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
 
-### ITestAdapter with NUnit Example
+### ITestAdapter with NUnit
 
 
 ```csharp
@@ -308,7 +325,7 @@ public class NUnitTestAdapter : ITestAdapter
 }
 ```
 
-You could even implement your own `ITestAdapter`, that simply exports the `NotException`s to json for further analysis tools.
+Of course, you can throw any exception type of your choice such as `AssertFailedException` for MS Test or `XunitException` for xUnit.
 
 
 
