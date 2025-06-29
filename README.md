@@ -26,6 +26,7 @@
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with Test Framework Attribute](#assertioncontext-with-test-framework-attribute)
   - [`ITestAdapter` with Logger](#itestadapter-with-logger)
+  - [`ITestAdapter` with MarkDown FailureReport](#itestadapter-with-markdown-failurereport)
 - [Test Framework Integration](#test-framework-integration)
   - [`ITestAdapter` example for NUnit](#itestadapter-example-for-nunit)
 - [Custom Assertions](#custom-assertions)
