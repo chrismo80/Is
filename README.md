@@ -274,11 +274,9 @@ public void ContextTest_WithAttribute()
 
 ### ITestAdapter with Logger
 
-If you don't want to throw exceptions at all, you can use the `ITestAdapter` interface to redirect failures to your logging system.
+If you don't want to throw exceptions at all, you can use the `ITestAdapter` interface to redirect failures to your logging system. To use this adapter, configure it at the start of your tests at `Configuration.Active.TestAdapter`.
 
 ```csharp
-// To use this adapter, configure it at the start of your tests (e.g., in a TestFixtureSetUp or static constructor):
-// Configuration.TestAdapter = new LoggerTestAdapter();
 public class LoggerTestAdapter : ITestAdapter
 {
     public void ReportFailure(Failure failure) =>
@@ -289,7 +287,7 @@ public class LoggerTestAdapter : ITestAdapter
 }
 ```
 
-You could even implement your own `ITestAdapter`, that simply exports the `Failure`s to json for further analysis tools.
+You could even implement your own `ITestAdapter`, that simply exports the `Failure`s to json for further analysis tools depending on your use-case.
 
 
 
@@ -306,10 +304,7 @@ If you do not want exception to be thrown at all, you can inject an `ITestAdapte
 
 ### ITestAdapter with NUnit
 
-
 ```csharp
-// To use this adapter, configure it at the start of your tests (e.g., in a TestFixtureSetUp or static constructor):
-// Configuration.TestAdapter = new NUnitTestAdapter();
 public class NUnitTestAdapter : ITestAdapter
 {
     public void ReportSuccess() { }
