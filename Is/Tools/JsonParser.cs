@@ -8,13 +8,11 @@ namespace Is.Tools;
 [DebuggerStepThrough]
 internal static class JsonParser
 {
-	private static readonly JsonSerializerOptions DefaultOptions = new() { WriteIndented = true };
-
-	internal static string ToJson<T>(this T me, JsonSerializerOptions? options = null) =>
-		JsonSerializer.Serialize(me, options ?? DefaultOptions);
+	internal static string ToJson<T>(this T me) =>
+		JsonSerializer.Serialize(me, Configuration.Active.JsonSerializerOptions);
 
 	internal static T? FromJson<T>(this string json) =>
-		JsonSerializer.Deserialize<T>(json, DefaultOptions);
+		JsonSerializer.Deserialize<T>(json, Configuration.Active.JsonSerializerOptions);
 
 	internal static Dictionary<string, object?> ParseJson(this string json) =>
 		JsonNode.Parse(json).Parse([]);

@@ -1,6 +1,8 @@
 ﻿using Is.Core;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Is;
 
@@ -52,6 +54,16 @@ public class Configuration
 	/// </summary>
 	public BindingFlags ParsingFlags { get; set; } = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
+	/// <summary>
+	/// These options dictate aspects such as how JSON properties are written, ignored, or formatted,
+	/// enabling fine-grained control over the serialization processes.
+	/// </summary>
+	public JsonSerializerOptions JsonSerializerOptions { get; set; } = new()
+	{
+		WriteIndented = true,
+		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+	};
+
 	internal Configuration Clone() => new()
 	{
 		TestAdapter = TestAdapter,
@@ -60,5 +72,6 @@ public class Configuration
 		FloatingPointComparisonPrecision = FloatingPointComparisonPrecision,
 		MaxRecursionDepth = MaxRecursionDepth,
 		ParsingFlags = ParsingFlags,
+		JsonSerializerOptions = JsonSerializerOptions,
 	};
 }

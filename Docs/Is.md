@@ -4,11 +4,12 @@ Lines of code < 800
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
 - __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results. The adapter decides whether the failure should result in a thrown exception, the type of this exception or if the failure should be silently handled via simple logging or data export for further failure analysis Default is throwing `NotException`._
-- __`AppendCodeLine`__: _Makes code line info in `NotException` optional._
+- __`AppendCodeLine`__: _Makes code line info in `Failure` optional._
 - __`ColorizeMessages`__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __`MaxRecursionDepth`__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __`ParsingFlags`__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
+- __`JsonSerializerOptions`__: _These options dictate aspects such as how JSON properties are written, ignored, or formatted, enabling fine-grained control over the serialization processes._
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
@@ -102,7 +103,7 @@ Mark custom assertion methods with this attribute to enable proper code line det
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
 #### <u>ITestAdapter</u>
-Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation of that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
+Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._

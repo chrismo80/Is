@@ -25,7 +25,7 @@ internal static class MessageExtensions
 		CreateMessage(actual.Format().Color(WRONG), equality);
 
 	internal static IEnumerable<string> Truncate(this List<string> text, int max) =>
-		text.Count > max ? text.Take(max).Append("...") : text;
+		text.Count() > max ? text.Take(max).Append("...") : text;
 
 	// https://ss64.com/nt/syntax-ansi.html
 	internal static string? Color<T>(this T text, int color) =>

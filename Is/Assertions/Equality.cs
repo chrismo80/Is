@@ -66,7 +66,7 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsMatchingSnapshot(this object actual, object expected, Func<string, bool>? ignorePaths = null, JsonSerializerOptions? options = null) =>
-		actual.ToJson(options).ParseJson().IsEquivalentTo(expected.ToJson(options).ParseJson(), ignorePaths);
+		actual.ToJson().ParseJson().IsEquivalentTo(expected.ToJson().ParseJson(), ignorePaths);
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the <paramref name="other" />

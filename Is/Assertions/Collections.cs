@@ -94,11 +94,10 @@ public static class Collections
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsEquivalentTo<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null) where TKey : notnull
 	{
-		var diffs = actual.Diffs(expected, ignoreKeys);
+		var failures = actual.Diffs(expected, ignoreKeys);
 
-		return Check
-			.That(diffs.Count == 0)
-			.Unless("object is not matching", diffs);
+		return failures.Count == 0 ? Assertion.Passed() :
+			Assertion.Failed<bool>(new Failure($"{failures.Count} mismatches", null, null, failures.ToList()));
 	}
 
 	private static (bool Yes, T? Duplicate) HasDuplicate<T>(this IEnumerable<T> items)
@@ -114,7 +113,7 @@ public static class Collections
 		return (false, default);
 	}
 
-	internal static List<string> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
+	internal static List<Failure> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
 		where TKey : notnull
 	{
 		if (ignoreKeys is not null)
@@ -128,16 +127,16 @@ public static class Collections
 		var (missing, unexpected) = actual.Where(kvp => !unexpectedKeys.Contains(kvp.Key))
 			.Diff(expected.Where(kvp => !missingKeys.Contains(kvp.Key)));
 
-		var diffs = missing.Zip(unexpected, (m, u) => $"{u.Key}: {u.Value.Simply("is not", m.Value)}").ToList();
+		var diffs = missing.Zip(unexpected, (m, u) => new Failure($"{u.Key}: {u.Value.Simply("is not", m.Value)}", u.Value, m.Value, null, true)).ToList();
 
 		if (missingKeys.Length == 0 && unexpectedKeys.Length == 0 && diffs.Count == 0)
 			return [];
 
-		var messages = diffs
-			.Concat(missingKeys.Select(k => $"{k.Color(100)}: missing {expected[k].Format()}"))
-			.Concat(unexpectedKeys.Select(k => $"{k.Color(100)}: unexpected"));
+		var failures = diffs
+			.Concat(missingKeys.Select(k => new Failure($"{k.Color(100)}: missing {expected[k].Format()}", null, k, null, true)))
+			.Concat(unexpectedKeys.Select(k => new Failure($"{k.Color(100)}: unexpected", k, null, null, true)));
 
-		return messages.ToList();
+		return failures.ToList();
 	}
 
 	private static IEnumerable<T> Ignore<T>(this IEnumerable<T> items, Func<T, bool>? predicate) where T : notnull =>

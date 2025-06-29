@@ -18,10 +18,8 @@ internal static class Assertion
 		return result;
 	}
 
-	internal static T? Failed<T>(string message, object? actual = null, object? expected = null)
+	internal static T? Failed<T>(Failure failure)
 	{
-		var failure = new Failure(message, actual, expected);
-
 		if (AssertionContext.IsActive)
 			AssertionContext.Current?.AddFailure(failure);
 		else
@@ -31,11 +29,8 @@ internal static class Assertion
 	}
 
 	internal static T? Failed<T>(object? actual, string equality, object? expected) =>
-		Failed<T>(actual.Actually(equality, expected), actual, expected);
+		Failed<T>(new Failure(actual.Actually(equality, expected), actual, expected));
 
 	internal static T? Failed<T>(object? actual, string equality) =>
-		Failed<T>(actual.Actually(equality), actual);
-
-	internal static T? Failed<T>(string message, List<string> text, int max = 100) =>
-		Failed<T>($"{message}\n\n\t{string.Join("\n\t", text.Truncate(max))}\n");
+		Failed<T>(new Failure(actual.Actually(equality), actual));
 }

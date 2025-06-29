@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Is.Tools;
 
 namespace Is.Core;
 
@@ -47,18 +48,12 @@ public readonly struct Failable<TResult>(bool condition, TResult? result)
 	public TResult? Unless(object? actual, string message) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(actual, message),
-	};
-
-	public TResult? Unless(string message, List<string> text) => condition switch
-	{
-		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(message, text),
+		false => Assertion.Failed<TResult>(new Failure(actual.Actually(message), actual)),
 	};
 
 	public TResult? Unless(string message) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(message),
+		false => Assertion.Failed<TResult>(new Failure(message)),
 	};
 }

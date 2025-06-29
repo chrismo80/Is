@@ -58,8 +58,20 @@ public class Failure
 	/// </summary>
 	public string? Code { get; }
 
-	public Failure(string message, object? actual, object? expected)
+	public List<Failure>? Failures { get; }
+
+	public Failure(string message, object? actual = null, object? expected = null, List<Failure>? failures = null, bool subFailure = false)
 	{
+		Message = failures == null ? message : $"{message}\n\n\t{string.Join("\n\t", failures.Select(f => f.Message).ToList().Truncate(30))}\n";
+
+		Actual = actual;
+		Expected = expected;
+
+		Failures = failures?.ToList();
+
+		if (subFailure)
+			return;
+
 		var (codeFrame, assertionFrame) = FindFrames();
 
 		Assertion = assertionFrame?.GetMethod()?.Name;
@@ -69,9 +81,7 @@ public class Failure
 		Line = codeFrame?.GetFileLineNumber();
 		Code = File?.GetLine(Line!.Value);
 
-		Message = message.AppendCodeLine(codeFrame);
-		Actual = actual;
-		Expected = expected;
+		Message = Message.AppendCodeLine(codeFrame);
 	}
 
 	public override string ToString() => Message;
