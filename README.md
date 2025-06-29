@@ -29,6 +29,7 @@
 - [Test Framework Integration](#test-framework-integration)
   - [`ITestAdapter` example for NUnit](#itestadapter-example-for-nunit)
 - [Custom Assertions](#custom-assertions)
+  - [Example with `IsAssertion(s)` attribute](#example-with-isassertions-attribute)
 
 
 
@@ -339,9 +340,9 @@ You'll primarily use the `Check` fluent API within your custom extension methods
 
 Syntax: `Check.That(condition).Unless(message)`.
 
-To ensure proper source code line detection in error messages, mark your custom assertion methods or their containing class with either `[IsAssertion]` or `[IsAssertions]` attributes from the `Is.Core` namespace.
+To ensure proper source code line detection in error messages, mark your custom assertion methods or their containing class with either `[IsAssertion]` <u>or</u> `[IsAssertions]` attributes from the `Is.Core` namespace.
 
-Example with `IsAssertion` attribute
+### Example with `IsAssertion(s)` attribute
 
 ```csharp
 [IsAssertions] // Mark all methods via class attribute
