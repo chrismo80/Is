@@ -77,7 +77,7 @@ public sealed class AssertionContext : IDisposable
 
 		var message = $"{_failures.Count} assertion{s} failed in '{_caller}'";
 
-		testAdapter.ReportFailures(message, _failures.ToList());
+		testAdapter?.ReportFailures(message, _failures.ToList());
 	}
 
 	/// <summary>

@@ -18,7 +18,7 @@ internal static class Assertion
 		if (AssertionContext.IsActive)
 			AssertionContext.Current?.AddFailure(failure);
 		else
-			Configuration.Active.TestAdapter.ReportFailure(failure);
+			Configuration.Active.TestAdapter?.ReportFailure(failure);
 
 		return default;
 	}

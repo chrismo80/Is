@@ -241,15 +241,13 @@ Your custom assertions integrate seamlessly with the existing fluent style of th
 By default, `Is` uses a `DefaultTestAdapter` that throws `Is.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
 
 You can hook your custom test adapter via `Configuration.TestAdapter`.
-If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
+If you do not want exception to be thrown at all, you can set this `ITestAdapter` to null.
 
 ### ITestAdapter example for NUnit
 
 ```csharp
 public class NUnitTestAdapter : ITestAdapter
 {
-    public void ReportSuccess() { }
-
     public void ReportFailure(Failure failure) =>
         throw new AssertionException(failure.Message);
 
@@ -370,6 +368,13 @@ If you don't want to throw exceptions at all, you can use the `ITestAdapter` ins
 ## FailureReport with `IFailureObserver` 
 
 If you prefer failure summaries over exception, `Is` comes with a `MarkDownObserver`, that exports every observed `Failure` by creating one report that includes all failures.
+
+```csharp
+public interface IFailureObserver
+{
+    void OnFailure(Failure failure);
+}
+```
 
 A failure from an object graph comparison for example looks like this.
 

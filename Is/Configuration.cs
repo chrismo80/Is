@@ -23,13 +23,13 @@ public class Configuration
 	/// enabling customisation of diagnostic or reporting mechanisms.
 	/// By default, failures are exported to a markdown FailureReport.
 	/// </summary>
-	public IFailureObserver FailureObserver { get; private init; } = new MarkDownObserver();
+	public IFailureObserver? FailureObserver { get; private init; } = new MarkDownObserver();
 
 	/// <summary>
 	/// Specifies the adapter responsible for integrating the assertion framework with external testing frameworks.
 	/// By default, a <see cref="NotException"/>s are thrown.
 	/// </summary>
-	public ITestAdapter TestAdapter { get; set; } = new DefaultAdapter();
+	public ITestAdapter? TestAdapter { get; set; } = new DefaultAdapter();
 
 	/// <summary>
 	/// Makes code line info in <see cref="Failure"/> optional.
