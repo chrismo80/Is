@@ -72,6 +72,6 @@ public class Configuration
 		FloatingPointComparisonPrecision = FloatingPointComparisonPrecision,
 		MaxRecursionDepth = MaxRecursionDepth,
 		ParsingFlags = ParsingFlags,
-		JsonSerializerOptions = JsonSerializerOptions,
+		JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerOptions),
 	};
 }
