@@ -22,16 +22,18 @@
   - [Null](#null)
   - [Strings](#strings)
   - [Types](#types)
+
+- [Custom Assertions](#custom-assertions)
+  - [Example with `IsAssertion(s)` attribute](#example-with-isassertions-attribute)
+
+- [Test Framework Integration](#test-framework-integration)
+  - [`ITestAdapter` example for NUnit](#itestadapter-example-for-nunit)
+
 - [Soft Assertions](#soft-assertions)
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with Test Framework Attribute](#assertioncontext-with-test-framework-attribute)
   - [Disabling `ITestAdapter`](#disabling-itestadapter)
-  - [MarkDown FailureReport with `IFailureObserver` ](#markdown-failurereport-with-ifailureobserver)
-- [Test Framework Integration](#test-framework-integration)
-  - [`ITestAdapter` example for NUnit](#itestadapter-example-for-nunit)
-- [Custom Assertions](#custom-assertions)
-  - [Example with `IsAssertion(s)` attribute](#example-with-isassertions-attribute)
-
+  - [FailureReport with `IFailureObserver` ](#failurereport-with-ifailureobserver)
 
 
 
@@ -187,6 +189,88 @@ groups[2].Value.Is("world"); // ✅
 
 
 
+
+
+
+
+## Custom Assertions
+
+`Is` makes it straightforward to create your own custom assertions that integrate seamlessly with the library's features, including `AssertionContext` support and consistent error message formatting.
+
+You'll primarily use the `Check` fluent API within your custom extension methods.
+
+Syntax: `Check.That(condition).Unless(message)`.
+
+To ensure proper source code line detection in error messages, mark your custom assertion methods or their containing class with either `[IsAssertion]` <u>or</u> `[IsAssertions]` attributes from the `Is.Core` namespace.
+
+### Example with `IsAssertion(s)` attribute
+
+```csharp
+[IsAssertions] // Mark all methods via class attribute
+public static class MyCustomAssertions
+{
+    [IsAssertion] // Or mark individual methods
+    public static bool IsEmail(this string value) => Check
+        .That(Regex.Match(value, "^(.*)\@(.*)\.(.*)$").Success)
+        .Unless(value, "is no email");
+
+    [IsAssertion]
+    public static bool IsDigitsOnly(this string value) => Check
+        .That(value.All(char.IsDigit))
+        .Unless(value, "contains non-digit characters");
+}
+```
+
+Your custom assertions integrate seamlessly with the existing fluent style of the library, providing consistent error reporting and soft assertion capabilities.
+
+
+
+
+
+
+
+
+
+
+
+
+## Test Framework Integration
+
+`Is` is designed to be framework-agnostic. It achieves this through the `ITestAdapter` interface. This acts as a hook, allowing you to plug in custom logic to handle and throw exceptions that are specific to your chosen test framework (e.g., NUnit.Framework.AssertionException, Xunit.Sdk.XunitException).
+
+By default, `Is` uses a `DefaultTestAdapter` that throws `Is.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
+
+You can hook your custom test adapter via `Configuration.TestAdapter`.
+If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
+
+### ITestAdapter example for NUnit
+
+```csharp
+public class NUnitTestAdapter : ITestAdapter
+{
+    public void ReportSuccess() { }
+
+    public void ReportFailure(Failure failure) =>
+        throw new AssertionException(failure.Message);
+
+    public void ReportFailures(string message, List<Failure> failures)
+    {
+        var messages = string.Join("\n\n", failures.Select(f => f.Message));
+
+        throw new AssertionException($"{message}\n{messages}");
+    }
+}
+```
+
+Of course, you can throw any exception type of your choice such as `AssertFailedException` for MS Test or `XunitException` for xUnit.
+
+
+
+
+
+
+
+
 ## Soft Assertions
 
 Sometimes you want to run multiple assertions in a test and evaluate all failures at once, rather than stopping after the first one. The `AssertionContext` provides exactly that capability, enabling "soft assertions" or "assert all" behavior.
@@ -283,7 +367,7 @@ public void ContextTest_WithAttribute()
 If you don't want to throw exceptions at all, you can use the `ITestAdapter` instance in `Configuration.Active.TestAdapter` to disable any reporting failures to test runners by setting this instance to null.
 
 
-## MarkDown FailureReport with `IFailureObserver` 
+## FailureReport with `IFailureObserver` 
 
 If you prefer failure summaries over exception, `Is` comes with a `MarkDownObserver`, that exports every observed `Failure` by creating one report that includes all failures.
 
@@ -294,70 +378,8 @@ A failure from an object graph comparison for example looks like this.
 Of course, you can even create your own `IFailureObserver` to redirect any failures to your favourite reporting or logging system.
 
 
-## Test Framework Integration
-
-`Is` is designed to be framework-agnostic. It achieves this through the `ITestAdapter` interface. This acts as a hook, allowing you to plug in custom logic to handle and throw exceptions that are specific to your chosen test framework (e.g., NUnit.Framework.AssertionException, Xunit.Sdk.XunitException).
-
-By default, `Is` uses a `DefaultTestAdapter` that throws `Is.NotException` directly for single failures and `AggregateException` for multiple failures from `AssertionContext`.
-
-You can hook your custom test adapter via `Configuration.TestAdapter`.
-If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
-
-### ITestAdapter example for NUnit
-
-```csharp
-public class NUnitTestAdapter : ITestAdapter
-{
-    public void ReportSuccess() { }
-
-    public void ReportFailure(Failure failure) =>
-        throw new AssertionException(failure.Message);
-
-    public void ReportFailures(string message, List<Failure> failures)
-    {
-        var messages = string.Join("\n\n", failures.Select(f => f.Message));
-
-        throw new AssertionException($"{message}\n{messages}");
-    }
-}
-```
-
-Of course, you can throw any exception type of your choice such as `AssertFailedException` for MS Test or `XunitException` for xUnit.
 
 
-
-
-
-
-## Custom Assertions
-
-`Is` makes it straightforward to create your own custom assertions that integrate seamlessly with the library's features, including `AssertionContext` support and consistent error message formatting.
-
-You'll primarily use the `Check` fluent API within your custom extension methods.
-
-Syntax: `Check.That(condition).Unless(message)`.
-
-To ensure proper source code line detection in error messages, mark your custom assertion methods or their containing class with either `[IsAssertion]` <u>or</u> `[IsAssertions]` attributes from the `Is.Core` namespace.
-
-### Example with `IsAssertion(s)` attribute
-
-```csharp
-[IsAssertions] // Mark all methods via class attribute
-public static class MyCustomAssertions
-{
-    [IsAssertion] // Or mark individual methods
-    public static bool IsEmail(this string value) => Check
-        .That(Regex.Match(value, "^(.*)\@(.*)\.(.*)$").Success)
-        .Unless(value, "is no email");
-
-    [IsAssertion]
-    public static bool IsDigitsOnly(this string value) => Check
-        .That(value.All(char.IsDigit))
-        .Unless(value, "contains non-digit characters");
-}
-```
-
-Your custom assertions integrate seamlessly with the existing fluent style of the library, providing consistent error reporting and soft assertion capabilities.
 
 
 
