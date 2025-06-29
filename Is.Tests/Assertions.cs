@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using Is.Core;
+using Is.Core.Interfaces;
 using Is.Assertions;
-using Is.Core.TestAdapters;
 using Is.Tools;
 
 namespace Is.Tests;
@@ -277,15 +277,6 @@ public class Assertions
 
 		AssertionContext.Current?.NextFailure().SaveJson("Match.json");
 		AssertionContext.Current?.NextFailure().SaveJson("Snapshot.json");
-
-		Configuration.Active.TestAdapter = new MarkDownAdapter();
-		Configuration.Active.TestAdapter.Is<MarkDownAdapter>();
-
-		3.Is(3.0);
-		5.0.IsApproximately(6.0);
-
-		failingObject.IsMatching(expectedSnapshot);
-		failingObject.IsMatchingSnapshot(expectedSnapshot);
 	}
 
 	private class MyObject
@@ -704,11 +695,6 @@ public class Assertions
 		false.IsTrue(); // ❌
 		4.Is(5);        // ❌
 
-		context.Total.Is(3); // counts as passed an assertion
-		context.Passed.Is(2);
-		context.Failed.Is(2);
-		context.Ratio.IsGreaterThan(0.66);
-
 		context.NextFailure().Message.IsContaining("false.IsTrue()");
 		context.NextFailure().Message.IsContaining("4.Is(5)");
 	}
@@ -751,14 +737,6 @@ public class Assertions
 		Configuration.Active.TestAdapter.Is<DefaultAdapter>();
 		Configuration.Active.TestAdapter = new NUnitTestAdapter();
 		Configuration.Active.TestAdapter.Is<NUnitTestAdapter>();
-
-		3.Is(3.0);
-		5.0.IsApproximately(6.0);
-
-		AssertionContext.Current?.TakeFailures(2);
-
-		Configuration.Active.TestAdapter = new ConsoleAdapter();
-		Configuration.Active.TestAdapter.Is<ConsoleAdapter>();
 
 		3.Is(3.0);
 		5.0.IsApproximately(6.0);

@@ -9,17 +9,12 @@ internal static class Assertion
 {
 	internal static bool Passed() => Passed(true);
 
-	internal static T Passed<T>(T result)
-	{
-		AssertionContext.Current?.AddSuccess();
-
-		Configuration.Active.TestAdapter.ReportSuccess();
-
-		return result;
-	}
+	internal static T Passed<T>(T result) => result;
 
 	internal static T? Failed<T>(Failure failure)
 	{
+		Configuration.Active.FailureObserver?.OnFailure(failure);
+
 		if (AssertionContext.IsActive)
 			AssertionContext.Current?.AddFailure(failure);
 		else

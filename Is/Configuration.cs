@@ -1,9 +1,9 @@
 ﻿using Is.Core;
+using Is.Core.Interfaces;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Is.Core.TestAdapters;
 
 namespace Is;
 
@@ -18,11 +18,16 @@ public class Configuration
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
 	/// <summary>
-	/// Specifies the adapter responsible for handling assertion results.
-	/// The adapter decides whether the failure should result in a thrown exception,
-	/// the type of this exception or if the failure should be silently handled
-	/// via simple logging or data export for further failure analysis
-	/// Default is throwing <see cref="NotException"/>.
+	/// Determines the observer responsible for handling failure events during assertions.
+	/// The observer implements logic for capturing, processing, or reporting failures,
+	/// enabling customisation of diagnostic or reporting mechanisms.
+	/// By default, failures are exported to a markdown FailureReport.
+	/// </summary>
+	public IFailureObserver FailureObserver { get; private init; } = new MarkDownObserver();
+
+	/// <summary>
+	/// Specifies the adapter responsible for integrating the assertion framework with external testing frameworks.
+	/// By default, a <see cref="NotException"/>s are thrown.
 	/// </summary>
 	public ITestAdapter TestAdapter { get; set; } = new DefaultAdapter();
 
@@ -67,6 +72,7 @@ public class Configuration
 
 	internal Configuration Clone() => new()
 	{
+		FailureObserver = FailureObserver,
 		TestAdapter = TestAdapter,
 		AppendCodeLine = AppendCodeLine,
 		ColorizeMessages = ColorizeMessages,

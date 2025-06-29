@@ -3,7 +3,8 @@ Lines of code < 800
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
-- __`TestAdapter`__: _Specifies the adapter responsible for handling assertion results. The adapter decides whether the failure should result in a thrown exception, the type of this exception or if the failure should be silently handled via simple logging or data export for further failure analysis Default is throwing `NotException`._
+- __`FailureObserver`__: _Determines the observer responsible for handling failure events during assertions. The observer implements logic for capturing, processing, or reporting failures, enabling customisation of diagnostic or reporting mechanisms. By default, failures are exported to a markdown FailureReport._
+- __`TestAdapter`__: _Specifies the adapter responsible for integrating the assertion framework with external testing frameworks. By default, a `NotException`s are thrown._
 - __`AppendCodeLine`__: _Makes code line info in `Failure` optional._
 - __`ColorizeMessages`__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
@@ -73,13 +74,9 @@ All assertions are implemented as extension methods.
 ## Is.Core
 #### <u>AssertionContext</u>
 Represents a scoped context that captures all assertion failures within its lifetime and reports the collection upon disposal if any failures occurred.
-- __`Failed`__: _The number of remaining assertion failures in the context._
-- __`Passed`__: _The number of passed assertions in the context._
-- __`Total`__: _The total number of assertions in the context._
-- __`Ratio`__: _The ratio of passed assertions._
 - __`Current`__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
 - __`Begin(method)`__: _Starts a new `AssertionContext` on the current thread. Current `Configuration` is cloned to enable local configurations per assertion context._
-- __`Dispose()`__: _Ends the assertion context and reports all collected failures to the `ITestAdapter`_
+- __`Dispose()`__: _Ends the assertion context and reports all collected failures to the `!:ITestAdapter`_
 - __`NextFailure()`__: _Dequeues an `Failure` from the queue to not be reported at the end of the context._
 - __`TakeFailures(count)`__: _Dequeues as many `Failure`s specified in `count` from the queue._
 #### <u>Check</u>
@@ -102,18 +99,15 @@ Represents a failure encountered during an assertion or test execution. Contains
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
+## Is.Core.Interfaces
+#### <u>IFailureObserver</u>
+Interface providing a mechanism to observe and handle failure events. Implementors of this interface are responsible for defining the logic on how to handle or log failure details for diagnostic or reporting purposes.
 #### <u>ITestAdapter</u>
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
-- __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
-## Is.Core.TestAdapters
-#### <u>ConsoleAdapter</u>
-`ITestAdapter` that simply logs the failures to the Console, does not throw any exceptions
 #### <u>DefaultAdapter</u>
 Default adapter using the default implementation of the `ITestAdapter` interface
-#### <u>MarkDownAdapter</u>
-`ITestAdapter` that creates a failure report, does not throw any exceptions
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_

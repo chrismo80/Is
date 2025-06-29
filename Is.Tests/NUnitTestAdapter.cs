@@ -1,12 +1,10 @@
 using Is.Core;
-using Is.Tools;
+using Is.Core.Interfaces;
 
 namespace Is.Tests;
 
 public class NUnitTestAdapter : ITestAdapter
 {
-	public void ReportSuccess() { }
-
 	public void ReportFailure(Failure failure) =>
 		throw new AssertionException(failure.Message);
 

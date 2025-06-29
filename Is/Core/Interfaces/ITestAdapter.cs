@@ -1,6 +1,4 @@
-using Is.Tools;
-
-namespace Is.Core;
+namespace Is.Core.Interfaces;
 
 /// <summary>
 /// Represents an interface for handling test result reporting.
@@ -12,9 +10,6 @@ namespace Is.Core;
 /// </summary>
 public interface ITestAdapter
 {
-	/// <summary>Reports a successful test result to the configured test adapter.</summary>
-	void ReportSuccess() { }
-
 	/// <summary>Reports a failed test result to the configured test adapter.</summary>
 	void ReportFailure(Failure failure) =>
 		throw new NotException(failure);
@@ -23,3 +18,8 @@ public interface ITestAdapter
 	void ReportFailures(string message, List<Failure> failures) =>
 		throw new AggregateException(message, failures.Select(f => new NotException(f)));
 }
+
+/// <summary>
+/// Default adapter using the default implementation of the <see cref="ITestAdapter"/> interface
+/// </summary>
+public class DefaultAdapter : ITestAdapter;

@@ -34,18 +34,6 @@ public sealed class AssertionContext : IDisposable
 
 	private string? _caller;
 
-	/// <summary>The number of remaining assertion failures in the context.</summary>
-	public int Failed => _failures.Count;
-
-	/// <summary>The number of passed assertions in the context.</summary>
-	public int Passed { get; private set; }
-
-	/// <summary>The total number of assertions in the context.</summary>
-	public int Total => Passed + Failed;
-
-	/// <summary>The ratio of passed assertions.</summary>
-	public double Ratio => Total > 0 ? (double)Passed / Total : 1;
-
 	/// <summary>Local configuration settings (copy of global <see cref="Configuration"/>) only active during the <see cref="AssertionContext"/>.</summary>
 	internal Configuration Configuration { get; } = Configuration.Default.Clone();
 
@@ -85,9 +73,9 @@ public sealed class AssertionContext : IDisposable
 		if (_failures.Count == 0)
 			return;
 
-		var s = Total == 1 ? "" : "s";
+		var s = _failures.Count == 1 ? "" : "s";
 
-		var message = $"{_failures.Count} of {Total} assertion{s} ({Ratio:P1}) failed in '{_caller}'";
+		var message = $"{_failures.Count} assertion{s} failed in '{_caller}'";
 
 		testAdapter.ReportFailures(message, _failures.ToList());
 	}
@@ -103,8 +91,6 @@ public sealed class AssertionContext : IDisposable
 	public List<Failure> TakeFailures(int count) => Take(count).ToList();
 
 	internal void AddFailure(Failure failure) => _failures.Enqueue(failure);
-
-	internal void AddSuccess() => Passed++;
 
 	private IEnumerable<Failure> Take(int count)
 	{
