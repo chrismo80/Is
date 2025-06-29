@@ -133,8 +133,8 @@ public static class Collections
 			return [];
 
 		var failures = diffs
-			.Concat(missingKeys.Select(k => new Failure($"{k.Color(100)}: missing {expected[k].Format()}", null, k, null, true)))
-			.Concat(unexpectedKeys.Select(k => new Failure($"{k.Color(100)}: unexpected", k, null, null, true)));
+			.Concat(missingKeys.Select(k => new Failure($"{k.Color(100)}: missing", null, expected[k], null, true)))
+			.Concat(unexpectedKeys.Select(k => new Failure($"{k.Color(100)}: unexpected", actual[k], null, null, true)));
 
 		return failures.ToList();
 	}
