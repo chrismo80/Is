@@ -664,6 +664,13 @@ public class Assertions
 		"hello".Is<int>(); // ❌
 
 		AssertionContext.Current?.TakeFailures(12);
+
+		false.IsTrue(); // ❌
+		4.Is(5); // ❌
+
+		// Verify expected count and dequeue failures
+		AssertionContext.Current?.TakeFailures(2)
+			.All(failure => failure.Message.IsContaining("is not")); // ✅
 	}
 
 	[Test]

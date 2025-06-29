@@ -206,8 +206,8 @@ using var ctx = AssertionContext.Begin();
 42.Is(0); // ❌
 true.IsTrue(); // ✅
 
-ctx.NextFailure().Message.IsContaining("abc"); // Dequeues first failure
-ctx.NextFailure().Message.IsContaining("42");  // Dequeues second failure
+Failure fail1 = ctx.NextFailure(); // Dequeues first failure
+Failure fail2 = ctx.NextFailure(); // Dequeues second failure
 // At this point, the context is empty. No AggregateException will be thrown on Dispose.
 
 try
@@ -268,7 +268,8 @@ public void ContextTest_WithAttribute()
     4.Is(5); // ❌
 
     // Verify expected count and dequeue failures
-    AssertionContext.Current?.TakeFailures(2).All(ex => ex.Is<Is.NotException>()); // ✅
+    AssertionContext.Current?.TakeFailures(2)
+        .All(failure => failure.Message.IsContaining("is not")); // ✅
 }
 ```
 
