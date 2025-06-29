@@ -323,21 +323,6 @@ A failure from an object graph comparison for example looks like this.
 ![plot](Docs/FailureReport.png)
 
 
-##### 🔍 Details
-
-| Path | Message | Actual | Expected |
-|-----|---------|--------|---------|
-| `Value` |  456 is not 123 | `456` | `123` |
-| `Info.WrongItem` |  5 (Int32) is not 5 (Double) | `5` | `5` |
-| `Info.Details.Names[0]` |  "Ipsum" is not "Lorem" | `Ipsum` | `Lorem` |
-| `Info.Details.Names[1]` |  "Lorem" is not "Ipsum" | `Lorem` | `Ipsum` |
-| `Max` |  missing | `` | `4,5` |
-| `Info.NewItem` |  unexpected | `ABC` | `` |
-| `Tags[2]` |  unexpected | `tag3` | `` |
-| `Min` |  unexpected | `1,2` | `` |
-
-
-
 
 
 ## Test Framework Integration
