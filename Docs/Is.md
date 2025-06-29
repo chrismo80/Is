@@ -107,10 +107,13 @@ Represents an interface for handling test result reporting. Serves as a hook for
 - __`ReportSuccess()`__: _Reports a successful test result to the configured test adapter._
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
-#### <u>DefaultTestAdapter</u>
-Default TestAdapter using the default implementation of the `ITestAdapter` interface
-#### <u>ConsoleTestAdapter</u>
+## Is.Core.TestAdapters
+#### <u>ConsoleAdapter</u>
 `ITestAdapter` that simply logs the failures to the Console, does not throw any exceptions
+#### <u>DefaultAdapter</u>
+Default adapter using the default implementation of the `ITestAdapter` interface
+#### <u>MarkDownAdapter</u>
+`ITestAdapter` that creates a failure report, does not throw any exceptions
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_

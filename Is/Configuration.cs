@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Is.Core.TestAdapters;
 
 namespace Is;
 
@@ -23,7 +24,7 @@ public class Configuration
 	/// via simple logging or data export for further failure analysis
 	/// Default is throwing <see cref="NotException"/>.
 	/// </summary>
-	public ITestAdapter TestAdapter { get; set; } = new DefaultTestAdapter();
+	public ITestAdapter TestAdapter { get; set; } = new DefaultAdapter();
 
 	/// <summary>
 	/// Makes code line info in <see cref="Failure"/> optional.

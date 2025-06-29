@@ -23,20 +23,3 @@ public interface ITestAdapter
 	void ReportFailures(string message, List<Failure> failures) =>
 		throw new AggregateException(message, failures.Select(f => new NotException(f)));
 }
-
-/// <summary>
-/// Default TestAdapter using the default implementation of the <see cref="ITestAdapter"/> interface
-/// </summary>
-public class DefaultTestAdapter : ITestAdapter;
-
-/// <summary>
-/// <see cref="ITestAdapter"/> that simply logs the failures to the Console, does not throw any exceptions
-/// </summary>
-public class ConsoleTestAdapter : ITestAdapter
-{
-	public void ReportFailure(Failure failure) =>
-		Console.WriteLine(failure.Message.RemoveLineBreaks());
-
-	public void ReportFailures(string message, List<Failure> failures) =>
-		failures.ForEach(ReportFailure);
-}

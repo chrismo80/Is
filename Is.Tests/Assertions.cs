@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Is.Core;
 using Is.Assertions;
+using Is.Core.TestAdapters;
 using Is.Tools;
 
 namespace Is.Tests;
@@ -276,6 +277,15 @@ public class Assertions
 
 		AssertionContext.Current?.NextFailure().SaveJson("Match.json");
 		AssertionContext.Current?.NextFailure().SaveJson("Snapshot.json");
+
+		Configuration.Active.TestAdapter = new MarkDownAdapter();
+		Configuration.Active.TestAdapter.Is<MarkDownAdapter>();
+
+		3.Is(3.0);
+		5.0.IsApproximately(6.0);
+
+		failingObject.IsMatching(expectedSnapshot);
+		failingObject.IsMatchingSnapshot(expectedSnapshot);
 	}
 
 	private class MyObject
@@ -738,7 +748,7 @@ public class Assertions
 	[AssertionContext]
 	public void TestAdapter()
 	{
-		Configuration.Active.TestAdapter.Is<DefaultTestAdapter>();
+		Configuration.Active.TestAdapter.Is<DefaultAdapter>();
 		Configuration.Active.TestAdapter = new NUnitTestAdapter();
 		Configuration.Active.TestAdapter.Is<NUnitTestAdapter>();
 
@@ -747,11 +757,13 @@ public class Assertions
 
 		AssertionContext.Current?.TakeFailures(2);
 
-		Configuration.Active.TestAdapter = new ConsoleTestAdapter();
-		Configuration.Active.TestAdapter.Is<ConsoleTestAdapter>();
+		Configuration.Active.TestAdapter = new ConsoleAdapter();
+		Configuration.Active.TestAdapter.Is<ConsoleAdapter>();
 
 		3.Is(3.0);
 		5.0.IsApproximately(6.0);
+
+		AssertionContext.Current?.TakeFailures(2);
 	}
 
 	[Test]
