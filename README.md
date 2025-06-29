@@ -24,10 +24,10 @@
   - [Types](#types)
 - [Soft Assertions](#soft-assertions)
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
-  - [`AssertionContext` with NUnit Attribute](#assertioncontext-with-nunit-attribute)
+  - [`AssertionContext` with Test Framework Attribute](#assertioncontext-with-test-framework-attribute)
   - [`ITestAdapter` with Logger](#itestadapter-with-logger)
 - [Test Framework Integration](#test-framework-integration)
-  - [`ITestAdapter` with NUnit](#itestadapter-with-nunit-example)
+  - [`ITestAdapter` example for NUnit](#itestadapter-example-for-nunit)
 - [Custom Assertions](#custom-assertions)
 
 
@@ -226,9 +226,9 @@ catch (AggregateException ex)
 
 The `AssertionContext` uses `AsyncLocal` for full async test compatibility, ensuring that only one context is active per async flow at a time.
 
-### AssertionContext with NUnit Attribute
+### AssertionContext with Test Framework Attribute
 
-For test frameworks like NUnit, you can integrate `AssertionContext` using a custom attribute to automatically manage the context lifetime for test methods or classes.
+For test frameworks (e.g. NUnit), you can integrate `AssertionContext` using a custom attribute to automatically manage the context lifetime for test methods or classes.
 
 ```csharp
 using Is.Core;
@@ -272,6 +272,8 @@ public void ContextTest_WithAttribute()
         .All(failure => failure.Message.IsContaining("is not")); // ✅
 }
 ```
+ holds true for MS Test or xUnit.
+
 
 ### ITestAdapter with Logger
 
@@ -303,7 +305,7 @@ By default, `Is` uses a `DefaultTestAdapter` that throws `Is.NotException` direc
 You can hook your custom test adapter via `Configuration.TestAdapter`.
 If you do not want exception to be thrown at all, you can inject an `ITestAdapter` implementation that simply logs or exports the failures, depending on your use case.
 
-### ITestAdapter with NUnit
+### ITestAdapter example for NUnit
 
 ```csharp
 public class NUnitTestAdapter : ITestAdapter
