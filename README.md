@@ -256,6 +256,7 @@ public sealed class AssertionContextAttribute : NUnitAttribute, IWrapTestMethod
         }
     }
 }
+
 ```
 
 You can then apply this attribute to your NUnit tests:
@@ -281,7 +282,7 @@ public void ContextTest_WithAttribute()
 If you don't want to throw exceptions at all, you can use the `ITestAdapter` interface to redirect failures to your logging system. To use this adapter, configure it at the start of your tests at `Configuration.Active.TestAdapter`.
 
 ```csharp
-public class LoggerTestAdapter : ITestAdapter
+public class LoggerAdapter : ITestAdapter
 {
     public void ReportFailure(Failure failure) =>
         Console.WriteLine(failure.Message);
@@ -292,6 +293,48 @@ public class LoggerTestAdapter : ITestAdapter
 ```
 
 You could even implement your own `ITestAdapter`, that simply exports the `Failure`s to json for further analysis tools depending on your use-case.
+
+## ITestAdapter with MarkDown FailureReport
+
+As an example `Is` comes with a `MarkDownAdapter`, that exports every unhadled `Failure` by creating one report that includes all failures.
+
+```csharp
+public class MarkDownAdapter : ITestAdapter
+{
+    private readonly string _file;
+
+    public MarkDownAdapter(string fileName  = "FailureReport.md")
+    {
+        _file = fileName;
+
+        File.Delete(_file);
+    }
+
+    public void ReportFailure(Failure failure) =>
+        File.AppendAllText(_file, failure.ToMarkDown());
+
+    public void ReportFailures(string message, List<Failure> failures) =>
+        failures.ForEach(ReportFailure);
+}
+```
+
+A failure from an object graph comparison for example looks like this.
+
+![plot](Docs/FailureReport.png)
+
+
+##### 🔍 Details
+
+| Path | Message | Actual | Expected |
+|-----|---------|--------|---------|
+| `Value` |  456 is not 123 | `456` | `123` |
+| `Info.WrongItem` |  5 (Int32) is not 5 (Double) | `5` | `5` |
+| `Info.Details.Names[0]` |  "Ipsum" is not "Lorem" | `Ipsum` | `Lorem` |
+| `Info.Details.Names[1]` |  "Lorem" is not "Ipsum" | `Lorem` | `Ipsum` |
+| `Max` |  missing | `` | `4,5` |
+| `Info.NewItem` |  unexpected | `ABC` | `` |
+| `Tags[2]` |  unexpected | `tag3` | `` |
+| `Min` |  unexpected | `1,2` | `` |
 
 
 
