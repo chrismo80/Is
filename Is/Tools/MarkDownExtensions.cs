@@ -15,6 +15,10 @@ internal static class MarkDownExtensions
 		sb.AppendLine();
 		sb.AppendLine($"**Location:** `{failure.File}` line {failure.Line}");
 		sb.AppendLine();
+		sb.AppendLine($"**Code:** `{failure.Code}`");
+		sb.AppendLine();
+		sb.AppendLine($"**Time:** `{failure.Created}`");
+		sb.AppendLine();
 		sb.AppendLine("## 📋 Summary");
 		sb.AppendLine();
 
