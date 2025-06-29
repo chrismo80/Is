@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Is.Tools;
 
 [DebuggerStepThrough]
-internal static class MessageExtensions
+internal static partial class MessageExtensions
 {
 	private static readonly bool ColorSupport = Console.IsOutputRedirected || !OperatingSystem.IsWindows();
 
@@ -30,6 +31,9 @@ internal static class MessageExtensions
 	// https://ss64.com/nt/syntax-ansi.html
 	internal static string? Color<T>(this T text, int color) =>
 		Configuration.Active.ColorizeMessages && ColorSupport ? "\x1b[" + color + "m" + text + "\x1b[0m" : text?.ToString();
+
+	internal static string RemoveColor(this string text) =>
+		ColorRegex().Replace(text, "");
 
 	internal static string FormatValue(this object? value) =>
 		value switch
@@ -58,4 +62,7 @@ internal static class MessageExtensions
 
 	private static string Strip(this string text, int length = 50) =>
 		text.Length <= length ? text : text[..length];
+
+    [GeneratedRegex(@"\x1B\[[0-9;]*[JKmsu]")]
+    private static partial Regex ColorRegex();
 }
