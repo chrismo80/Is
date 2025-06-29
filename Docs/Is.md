@@ -102,6 +102,7 @@ Mark a custom assertions class with this attribute to enable proper code line de
 ## Is.Core.Interfaces
 #### <u>IFailureObserver</u>
 Interface providing a mechanism to observe and handle failure events. Implementors of this interface are responsible for defining the logic on how to handle or log failure details for diagnostic or reporting purposes.
+- __`OnFailure(failure)`__: _This method is invoked when a failure occurs during an assertion. Observer can perform custom logic on that failure such as logging or reporting._
 #### <u>ITestAdapter</u>
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._

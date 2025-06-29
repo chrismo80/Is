@@ -25,8 +25,8 @@
 - [Soft Assertions](#soft-assertions)
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with Test Framework Attribute](#assertioncontext-with-test-framework-attribute)
-  - [`ITestAdapter` with Logger](#itestadapter-with-logger)
-  - [`ITestAdapter` with MarkDown FailureReport](#itestadapter-with-markdown-failurereport)
+  - [Disabling `ITestAdapter`](#disabling-itestadapter)
+  - [MarkDown FailureReport with `IFailureObserver` ](#markdown-failurereport-with-ifailureobserver)
 - [Test Framework Integration](#test-framework-integration)
   - [`ITestAdapter` example for NUnit](#itestadapter-example-for-nunit)
 - [Custom Assertions](#custom-assertions)
@@ -278,57 +278,20 @@ public void ContextTest_WithAttribute()
  holds true for MS Test or xUnit.
 
 
-### ITestAdapter with Logger
+### Disabling `ITestAdapter`
 
-If you don't want to throw exceptions at all, you can use the `ITestAdapter` interface to redirect failures to your logging system. To use this adapter, configure it at the start of your tests at `Configuration.Active.TestAdapter`.
+If you don't want to throw exceptions at all, you can use the `ITestAdapter` instance in `Configuration.Active.TestAdapter` to disable any reporting failures to test runners by setting this instance to null.
 
-```csharp
-public class LoggerAdapter : ITestAdapter
-{
-    public void ReportFailure(Failure failure) =>
-        Console.WriteLine(failure.Message);
 
-    public void ReportFailures(string message, List<Failure> failures) =>
-        failures.ForEach(ReportFailure);
-}
-```
+## MarkDown FailureReport with `IFailureObserver` 
 
-You could even implement your own `ITestAdapter`, that simply exports the `Failure`s to json for further analysis tools depending on your use-case.
-
-## ITestAdapter with MarkDown FailureReport
-
-As an example `Is` comes with a `MarkDownAdapter`, that exports every unhadled `Failure` by creating one report that includes all failures.
-
-```csharp
-public class MarkDownAdapter : ITestAdapter
-{
-    private readonly string _file;
-
-    public MarkDownAdapter(string fileName  = "FailureReport.md")
-    {
-        _file = fileName;
-
-        File.Delete(_file);
-    }
-
-    public void ReportFailure(Failure failure) =>
-        File.AppendAllText(_file, failure.ToMarkDown());
-
-    public void ReportFailures(string message, List<Failure> failures) =>
-        failures.ForEach(ReportFailure);
-}
-```
+If you prefer failure summaries over exception, `Is` comes with a `MarkDownObserver`, that exports every observed `Failure` by creating one report that includes all failures.
 
 A failure from an object graph comparison for example looks like this.
 
 ![plot](Docs/FailureReport.png)
 
-The `ITestAdapter` interface is actually very powerful and enables you to control what should happen with failures.
-You can even create your own adapter and combine all functions such as:
-- exporting to json for further analysis tools
-- creating failure report as markdown for humans
-- throw exception nonetheless for test runners
-
+Of course, you can even create your own `IFailureObserver` to redirect any failures to your favourite reporting or logging system.
 
 
 ## Test Framework Integration
