@@ -322,6 +322,11 @@ A failure from an object graph comparison for example looks like this.
 
 ![plot](Docs/FailureReport.png)
 
+The `ITestAdapter` interface is actually very powerful and enables you to control what should happen with failures.
+You can even create your own adapter and combine all functions such as:
+- exporting to json for further analysis tools
+- creating failure report as markdown for humans
+- throw exception nonetheless for test runners
 
 
 
