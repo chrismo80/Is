@@ -5,7 +5,8 @@
 !theme materia
 
 Component_Ext(ca, "Custom assertions", "extension methods", "user can add own assertions")
-Component_Ext(cta, "Custom TestAdapter", "ITestAdapter", "user can plug in custom test adapter to throw framework exception types (or silently create log entries, data exports, etc.)")
+Component_Ext(cfo, "Custom FailureObserver", "IFailureObserver", "user can plug in custom failure observer to create log entries, data exports, reports")
+Component_Ext(cta, "Custom TestAdapter", "ITestAdapter", "user can plug in custom test adapter to throw framework exception types ")
 
 Container_Boundary(Is, "Is") {
 
@@ -15,32 +16,31 @@ Container_Boundary(Is, "Is") {
 
     Container_Boundary(Core, "Core") {
         Component(check, "Check", "That / (Yields) / Unless", "fluent API to simplify condition check and error message creation")
-        Component(ass, "Assertion", "Passed / Failed", "single entry point for failure behaviour")
-        Component(fail, "Failure", "Reported object", "holds infos like actual / expected values and source code location")
+        Component(ass, "Assertion", "Passed / Failed", "single entry point for failure creation")
         Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
-        Component(ita, "ITestAdapter", "Handles Failure(s)", "reports success and failure(s) to \n - test frameworks \n - loggers \n - data exports")
+        
+        Container_Boundary(Interfaces, "Interfaces") {
+            Component(ifo, "IFailureObserver", "receives individual failures", "notifies external loggers, data exporters, or reporting systems")
+            Component(ita, "ITestAdapter", "throws exceptions", "integrates with test frameworks/runners by throwing exceptions")
         }
-
-    Component(conf, "Configuration", "Global settings", "control behaviour of core components and assertions")
+    }
 }
 
 
-Rel_L(ass, ita, "sends failure to")
-Rel(ass, fail, "creates")
+Rel_R(ass, ctx, "adds failure to")
+Rel(ass, ifo, "notifies on failure")
+Rel(ass, ita, "sends single failure to")
 
 Rel_R(ext, check, "uses")
 Rel(ext, ass, "pass / fail")
 
-Rel(ctx, ita, "sends failures to")
+Rel(ctx, ita, "sends collected failures to")
 
 Rel(check, ass, "pass / fail")
-Rel(ass, ctx, "adds successes / failures")
-
-Rel_U(conf, ext, "configures")
-Rel_R(conf, fail, "configures")
 
 Rel_L(ca, check, "uses")
 Rel_U(cta, ita, "implements")
+Rel_U(cfo, ifo, "implements")
 
 
 @enduml
