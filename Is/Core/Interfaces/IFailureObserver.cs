@@ -3,9 +3,10 @@ using Is.Tools;
 namespace Is.Core.Interfaces;
 
 /// <summary>
-/// Interface providing a mechanism to observe and handle failure events.
-/// Implementors of this interface are responsible for defining the logic
-/// on how to handle or log failure details for diagnostic or reporting purposes.
+/// Interface providing a mechanism to observe failures.
+/// The provided default implementation writes all failures into
+/// one FailureReport markdown file.
+/// Can be set via Configuration.FailureObserver.
 /// </summary>
 public interface IFailureObserver
 {
