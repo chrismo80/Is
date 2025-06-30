@@ -19,7 +19,4 @@ public interface ITestAdapter
 		throw new AggregateException(message, failures.Select(f => new NotException(f)));
 }
 
-/// <summary>
-/// Default adapter using the default implementation of the <see cref="ITestAdapter"/> interface
-/// </summary>
 public class DefaultAdapter : ITestAdapter;
