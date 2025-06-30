@@ -63,6 +63,7 @@ All assertions are implemented as extension methods.
 - __`IsNull(actual)`__: _Asserts that an object is `null`._
 - __`IsNotNull(actual)`__: _Asserts that the object is not `null`._
 #### <u>Strings</u>
+- __`IsNotNullOrEmpty(actual)`__: _Asserts that the `actual` string is not `null` or empty._
 - __`IsContaining(actual, expected)`__: _Asserts that the `actual` string contains the specified `expected` substring._
 - __`IsStartingWith(actual, expected)`__: _Asserts that the `actual` string starts with the specified `expected` string._
 - __`IsEndingWith(actual, expected)`__: _Asserts that the `actual` string ends with the specified `expected` string._
