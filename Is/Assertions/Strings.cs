@@ -12,9 +12,8 @@ public static class Strings
 	/// Asserts that the <paramref name="actual"/> string is not <c>null</c> or empty.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotNullOrEmpty(this string actual) => Check
-		.That(!string.IsNullOrEmpty(actual))
-		.Unless(actual, "is null or empty");
+	public static bool IsNotNullOrEmpty(this string actual) =>
+		actual.IsNotNull() && actual.IsNotEmpty();
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string

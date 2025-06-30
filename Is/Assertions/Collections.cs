@@ -17,6 +17,14 @@ public static class Collections
 		.Unless(actual, "is not empty");
 
 	/// <summary>
+	/// Asserts that the sequence is not empty.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotEmpty<T>(this IEnumerable<T> actual) => Check
+		.That(actual.Any())
+		.Unless(actual, "is empty");
+
+	/// <summary>
 	/// Asserts that all elements in the sequence are unique.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]

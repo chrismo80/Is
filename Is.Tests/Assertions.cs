@@ -158,6 +158,22 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
+	public void Is_NotNullOrEmpty()
+	{
+		string? test = null;
+		test.IsNotNullOrEmpty();
+
+		test = "";
+		test.IsNotNullOrEmpty();
+
+		test = " ";
+		test.IsNotNullOrEmpty();
+
+		AssertionContext.Current?.TakeFailures(2);
+	}
+
+	[Test]
 	public void Is_List()
 	{
 		((int?[])[1, 2, null, 4]).Is(1, 2, null, 4);

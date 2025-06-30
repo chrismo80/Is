@@ -90,9 +90,7 @@ public static class Delegates
 
 		long allocated = (after - before) / 1024;
 
-		return Check
-			.That(allocated <= kiloBytes)
-			.Unless(allocated, "is allocating more kB than", kiloBytes);
+		return allocated.IsAtMost(kiloBytes);
 	}
 
 	/// <summary>

@@ -24,13 +24,13 @@ public class MarkDownObserver : IFailureObserver
 
 	static MarkDownObserver() => File.Delete(FILE);
 
-	public void OnFailure(Failure failure)
-	{
-		var markdown = failure.ToMarkDown();
+	public void OnFailure(Failure failure) => Append(failure.ToMarkDown());
 
+	private static void Append(string text)
+	{
 		lock (sync)
 		{
-			File.AppendAllText(FILE, markdown);
+			File.AppendAllText(FILE, text);
 		}
 	}
 }
