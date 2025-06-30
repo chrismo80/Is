@@ -9,6 +9,14 @@ namespace Is.Assertions;
 public static class Strings
 {
 	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string is not <c>null</c> or empty.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotNullOrEmpty(this string actual) => Check
+		.That(!string.IsNullOrEmpty(actual))
+		.Unless(actual, "is null or empty");
+
+	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
 	/// contains the specified <paramref name="expected"/> substring.
 	/// </summary>

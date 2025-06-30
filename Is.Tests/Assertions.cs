@@ -334,6 +334,7 @@ public class Assertions
 	{
 		new List<int> { 1, 2, 3, 4, 5, 6 }.IsContaining(2, 4);
 
+		"hello world".IsNotNullOrEmpty();
 		"hello world".IsContaining("hello");
 		"hello world".IsStartingWith("hello");
 		"hello world".IsEndingWith("world");
