@@ -19,10 +19,12 @@ public static class Check
 	public static Returnable<TValue> That<TValue>(TValue value, Func<TValue, bool> predicate) =>
 		new(predicate(value), value);
 
-	public static bool Argument(bool condition, string message) =>
+	/// <summary>Guard clause for argument checks, throws <see cref="ArgumentException"/></summary>
+	public static bool Arg(bool condition, string message) =>
 		That(condition).Unless<ArgumentException>(message);
 
-	public static bool Operation(bool condition, string message) =>
+	/// <summary>Guard clause for operation checks, throws <see cref="InvalidOperationException"/></summary>
+	public static bool Op(bool condition, string message) =>
 		That(condition).Unless<InvalidOperationException>(message);
 }
 
@@ -60,12 +62,12 @@ public readonly struct Failable<TResult>(bool condition, TResult? result)
 	public TResult? Unless(string message) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(new Failure(message) ),
+		false => Assertion.Failed<TResult>(new Failure(message)),
 	};
 
 	public TResult? Unless<TException>(string message) where TException : Exception => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(new Failure(message) { CustomExceptionType = typeof(TException) } ),
+		false => Assertion.Failed<TResult>(new Failure(message) { CustomExceptionType = typeof(TException) }),
 	};
 }

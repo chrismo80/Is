@@ -581,10 +581,10 @@ public class Assertions
 		action = () => Check.That(value < 0).Unless<InvalidOperationException>("nope");
 		action.IsThrowing<InvalidOperationException>("nope");
 
-		action = () => Check.Argument(value < 0, "oh no");
+		action = () => Check.Arg(value < 0, "oh no");
 		action.IsThrowing<ArgumentException>("oh no");
 
-		action = () => Check.Operation(value < 0, "oh no");
+		action = () => Check.Op(value < 0, "oh no");
 		action.IsThrowing<InvalidOperationException>("oh no");
 	}
 

@@ -84,6 +84,8 @@ Represents a scoped context that captures all assertion failures within its life
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
 - __`That(condition)`__: _Evaluates a boolean condition._
+- __`Arg(condition, message)`__: _Guard clause for argument checks, throws `ArgumentException`_
+- __`Op(condition, message)`__: _Guard clause for operation checks, throws `InvalidOperationException`_
 - __`Yields<TResult>(result)`__: _Projects a result from the original value if the initial predicate condition was true._
 - __`Unless(actual, message, other)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
 #### <u>Failure</u>
