@@ -18,6 +18,7 @@ All assertions are implemented as extension methods.
 - __`IsFalse(actual)`__: _Asserts that a boolean value is `false`._
 #### <u>Collections</u>
 - __`IsEmpty<T>(actual)`__: _Asserts that the sequence is empty._
+- __`IsNotEmpty<T>(actual)`__: _Asserts that the sequence is not empty._
 - __`IsUnique<T>(actual)`__: _Asserts that all elements in the sequence are unique._
 - __`IsContaining<T>(actual, expected)`__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
 - __`IsIn<T>(actual, expected)`__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
