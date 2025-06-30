@@ -107,8 +107,6 @@ Interface providing a mechanism to observe and handle failure events. Implemento
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
-#### <u>DefaultAdapter</u>
-Default adapter using the default implementation of the `ITestAdapter` interface
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_
