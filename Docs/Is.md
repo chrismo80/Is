@@ -103,10 +103,10 @@ Mark custom assertion methods with this attribute to enable proper code line det
 Mark a custom assertions class with this attribute to enable proper code line detection.
 ## Is.Core.Interfaces
 #### <u>IFailureObserver</u>
-Interface providing a mechanism to observe failures. The provided default implementation writes all failures into one FailureReport markdown file. Can be set via Configuration.FailureObserver.
+Interface providing a mechanism to observe failures. The provided default observer writes all failures into one FailureReport markdown file. Can be set via Configuration.FailureObserver.
 - __`OnFailure(failure)`__: _This method is invoked when a failure occurs during an assertion. Observer can perform custom logic on that failure such as logging or reporting._
 #### <u>ITestAdapter</u>
-Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Provides a default implementation that throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
+Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. The provided default adapter throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
 ## Is.Tools

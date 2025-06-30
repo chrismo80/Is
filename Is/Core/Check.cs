@@ -51,9 +51,9 @@ public readonly struct Failable<TResult>(bool condition, TResult? result)
 		false => Assertion.Failed<TResult>(new Failure(actual.Actually(message), actual)),
 	};
 
-	public TResult? Unless(string message) => condition switch
+	public TResult? Unless<TException>(string message) where TException : Exception => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(new Failure(message)),
+		false => Assertion.Failed<TResult>(new Failure(message) { CustomExceptionType = typeof(TException) } ),
 	};
 }

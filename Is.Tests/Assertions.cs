@@ -566,6 +566,21 @@ public class Assertions
 		((Action)(() => new List<int> {1, 2}.IsEmpty())).IsThrowing<NotException>("is not");
 	}
 
+
+	[Test]
+	public void Guards()
+	{
+		int value = 5;
+		Action action;
+
+		action = () => Check.That(value < 0).Unless<ArgumentException>("oh oh");
+		action.IsThrowing<ArgumentException>("oh oh");
+
+		action = () => Check.That(value < 0).Unless<InvalidOperationException>("nope");
+		action.IsThrowing<InvalidOperationException>("nope");
+
+	}
+
 	[Test]
 	public void IsNull_IsDefault_IsSame()
 	{

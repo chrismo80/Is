@@ -58,6 +58,8 @@ public class Failure
 	/// </summary>
 	public string? Code { get; }
 
+	public Type? CustomExceptionType { get; init; }
+
 	public List<Failure>? Failures { get; }
 
 	public Failure(string message, object? actual = null, object? expected = null, List<Failure>? failures = null, bool subFailure = false)
