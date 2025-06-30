@@ -18,6 +18,12 @@ public static class Check
 
 	public static Returnable<TValue> That<TValue>(TValue value, Func<TValue, bool> predicate) =>
 		new(predicate(value), value);
+
+	public static bool Argument(bool condition, string message) =>
+		That(condition).Unless<ArgumentException>(message);
+
+	public static bool Operation(bool condition, string message) =>
+		That(condition).Unless<InvalidOperationException>(message);
 }
 
 [DebuggerStepThrough]
@@ -49,6 +55,12 @@ public readonly struct Failable<TResult>(bool condition, TResult? result)
 	{
 		true => Assertion.Passed(result),
 		false => Assertion.Failed<TResult>(new Failure(actual.Actually(message), actual)),
+	};
+
+	public TResult? Unless(string message) => condition switch
+	{
+		true => Assertion.Passed(result),
+		false => Assertion.Failed<TResult>(new Failure(message) ),
 	};
 
 	public TResult? Unless<TException>(string message) where TException : Exception => condition switch

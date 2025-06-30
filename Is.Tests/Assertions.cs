@@ -570,8 +570,10 @@ public class Assertions
 	[Test]
 	public void Guards()
 	{
-		int value = 5;
+		int value;
 		Action action;
+
+		value = 5;
 
 		action = () => Check.That(value < 0).Unless<ArgumentException>("oh oh");
 		action.IsThrowing<ArgumentException>("oh oh");
@@ -579,6 +581,7 @@ public class Assertions
 		action = () => Check.That(value < 0).Unless<InvalidOperationException>("nope");
 		action.IsThrowing<InvalidOperationException>("nope");
 
+		Check.Argument(value < 0, "oh no");
 	}
 
 	[Test]
