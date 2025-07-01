@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using Is.Core;
-using Is.Core.Interfaces;
+using Is.Core.TestAdapters;
 using Is.Assertions;
 using Is.Tools;
 
@@ -770,17 +770,28 @@ public class Assertions
 	}
 
 	[Test]
-	[AssertionContext]
 	public void TestAdapter()
 	{
-		Configuration.Active.TestAdapter.Is<DefaultAdapter>();
 		Configuration.Active.TestAdapter = new NUnitTestAdapter();
 		Configuration.Active.TestAdapter.Is<NUnitTestAdapter>();
 
-		3.Is(3.0);
-		5.0.IsApproximately(6.0);
+		try { 5.0.IsExactly(6.0); }
+		catch (Exception ex) { ex.Is<AssertionException>(); }
 
-		AssertionContext.Current?.TakeFailures(2);
+		Configuration.Active.TestAdapter = new DefaultAdapter();
+		Configuration.Active.TestAdapter.Is<DefaultAdapter>();
+
+		try { 5.0.IsExactly(6.0); }
+		catch (Exception ex) { ex.Is<NotException>(); }
+
+		Configuration.Active.TestAdapter = new UnitTestAdapter();
+		Configuration.Active.TestAdapter.Is<UnitTestAdapter>();
+
+		try { 5.0.IsExactly(6.0); }
+		catch (Exception ex) { ex.Is<AssertionException>(); }
+
+		try { 5.0.IsExactly(6.0); }
+		catch (Exception ex) { ex.Is<AssertionException>(); }
 	}
 
 	[Test]

@@ -1,7 +1,6 @@
-﻿using Is.Core;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Is;
 
 [DebuggerStepThrough]
-public class NotException(Failure failure) : Exception(failure.Message);
+public class NotException(string message) : Exception(message);
