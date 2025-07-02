@@ -40,6 +40,8 @@
 
 ## Why use Is?
 
+`Is` is a powerful, highly configurable .NET validation and diagnostic tool that prioritizes clear, rich, and shareable failure reporting, designed to seamlessly integrate into various development workflows, including but not limited to traditional unit testing.
+
 - Concise: One word. One assertion.
 - Opinionated: Prioritizes clarity over fluent DSL chaining.
 - Test-framework agnostic: Works with xUnit, NUnit, MSTest, or none at all.
