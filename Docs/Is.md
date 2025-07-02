@@ -104,6 +104,8 @@ Mark custom assertion methods with this attribute to enable proper code line det
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
 ## Is.Core.FailureObservers
+#### <u>ConsoleObserver</u>
+`IFailureObserver` that writes all failures directly to the Console.
 #### <u>JsonObserver</u>
 `IFailureObserver` that writes all failures into one FailureReport JSON file.
 #### <u>MarkDownObserver</u>
@@ -117,6 +119,7 @@ Represents an interface for handling test result reporting. Serves as a hook for
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
 ## Is.Core.TestAdapters
+`ITestAdapter` that allows throwing a custom exception type `TException` when test failures are reported.
 #### <u>DefaultAdapter</u>
 `ITestAdapter` that is throwing `NotException`s for single failures and an `AggregateException` for multiple failures.
 #### <u>UnitTestAdapter</u>

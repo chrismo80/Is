@@ -809,6 +809,12 @@ public class Assertions
 
 		try { 5.0.IsExactly(6.0); }
 		catch (Exception ex) { ex.Is<AssertionException>(); }
+
+		Configuration.Active.TestAdapter =
+			new CustomExceptionAdapter<ArgumentException>(failure => new ArgumentException(failure.Message));
+
+		try { 5.0.IsExactly(6.0); }
+		catch (Exception ex) { ex.Is<ArgumentException>(); }
 	}
 
 	[Test]
