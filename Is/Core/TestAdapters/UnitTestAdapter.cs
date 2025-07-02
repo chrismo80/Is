@@ -16,20 +16,11 @@ public class UnitTestAdapter : ITestAdapter
 	private static Type ExceptionType => _detectedType ??= FindType() ?? typeof(NotException);
 
 
-	public void ReportFailure(Failure failure)
-	{
-		if(failure.CustomExceptionType is { } customType)
-			ThrowException(failure.Message, customType);
+	public void ReportFailure(Failure failure) =>
+		ThrowException(failure.Message, failure.CustomExceptionType ?? ExceptionType);
 
-		ThrowException(failure.Message, ExceptionType);
-	}
-
-	public void ReportFailures(string message, List<Failure> failures)
-	{
-		var messages = string.Join("\n\n", failures.Select(f => f.Message));
-
-		ThrowException($"{message}\n{messages}", ExceptionType);
-	}
+	public void ReportFailures(string message, List<Failure> failures) =>
+		ThrowException(Combine(message, failures.Select(f => f.Message)), ExceptionType);
 
 	private static void ThrowException(string message, Type type)
 	{
@@ -38,6 +29,9 @@ public class UnitTestAdapter : ITestAdapter
 
 		throw new NotException(message);
 	}
+
+	private string Combine(string message, IEnumerable<string> messages) =>
+		$"{message}\n{string.Join("\n\n", messages)}";
 
 	private static Type? FindType() => typeNames
 		.Select(typeName => Type.GetType(typeName, false))
