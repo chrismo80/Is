@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Is.Core.FailureObservers;
 
+/// <summary>
+/// <see cref="IFailureObserver"/> that writes all failures into
+/// one FailureReport mark-down file.
+/// </summary>
 [DebuggerStepThrough]
 public class MarkDownObserver : IFailureObserver
 {

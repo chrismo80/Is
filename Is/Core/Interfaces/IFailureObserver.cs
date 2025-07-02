@@ -2,8 +2,6 @@ namespace Is.Core.Interfaces;
 
 /// <summary>
 /// Interface providing a mechanism to observe failures.
-/// The provided default observer writes all failures into
-/// one FailureReport markdown file.
 /// Can be set via Configuration.FailureObserver.
 /// </summary>
 public interface IFailureObserver

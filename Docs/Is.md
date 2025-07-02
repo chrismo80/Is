@@ -3,8 +3,8 @@ Lines of code < 900
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour
-- __`FailureObserver`__: _Determines the observer responsible for handling failure events during assertions. The observer implements logic for capturing, processing, or reporting failures, enabling customisation of diagnostic or reporting mechanisms. By default, failures are exported to a markdown FailureReport._
-- __`TestAdapter`__: _Specifies the adapter responsible for integrating the assertion framework with external testing frameworks. By default, a `NotException`s are thrown._
+- __`FailureObserver`__: _Determines the observer responsible for handling failure events during assertions. The observer implements logic for capturing, processing, or reporting failures, enabling customisation of diagnostic or reporting mechanisms. Default is `MarkDownObserver`._
+- __`TestAdapter`__: _Specifies the adapter responsible for integrating the assertion framework with external testing frameworks. Default is `DefaultAdapter`that is throwing `NotException` for single failures and a `AggregateException` for multiple failures._
 - __`AppendCodeLine`__: _Makes code line info in `Failure` optional._
 - __`ColorizeMessages`__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
@@ -103,14 +103,24 @@ Represents a failure encountered during an assertion or test execution. Contains
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
+## Is.Core.FailureObservers
+#### <u>JsonObserver</u>
+`IFailureObserver` that writes all failures into one FailureReport JOSN file.
+#### <u>MarkDownObserver</u>
+`IFailureObserver` that writes all failures into one FailureReport mark-down file.
 ## Is.Core.Interfaces
 #### <u>IFailureObserver</u>
-Interface providing a mechanism to observe failures. The provided default observer writes all failures into one FailureReport markdown file. Can be set via Configuration.FailureObserver.
+Interface providing a mechanism to observe failures. Can be set via Configuration.FailureObserver.
 - __`OnFailure(failure)`__: _This method is invoked when a failure occurs during an assertion. Observer can perform custom logic on that failure such as logging or reporting._
 #### <u>ITestAdapter</u>
-Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. The provided default adapter throws exceptions for test failures, specifically a `NotException` for single failures and a `AggregateException` for multiple failures. Can be set via Configuration.TestAdapter.
+Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Can be set via Configuration.TestAdapter.
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
+## Is.Core.TestAdapters
+#### <u>DefaultAdapter</u>
+`ITestAdapter` that is throwing `NotException` for single failures and a `AggregateException` for multiple failures.
+#### <u>UnitTestAdapter</u>
+`ITestAdapter` that is throwing test framework specific exception. Detects the loaded framework (MS Test, xUnit, NUnit) on first failure. If none of those is detected `NotException`(s) are thrown.
 ## Is.Tools
 #### <u>JsonFileHelper</u>
 - __`SaveJson<T>(obj, filename)`__: _Serializes an object `obj` to a JSON file to `filename`_

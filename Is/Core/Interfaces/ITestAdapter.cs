@@ -3,9 +3,6 @@ namespace Is.Core.Interfaces;
 /// <summary>
 /// Represents an interface for handling test result reporting.
 /// Serves as a hook for custom test frameworks to throw custom exception types.
-/// The provided default adapter throws exceptions for test failures,
-/// specifically a <see cref="NotException"/> for single failures
-/// and a <see cref="AggregateException"/> for multiple failures.
 /// Can be set via Configuration.TestAdapter.
 /// </summary>
 public interface ITestAdapter

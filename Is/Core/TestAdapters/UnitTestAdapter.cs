@@ -1,7 +1,14 @@
+using System.Diagnostics;
 using Is.Core.Interfaces;
 
 namespace Is.Core.TestAdapters;
 
+/// <summary>
+/// <see cref="ITestAdapter"/> that is throwing test framework specific exception.
+/// Detects the loaded framework (MS Test, xUnit, NUnit) on first failure.
+/// If none of those is detected <see cref="NotException"/>(s) are thrown.
+/// </summary>
+[DebuggerStepThrough]
 public class UnitTestAdapter : ITestAdapter
 {
 	private static readonly string[] typeNames =
@@ -30,7 +37,7 @@ public class UnitTestAdapter : ITestAdapter
 		throw new NotException(message);
 	}
 
-	private string Combine(string message, IEnumerable<string> messages) =>
+	private static string Combine(string message, IEnumerable<string> messages) =>
 		$"{message}\n{string.Join("\n\n", messages)}";
 
 	private static Type? FindType() => typeNames

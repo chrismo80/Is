@@ -23,13 +23,14 @@ public class Configuration
 	/// Determines the observer responsible for handling failure events during assertions.
 	/// The observer implements logic for capturing, processing, or reporting failures,
 	/// enabling customisation of diagnostic or reporting mechanisms.
-	/// By default, failures are exported to a markdown FailureReport.
+	/// Default is <see cref="MarkDownObserver"/>.
 	/// </summary>
 	public IFailureObserver? FailureObserver { get; set; } = new MarkDownObserver();
 
 	/// <summary>
 	/// Specifies the adapter responsible for integrating the assertion framework with external testing frameworks.
-	/// By default, a <see cref="NotException"/>s are thrown.
+	/// Default is <see cref="DefaultAdapter"/>that is throwing <see cref="NotException"/> for single failures
+	/// and a <see cref="AggregateException"/> for multiple failures.
 	/// </summary>
 	public ITestAdapter? TestAdapter { get; set; } = new DefaultAdapter();
 

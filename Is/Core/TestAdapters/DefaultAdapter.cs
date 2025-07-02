@@ -1,7 +1,13 @@
+using System.Diagnostics;
 using Is.Core.Interfaces;
 
 namespace Is.Core.TestAdapters;
 
+/// <summary>
+/// <see cref="ITestAdapter"/> that is throwing <see cref="NotException"/> for
+/// single failures and a <see cref="AggregateException"/> for multiple failures.
+/// </summary>
+[DebuggerStepThrough]
 public class DefaultAdapter : ITestAdapter
 {
 	public void ReportFailure(Failure failure) => throw CreateException(failure);
