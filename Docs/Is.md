@@ -119,6 +119,7 @@ Represents an interface for handling test result reporting. Serves as a hook for
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
 ## Is.Core.TestAdapters
+#### <u>CustomExceptionAdapter`1</u>
 `ITestAdapter` that allows throwing a custom exception type `TException` when test failures are reported.
 #### <u>DefaultAdapter</u>
 `ITestAdapter` that is throwing `NotException`s for single failures and an `AggregateException` for multiple failures.
