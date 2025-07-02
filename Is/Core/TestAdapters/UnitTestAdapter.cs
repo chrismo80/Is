@@ -4,38 +4,42 @@ namespace Is.Core.TestAdapters;
 
 public class UnitTestAdapter : ITestAdapter
 {
-	private static readonly string[] exceptionTypeNames =
+	private static readonly string[] typeNames =
 	[
 		"Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException, Microsoft.VisualStudio.TestTools.UnitTesting",
 		"Xunit.Sdk.XunitException, xunit.assert",
 		"NUnit.Framework.AssertionException, nunit.framework",
-		"Is.NotException, is",
 	];
 
-	private static Type? _exceptionType;
+	private static Type? _detectedType;
 
-	public static Type ExceptionType => _exceptionType ??= GetFrameworkExceptionType();
+	private static Type ExceptionType => _detectedType ??= FindType() ?? typeof(NotException);
 
-	public void ReportFailure(Failure failure) =>
-		throw CreateException(failure);
 
-	public void ReportFailures(string message, List<Failure> failures) =>
-		throw new AggregateException(message, failures.Select(CreateException));
-
-	private static Exception CreateException(Failure failure)
+	public void ReportFailure(Failure failure)
 	{
 		if(failure.CustomExceptionType is { } customType)
-			return New(customType, failure);
+			ThrowException(failure.Message, customType);
 
-		return New(ExceptionType, failure);
+		ThrowException(failure.Message, ExceptionType);
 	}
 
-	private static Exception New(Type type, Failure failure) =>
-		(Exception)Activator.CreateInstance(type, failure.Message);
+	public void ReportFailures(string message, List<Failure> failures)
+	{
+		var messages = string.Join("\n\n", failures.Select(f => f.Message));
 
-	private static Type GetFrameworkExceptionType() =>
-		Type.GetType(GetTypeName()) ?? typeof(NotException);
+		ThrowException($"{message}\n{messages}", ExceptionType);
+	}
 
-	private static string GetTypeName() =>
-		exceptionTypeNames.First(e => Type.GetType(e, false) is not null);
+	private static void ThrowException(string message, Type type)
+	{
+		if (type.GetConstructor([typeof(string)])?.Invoke([message]) is Exception ex)
+			throw ex;
+
+		throw new NotException(message);
+	}
+
+	private static Type? FindType() => typeNames
+		.Select(typeName => Type.GetType(typeName, false))
+		.FirstOrDefault(type => type is not null);
 }
