@@ -1,7 +1,7 @@
 ﻿using Is.Core;
 using Is.Core.Interfaces;
-using Is.Core.FailureObservers;
-using Is.Core.TestAdapters;
+using Is.FailureObservers;
+using Is.TestAdapters;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;

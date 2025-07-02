@@ -1,7 +1,8 @@
+using Is.Core;
 using System.Diagnostics;
 using Is.Core.Interfaces;
 
-namespace Is.Core.TestAdapters;
+namespace Is.TestAdapters;
 
 /// <summary>
 /// <see cref="ITestAdapter"/> that is throwing <see cref="NotException"/>s for

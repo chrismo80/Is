@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
 using Is.Core;
-using Is.Core.TestAdapters;
+using Is.TestAdapters;
 using Is.Assertions;
-using Is.Core.FailureObservers;
+using Is.FailureObservers;
 using Is.Tools;
 
 namespace Is.Tests;

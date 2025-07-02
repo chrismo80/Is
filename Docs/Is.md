@@ -103,13 +103,6 @@ Represents a failure encountered during an assertion or test execution. Contains
 Mark custom assertion methods with this attribute to enable proper code line detection.
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
-## Is.Core.FailureObservers
-#### <u>ConsoleObserver</u>
-`IFailureObserver` that writes all failures directly to the Console.
-#### <u>JsonObserver</u>
-`IFailureObserver` that writes all failures into one FailureReport JSON file.
-#### <u>MarkDownObserver</u>
-`IFailureObserver` that writes all failures into one FailureReport mark-down file.
 ## Is.Core.Interfaces
 #### <u>IFailureObserver</u>
 Interface providing a mechanism to observe failures. Can be set via Configuration.FailureObserver.
@@ -118,7 +111,14 @@ Interface providing a mechanism to observe failures. Can be set via Configuratio
 Represents an interface for handling test result reporting. Serves as a hook for custom test frameworks to throw custom exception types. Can be set via Configuration.TestAdapter.
 - __`ReportFailure(failure)`__: _Reports a failed test result to the configured test adapter._
 - __`ReportFailures(message, failures)`__: _Reports multiple test failures to the configured test adapter._
-## Is.Core.TestAdapters
+## Is.FailureObservers
+#### <u>ConsoleObserver</u>
+`IFailureObserver` that writes all failures directly to the Console.
+#### <u>JsonObserver</u>
+`IFailureObserver` that writes all failures into one FailureReport JSON file.
+#### <u>MarkDownObserver</u>
+`IFailureObserver` that writes all failures into one FailureReport mark-down file.
+## Is.TestAdapters
 #### <u>CustomExceptionAdapter</u>
 `ITestAdapter` that allows throwing a custom exception type `TException` when test failures are reported.
 #### <u>DefaultAdapter</u>

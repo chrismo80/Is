@@ -1,6 +1,7 @@
+using Is.Core;
 using Is.Core.Interfaces;
 
-namespace Is.Core.TestAdapters;
+namespace Is.TestAdapters;
 
 /// <summary>
 /// <see cref="ITestAdapter"/> that allows throwing a custom exception type

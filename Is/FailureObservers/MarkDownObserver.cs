@@ -1,9 +1,10 @@
+using Is.Core;
 using Is.Core.Interfaces;
 using Is.Tools;
 using System.Diagnostics;
 using System.Text;
 
-namespace Is.Core.FailureObservers;
+namespace Is.FailureObservers;
 
 /// <summary>
 /// <see cref="IFailureObserver"/> that writes all failures into
