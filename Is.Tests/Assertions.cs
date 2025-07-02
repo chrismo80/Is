@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Is.Core;
 using Is.Core.TestAdapters;
 using Is.Assertions;
+using Is.Core.FailureObservers;
 using Is.Tools;
 
 namespace Is.Tests;
@@ -642,6 +643,22 @@ public class Assertions
 
 		Configuration.Active.FloatingPointComparisonPrecision = 1e-4;
 		actual.IsApproximately(expected);
+	}
+
+	[Test]
+	[AssertionContext]
+	public void JsonObserver()
+	{
+		Configuration.Active.FailureObserver = new JsonObserver();
+
+		var t = Parallel.For(1, 20, i =>
+		{
+			(i % 2 == 0).IsTrue();
+			i.Is(2);
+			3.Is(i);
+		});
+
+		AssertionContext.Current?.TakeFailures(46);
 	}
 
 	[Test]
