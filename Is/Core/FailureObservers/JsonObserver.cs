@@ -6,7 +6,7 @@ namespace Is.Core.FailureObservers;
 
 /// <summary>
 /// <see cref="IFailureObserver"/> that writes all failures into
-/// one FailureReport JOSN file.
+/// one FailureReport JSON file.
 /// </summary>
 [DebuggerStepThrough]
 public class JsonObserver : IFailureObserver
