@@ -1,7 +1,7 @@
+using Is.Core.Interfaces;
+using Is.Tools;
 using System.Diagnostics;
 using System.Text;
-using Is.Tools;
-using Is.Core.Interfaces;
 
 namespace Is.Core.FailureObservers;
 
@@ -10,17 +10,15 @@ public class MarkDownObserver : IFailureObserver
 {
 	const string FILE = "FailureReport.md";
 
-	static readonly object sync = new();
+	private static readonly object sync = new();
 
 	static MarkDownObserver() => File.Delete(FILE);
 
-	public void OnFailure(Failure failure) => Append(failure.ToMarkDown());
-
-	private static void Append(string text)
+	public void OnFailure(Failure failure)
 	{
 		lock (sync)
 		{
-			File.AppendAllText(FILE, text);
+			File.AppendAllText(FILE, failure.ToMarkDown());
 		}
 	}
 }
