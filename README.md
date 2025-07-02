@@ -382,6 +382,8 @@ A failure from an object graph comparison for example looks like this.
 
 ![plot](Docs/FailureReport.png)
 
+Rich, Human-Readable Reports: Imagine CI/CD pipelines generating beautiful Markdown failure reports that are easy to read directly in GitHub/GitLab, Confluence, or even just a text editor. This is immensely valuable for teams, QA, and even non-technical stakeholders to understand failures without diving into raw log files or test runner UIs.
+
 Of course, you can even create your own `IFailureObserver` to redirect any failures to your favourite reporting or logging system.
 
 
