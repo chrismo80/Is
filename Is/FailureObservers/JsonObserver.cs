@@ -12,17 +12,17 @@ namespace Is.FailureObservers;
 [DebuggerStepThrough]
 public class JsonObserver : IFailureObserver
 {
-	const string FILE = "FailureReport.json";
-
 	private static readonly List<Failure> failures = [];
 	private static readonly object sync = new();
+
+	public string Filename { get; set; } = "FailureReport.json";
 
 	public void OnFailure(Failure failure)
 	{
 		lock (sync)
 		{
 			failures.Add(failure);
-			failures.SaveJson(FILE);
+			failures.SaveJson(Filename);
 		}
 	}
 }
