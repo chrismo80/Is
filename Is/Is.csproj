@@ -38,10 +38,14 @@
 
     <None Include="..\Docs\Is.png" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\"/>
-    <None Update="is.configuration.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
 
+    <Content Include="is.configuration.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>contentFiles/any/any</PackagePath>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    
   </ItemGroup>
 
 </Project>
