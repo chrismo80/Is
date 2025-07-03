@@ -100,10 +100,3 @@ file class TypeConverter<TInterface, T> : JsonConverter<TInterface>
 	public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
 		writer.WriteStringValue(value.GetType().AssemblyQualifiedName);
 }
-
-file static class TypeExtensions
-{
-	internal static Type? ToType(this string typeName) => Type.GetType(typeName);
-	internal static T ToInstance<T>(this Type type) => (T)Activator.CreateInstance(type)!;
-
-}

@@ -1,6 +1,7 @@
 using Is.Core;
-using System.Diagnostics;
+using Is.Tools;
 using Is.Core.Interfaces;
+using System.Diagnostics;
 
 namespace Is.TestAdapters;
 
@@ -30,18 +31,13 @@ public class UnitTestAdapter : ITestAdapter
 	public void ReportFailures(string message, List<Failure> failures) =>
 		ThrowException(Combine(message, failures.Select(f => f.Message)), ExceptionType);
 
-	private static void ThrowException(string message, Type type)
-	{
-		if (type.GetConstructor([typeof(string)])?.Invoke([message]) is Exception ex)
-			throw ex;
-
-		throw new NotException(message);
-	}
+	private static void ThrowException(string message, Type type) =>
+		throw type.ToInstance<Exception>(message) ?? new NotException(message);
 
 	private static string Combine(string message, IEnumerable<string> messages) =>
 		$"{message}\n{string.Join("\n\n", messages)}";
 
 	private static Type? FindType() => typeNames
-		.Select(typeName => Type.GetType(typeName, false))
+		.Select(typeName => typeName.ToType())
 		.FirstOrDefault(type => type is not null);
 }
