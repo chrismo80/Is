@@ -1,5 +1,6 @@
 ﻿using Is.Core;
 using Is.Core.Interfaces;
+using Is.Tools;
 using Is.FailureObservers;
 using Is.TestAdapters;
 using System.Diagnostics;
@@ -15,7 +16,8 @@ namespace Is;
 [DebuggerStepThrough]
 public class Configuration
 {
-	internal static Configuration Default { get; } = new();
+	const string ConfigFile = "configuration.json";
+	internal static Configuration Default { get; } = ConfigFile.LoadJson<Configuration>() ?? new Configuration();
 
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
@@ -25,6 +27,7 @@ public class Configuration
 	/// enabling customisation of diagnostic or reporting mechanisms.
 	/// Default is <see cref="MarkDownObserver"/>.
 	/// </summary>
+	[JsonConverter(typeof(TypeConverter<IFailureObserver, MarkDownObserver>))]
 	public IFailureObserver? FailureObserver { get; set; } = new MarkDownObserver();
 
 	/// <summary>
@@ -32,6 +35,7 @@ public class Configuration
 	/// Default is <see cref="DefaultAdapter"/>that is throwing <see cref="NotException"/> for single failures
 	/// and a <see cref="AggregateException"/> for multiple failures.
 	/// </summary>
+	[JsonConverter(typeof(TypeConverter<ITestAdapter, DefaultAdapter>))]
 	public ITestAdapter? TestAdapter { get; set; } = new DefaultAdapter();
 
 	/// <summary>
@@ -67,6 +71,7 @@ public class Configuration
 	/// These options dictate aspects such as how JSON properties are written, ignored, or formatted,
 	/// enabling fine-grained control over the serialization processes.
 	/// </summary>
+	[JsonIgnore]
 	public JsonSerializerOptions JsonSerializerOptions { get; set; } = new()
 	{
 		WriteIndented = true,
@@ -84,4 +89,21 @@ public class Configuration
 		ParsingFlags = ParsingFlags,
 		JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerOptions),
 	};
+}
+
+file class TypeConverter<TInterface, T> : JsonConverter<TInterface>
+	where TInterface : class where T : TInterface, new()
+{
+	public override TInterface Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+		reader.GetString()?.ToType()?.ToInstance<TInterface>() ?? new T();
+
+	public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
+		writer.WriteStringValue(value.GetType().AssemblyQualifiedName);
+}
+
+file static class TypeExtensions
+{
+	internal static Type? ToType(this string typeName) => Type.GetType(typeName);
+	internal static T ToInstance<T>(this Type type) => (T)Activator.CreateInstance(type)!;
+
 }

@@ -11,8 +11,8 @@ internal static class JsonParser
 	internal static string ToJson<T>(this T me) =>
 		JsonSerializer.Serialize(me, Configuration.Active.JsonSerializerOptions);
 
-	internal static T? FromJson<T>(this string json) =>
-		JsonSerializer.Deserialize<T>(json, Configuration.Active.JsonSerializerOptions);
+	internal static T? FromJson<T>(this string json, JsonSerializerOptions? options = null) =>
+		JsonSerializer.Deserialize<T>(json, options);
 
 	internal static Dictionary<string, object?> ParseJson(this string json) =>
 		JsonNode.Parse(json).Parse([]);
@@ -80,6 +80,12 @@ public static class JsonFileHelper
 	/// <summary>
 	/// Deserializes an object to type <typeparamref name="T" /> from a JSON file at <paramref name="filename"/>
 	/// </summary>
-	public static T? LoadJson<T>(this string filename) =>
-		File.ReadAllText(filename, Encoding.UTF8).FromJson<T>();
+	public static T? LoadJson<T>(this string filename)
+	{
+		if (!File.Exists(filename))
+			return default;
+
+		return File.ReadAllText(filename, Encoding.UTF8).FromJson<T>();
+
+	}
 }

@@ -1,0 +1,9 @@
+{
+  "FailureObserver": "Is.FailureObservers.MarkDownObserver, Is",
+  "TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
+  "AppendCodeLine": true,
+  "ColorizeMessages": true,
+  "FloatingPointComparisonPrecision": 1E-06,
+  "MaxRecursionDepth": 20,
+  "ParsingFlags": 52
+}
