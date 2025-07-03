@@ -2,7 +2,20 @@
 Lines of code < 900
 ## Is
 #### <u>Configuration</u>
-Global configurations that control assertion behaviour
+Global configurations that control assertion behaviour.
+ 
+ Can be set via `is.configuration.json`:
+ ```
+ {
+ 	"FailureObserver": "Is.FailureObservers.MarkDownObserver, Is",
+ 	"TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
+ 	"AppendCodeLine": true,
+ 	"ColorizeMessages": true,
+ 	"FloatingPointComparisonPrecision": 1E-06,
+ 	"MaxRecursionDepth": 20,
+ 	"ParsingFlags": 52
+ }
+ ```
 - __`FailureObserver`__: _Determines the observer responsible for handling failure events during assertions. The observer implements logic for capturing, processing, or reporting failures, enabling customisation of diagnostic or reporting mechanisms. Default is `MarkDownObserver`._
 - __`TestAdapter`__: _Specifies the adapter responsible for integrating the assertion framework with external testing frameworks. Default is `DefaultAdapter`that is throwing `NotException` for single failures and a `AggregateException` for multiple failures._
 - __`AppendCodeLine`__: _Makes code line info in `Failure` optional._
@@ -76,6 +89,25 @@ All assertions are implemented as extension methods.
 ## Is.Core
 #### <u>AssertionContext</u>
 Represents a scoped context that captures all assertion failures within its lifetime and reports the collection upon disposal if any failures occurred.
+ Intended for test frameworks like NUnit, xUnit, or MSTest. By using this context, tests can collect multiple
+ assertion failures and evaluate them together at the end of the test unless being dequeued before.
+ 
+ Usage:
+ ```
+ using var context = AssertionContext.Begin();
+ 
+ false.IsTrue();
+ 4.Is(5);
+ 
+ context.Failed.Is(2);
+ context.NextFailure().Message.IsContaining("false.IsTrue()");
+ 
+ context.Failed.Is(1);
+ context.NextFailure().Message.IsContaining("4.Is(5)");
+ ```
+ 
+ If any failures are not dequeued or handled manually, they will be reported when the context is disposed.
+ 
 - __`Current`__: _The current active `AssertionContext` for the asynchronous operation, or null if no context is active._
 - __`Begin(method)`__: _Starts a new `AssertionContext` on the current thread. Current `Configuration` is cloned to enable local configurations per assertion context._
 - __`Dispose()`__: _Ends the assertion context and reports all collected failures to the `!:ITestAdapter`_
@@ -101,6 +133,12 @@ Represents a failure encountered during an assertion or test execution. Contains
 - __`Code`__: _The specific line of source code of the assertion failure._
 #### <u>IsAssertionAttribute</u>
 Mark custom assertion methods with this attribute to enable proper code line detection.
+ Usage:
+ ```
+ [IsAssertion]
+ public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
+ 	Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
+ ```
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
 ## Is.Core.Interfaces

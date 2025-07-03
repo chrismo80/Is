@@ -7,8 +7,8 @@ namespace Is.Core;
 /// Usage:
 /// <code>
 /// [IsAssertion]
-/// public static bool IsCustomAssertion(this bool value, [CallerArgumentExpression("value")] string? expr = null) =>
-///		Check.That(value).Unless($"{expr} is wrong");
+/// public static bool IsCustomAssertion(this int value, [CallerArgumentExpression("value")] string? expr = null) =>
+///		Check.That(value > 0).Unless(value, $"in '{expr}' is not positive");
 /// </code>
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method)]

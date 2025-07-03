@@ -11,8 +11,23 @@ using System.Text.Json.Serialization;
 namespace Is;
 
 /// <summary>
-/// Global configurations that control assertion behaviour
+/// Global configurations that control assertion behaviour.
 /// </summary>
+/// <remarks>
+///
+/// Can be set via <c>is.configuration.json</c>:
+/// <code>
+/// {
+///	"FailureObserver": "Is.FailureObservers.MarkDownObserver, Is",
+///	"TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
+///	"AppendCodeLine": true,
+///	"ColorizeMessages": true,
+///	"FloatingPointComparisonPrecision": 1E-06,
+///	"MaxRecursionDepth": 20,
+///	"ParsingFlags": 52
+/// }
+/// </code>
+/// </remarks>
 [DebuggerStepThrough]
 public class Configuration
 {
