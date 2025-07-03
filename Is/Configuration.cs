@@ -16,7 +16,7 @@ namespace Is;
 [DebuggerStepThrough]
 public class Configuration
 {
-	const string ConfigFile = "configuration.json";
+	const string ConfigFile = "is.configuration.json";
 	internal static Configuration Default { get; } = ConfigFile.LoadJson<Configuration>() ?? new Configuration();
 
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
