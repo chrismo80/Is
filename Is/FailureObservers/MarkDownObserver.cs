@@ -2,6 +2,7 @@ using Is.Core;
 using Is.Core.Interfaces;
 using Is.Tools;
 using System.Diagnostics;
+using System.Net.Mail;
 using System.Text;
 
 namespace Is.FailureObservers;
@@ -37,13 +38,14 @@ file static class MarkDownExtensions
 
 		sb.AppendLine($"# ❌ Assertion failed: `{failure.Assertion}`");
 		sb.AppendLine();
-		sb.AppendLine($"**Location:** `{failure.File}` line {failure.Line}");
-		sb.AppendLine();
-		sb.AppendLine($"**Code:** `{failure.Code}`");
-		sb.AppendLine();
 		sb.AppendLine($"**Time:** `{failure.Created}`");
 		sb.AppendLine();
-		sb.AppendLine("## 📋 Summary");
+		sb.AppendLine($"**Code:** `{failure.File}` line `{failure.Line}`");
+		sb.AppendLine($"```csharp");
+		sb.AppendLine($"{failure.Code}");
+		sb.AppendLine($"```");
+		sb.AppendLine();
+		sb.AppendLine("## 📋 Message");
 		sb.AppendLine();
 
 		if (failure.Failures == null)
@@ -61,17 +63,22 @@ file static class MarkDownExtensions
 		sb.AppendLine("|-----|--------|---------|");
 
 		foreach (var sub in failure.Failures)
-			sb.AppendLine($"| `{sub.Message.RemoveColor().Path().Beautify()}` | {sub.Actual.Value()} | {sub.Expected.Value()} |");
+			sb.AppendLine($"| `{sub.Message.RemoveColor().Path().Beautify()}` | {sub.Values()} |");
 
 		return sb.AppendLine().AppendLine().ToString();
 	}
 
-	private static string Beautify(this string text) =>
-		text.Replace(".", "`__.__`");
-
 	private static string Path(this string message) =>
 		message.Split(": ").First();
 
+	private static string Beautify(this string text) =>
+		text.Replace(".", "`__.__`");
+
 	private static string Value(this object? value) =>
 		value is null ? "__---__" : $"`{value}`";
+
+	private static string Values(this Failure failure) =>
+		failure.Actual is null || failure.Expected is null || failure.Actual?.GetType() == failure.Expected?.GetType() ?
+			$"{failure.Actual.Value()} | {failure.Expected.Value()}" :
+			$"{failure.Actual.Value()} ({failure.Actual?.GetType().Name}) | {failure.Expected.Value()} ({failure.Expected?.GetType().Name})";
 }
