@@ -57,21 +57,21 @@ file static class MarkDownExtensions
 		sb.AppendLine();
 		sb.AppendLine("## 🔍 Details");
 		sb.AppendLine();
-		sb.AppendLine("| Path | Message | Actual | Expected |");
-		sb.AppendLine("|-----|---------|--------|---------|");
+		sb.AppendLine("| Path | Actual | Expected |");
+		sb.AppendLine("|-----|--------|---------|");
 
 		foreach (var sub in failure.Failures)
-			sb.AppendLine($"| `{sub.Message.RemoveColor().Path()}` | {EscapeMarkdown(sub.Message.RemoveColor().Text())} | `{sub.Actual}` | `{sub.Expected}` |");
+			sb.AppendLine($"| `{sub.Message.RemoveColor().Path().Beautify()}` | {sub.Actual.Value()} | {sub.Expected.Value()} |");
 
-		return sb.AppendLine().ToString();
+		return sb.AppendLine().AppendLine().ToString();
 	}
 
-	private static string EscapeMarkdown(string text) =>
-		text.Replace("|", "\\|");
+	private static string Beautify(this string text) =>
+		text.Replace(".", "`__.__`");
 
 	private static string Path(this string message) =>
-		message.Split(":").First();
+		message.Split(": ").First();
 
-	private static string Text(this string message) =>
-		message.Split(":").Last();
+	private static string Value(this object? value) =>
+		value is null ? "__---__" : $"`{value}`";
 }

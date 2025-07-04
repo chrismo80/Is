@@ -37,7 +37,6 @@ public class UnitTestAdapter : ITestAdapter
 	private static string Combine(string message, IEnumerable<string> messages) =>
 		$"{message}\n{string.Join("\n\n", messages)}";
 
-	private static Type? FindType() => typeNames
-		.Select(typeName => typeName.ToType())
+	private static Type? FindType() => typeNames.Select(typeName => typeName.ToType())
 		.FirstOrDefault(type => type is not null);
 }
