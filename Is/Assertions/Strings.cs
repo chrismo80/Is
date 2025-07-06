@@ -1,6 +1,7 @@
 ﻿using Is.Core;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace Is.Assertions;
@@ -81,4 +82,9 @@ public static class Strings
 	public static bool IsNotMatching(this string actual, string pattern)=> Check
 		.That(!Regex.Match(actual, pattern).Success)
 		.Unless(actual, "is matching", pattern);
+
+	/// <summary>Determines whether the <paramref name="actual"/> string is a valid email address.</summary>
+	public static bool IsEmail(this string actual) => Check
+		.That(MailAddress.TryCreate(actual, out var _))
+		.Unless(actual, "is not an email address");
 }

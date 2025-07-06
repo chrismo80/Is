@@ -408,6 +408,16 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
+	public void IsEmail()
+	{
+		"pre.post@provider.com".IsEmail();
+
+		"pre.post_provider.com".IsEmail();
+		AssertionContext.Current?.NextFailure();
+	}
+
+	[Test]
 	public void IsMatching()
 	{
 		"hello world".IsMatching("hello");

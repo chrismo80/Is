@@ -88,6 +88,7 @@ All assertions are implemented as extension methods.
 - __`IsEquivalentTo(actual, expected)`__: _Asserts that the `actual` string is equivalent to the `expected` string, ignoring case differences._
 - __`IsMatching(actual, pattern)`__: _Asserts that the `actual` string matches the specified `pattern` regular expression._
 - __`IsNotMatching(actual, pattern)`__: _Asserts that the `actual` string does not match the specified `pattern` regular expression._
+- __`IsEmail(actual)`__: _Determines whether the `actual` string is a valid email address._
 #### <u>Types</u>
 - __`Is<T>(actual)`__: _Asserts that the actual object is of type `T`._
 - __`IsNot<T>(actual)`__: _Asserts that the actual object is not of type `T`._
