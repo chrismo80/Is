@@ -134,8 +134,25 @@ public static class Comparisons
 
 	/// <summary>
 	/// Checks that the given <paramref name="actual"/> date is older than the specified number of
-	/// <paramref name="years"/> relative to the reference date <paramref name="atDate"/> or today if not provided.
+	/// <paramref name="years"/> relative to the reference date <paramref name="date"/> or today if not provided.
 	/// </summary>
-	public static bool IsOlderThan(this DateTime actual, int years, DateTime atDate = default) =>
-		(atDate == default ? DateTime.Today : atDate).AddYears(-1 * years).IsAtLeast(actual.Date);
+	public static bool IsOlderThan(this DateTime actual, int years, DateTime date) =>
+		actual.GetAgeTo(date).IsAtLeast(years);
+
+	/// <summary>
+	/// Checks that the given <paramref name="actual"/> date is older than
+	/// the specified number of <paramref name="years"/>.
+	/// </summary>
+	public static bool IsOlderThan(this DateTime actual, int years) =>
+		actual.IsOlderThan(years, DateTime.Today);
+
+	private static int GetAgeTo(this DateTime birthDate, DateTime date)
+	{
+		int age = date.Year - birthDate.Year;
+
+		if (birthDate.Date > date.AddYears(-age).Date)
+			age--;
+
+		return age;
+	}
 }

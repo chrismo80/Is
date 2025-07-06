@@ -398,8 +398,8 @@ public class Assertions
 	[AssertionContext]
 	public void IsOlderThan()
 	{
-		var birthDate = new DateTime(2007, 07, 05, 11, 11, 11);
-		var checkDate = new DateTime(2025, 07, 04, 11, 11, 11);
+		var birthDate = new DateTime(2007, 07, 06, 11, 11, 11);
+		var checkDate = new DateTime(2025, 07, 05, 11, 11, 11);
 
 		birthDate.IsOlderThan(18, checkDate);
 		AssertionContext.Current?.NextFailure();
