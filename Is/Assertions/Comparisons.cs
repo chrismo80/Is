@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Numerics;
+using System.Reflection;
 
 namespace Is.Assertions;
 
@@ -130,4 +131,11 @@ public static class Comparisons
 	/// </summary>
 	public static bool IsApproximately(this TimeSpan actual, TimeSpan expected, TimeSpan tolerance) =>
 		(actual - expected).Duration().IsAtMost(tolerance);
+
+	/// <summary>
+	/// Checks that the given <paramref name="actual"/> date is older than the specified number of
+	/// <paramref name="years"/> relative to the reference date <paramref name="atDate"/> or today if not provided.
+	/// </summary>
+	public static bool IsOlderThan(this DateTime actual, int years, DateTime atDate = default) =>
+		(atDate == default ? DateTime.Today : atDate).AddYears(-1 * years).IsAtLeast(actual.Date);
 }

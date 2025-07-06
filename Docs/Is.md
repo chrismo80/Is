@@ -55,6 +55,7 @@ All assertions are implemented as extension methods.
 - __`IsOutOfRange<T>(actual, min, max)`__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `TimeSpan` is within the specified `tolerance`._
+- __`IsOlderThan(actual, years, atDate)`__: _Checks that the given `actual` date is older than the specified number of `years` relative to the reference date `atDate` or today if not provided._
 #### <u>Delegates</u>
 - __`IsThrowing<T>(action)`__: _Asserts that the given `action` throws an exception of type `T`._
 - __`IsNotThrowing<T>(action)`__: _Asserts that the given `action` does not throw an exception of type `T`._

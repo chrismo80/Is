@@ -395,6 +395,19 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
+	public void IsOlderThan()
+	{
+		var birthDate = new DateTime(2007, 07, 05, 11, 11, 11);
+		var checkDate = new DateTime(2025, 07, 04, 11, 11, 11);
+
+		birthDate.IsOlderThan(18, checkDate);
+		AssertionContext.Current?.NextFailure();
+
+		birthDate.IsOlderThan(18);
+	}
+
+	[Test]
 	public void IsMatching()
 	{
 		"hello world".IsMatching("hello");
@@ -542,7 +555,7 @@ public class Assertions
 	}
 
 	[Test]
-	public void DateTime()
+	public void DateTime_Comparisons()
 	{
 		var from = new DateTime(2025, 05, 24, 11, 11, 10);
 		var to = new DateTime(2025, 05, 24, 11, 11, 11);
