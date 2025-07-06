@@ -51,6 +51,18 @@ public static class Collections
 			.Unless(actual, "is not containing", missing);
 	}
 
+	/// <summary>Asserts that the sequence contains the specified elements.</summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsContaining<T>(this IEnumerable<T> actual, T expected) => Check
+		.That(actual.Contains(expected))
+		.Unless(actual, "is not containing", expected);
+
+	/// <summary>Asserts that the sequence does not contain the specified elements.</summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotContaining<T>(this IEnumerable<T> actual, T expected) => Check
+		.That(!actual.Contains(expected))
+		.Unless(actual, "is containing", expected);
+
 	/// <summary>
 	/// Asserts that all elements in the <paramref name="actual"/> collection
 	/// are present in the <paramref name="expected"/> collection.
@@ -64,6 +76,18 @@ public static class Collections
 			.That(unexpected.Length == 0)
 			.Unless(unexpected, "is not in", expected);
 	}
+
+	/// <summary>Checks that the specified element is contained within the given sequence.</summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsIn<T>(this T actual, IEnumerable<T> expected) => Check
+		.That(expected.Contains(actual))
+		.Unless(actual, "is not in", expected);
+
+	/// <summary>Checks that the specified element is not contained within the given sequence.</summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotIn<T>(this T actual, IEnumerable<T> expected) => Check
+		.That(!expected.Contains(actual))
+		.Unless(actual, "is in", expected);
 
 	/// <summary>Asserts that the sequence is ordered in ascending order.</summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]

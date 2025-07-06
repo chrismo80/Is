@@ -1,5 +1,5 @@
 # Public API
-Lines of code < 900
+Lines of code < 1000
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour.
@@ -34,7 +34,11 @@ All assertions are implemented as extension methods.
 - __`IsNotEmpty<T>(actual)`__: _Asserts that the sequence is not empty._
 - __`IsUnique<T>(actual)`__: _Asserts that all elements in the sequence are unique._
 - __`IsContaining<T>(actual, expected)`__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
+- __`IsContaining<T>(actual, expected)`__: _Asserts that the sequence contains the specified elements._
+- __`IsNotContaining<T>(actual, expected)`__: _Asserts that the sequence does not contain the specified elements._
 - __`IsIn<T>(actual, expected)`__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
+- __`IsIn<T>(actual, expected)`__: _Checks that the specified element is contained within the given sequence._
+- __`IsNotIn<T>(actual, expected)`__: _Checks that the specified element is not contained within the given sequence._
 - __`IsOrdered<T>(actual)`__: _Asserts that the sequence is ordered in ascending order._
 - __`IsOrderedDescending<T>(actual)`__: _Asserts that the sequence is ordered in descending order._
 - __`IsEquivalentTo<T>(actual, expected)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Default Equality comparer of `T`._
