@@ -57,6 +57,7 @@ All assertions are implemented as extension methods.
 - __`IsInRange<T>(actual, min, max)`__: _Asserts that the `actual` value is between `min` and `max` inclusive bounds._
 - __`IsNotBetween<T>(actual, min, max)`__: _Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds._
 - __`IsOutOfRange<T>(actual, min, max)`__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
+#### <u>DateTimes</u>
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `TimeSpan` is within the specified `tolerance`._
 - __`IsSameDay(actual, other)`__: _Determines whether the specified `actual` date and `other` date are on the same calendar day._
