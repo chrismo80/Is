@@ -9,11 +9,23 @@ namespace Is.Assertions;
 public static class Strings
 {
 	/// <summary>
-	/// Asserts that the <paramref name="actual"/> string is not <c>null</c> or empty.
+	/// Asserts that the <paramref name="actual"/> string is <c>null</c> or
+	/// empty or contains only whitespaces.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotNullOrEmpty(this string actual) =>
-		actual.IsNotNull() && actual.IsNotEmpty();
+	public static bool IsBlank(this string actual) => Check
+		.That(string.IsNullOrWhiteSpace(actual))
+		.Unless(actual, "is not blank");
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string is not <c>null</c> and
+	/// not empty and does not contain only whitespaces
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotBlank(this string actual) =>
+		actual.IsNotNull() && actual.IsNotEmpty() && Check
+			.That(!string.IsNullOrWhiteSpace(actual))
+			.Unless(actual, "is blank");
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
@@ -41,6 +53,14 @@ public static class Strings
 	public static bool IsEndingWith(this string actual, string expected) => Check
 		.That(actual.EndsWith(expected))
 		.Unless(actual, "is not ending with", expected);
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> string is equivalent to the
+	/// <paramref name="expected"/> string, ignoring case differences.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsEquivalentTo(this string actual, string expected) =>
+		actual.ToLower().IsExactly(expected.ToLower());
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> string
