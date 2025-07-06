@@ -65,6 +65,16 @@ public static class Collections
 			.Unless(unexpected, "is not in", expected);
 	}
 
+	/// <summary>Asserts that the sequence is ordered in ascending order.</summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsOrdered<T>(this IEnumerable<T> actual) where T : IComparable<T> =>
+		VerifyOrder(actual, (next, prev) => next.IsAtLeast(prev));
+
+	/// <summary>Asserts that the sequence is ordered in descending order.</summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsOrderedDescending<T>(this IEnumerable<T> actual) where T : IComparable<T> =>
+		VerifyOrder(actual, (next, prev) => next.IsAtMost(prev));
+
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> sequence matches
 	/// the <paramref name="expected"/> sequence ignoring item order by using Default Equality comparer of <typeparamref name="T" />.
@@ -168,4 +178,25 @@ public static class Collections
 
 	private static T[] Filter<T>(this Dictionary<T, int> dict, Func<int, bool> predicate) where T : notnull =>
 		dict.Where(kvp => predicate(kvp.Value)).Select(kvp => kvp.Key).ToArray();
+
+	private static bool VerifyOrder<T>(IEnumerable<T> actual, Func<T, T, bool> check) where T : IComparable<T>
+	{
+		using var enumerator = actual.GetEnumerator();
+
+		if (!enumerator.MoveNext())
+			return Assertion.Passed();
+
+		var prev = enumerator.Current;
+
+		while (enumerator.MoveNext())
+		{
+			var next = enumerator.Current;
+
+			check(next, prev);
+
+			prev = next;
+		}
+
+		return Assertion.Passed();
+	}
 }
