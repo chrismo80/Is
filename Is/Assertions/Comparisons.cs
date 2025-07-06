@@ -133,6 +133,13 @@ public static class Comparisons
 		(actual - expected).Duration().IsAtMost(tolerance);
 
 	/// <summary>
+	/// Determines whether the specified <paramref name="actual"/> date and
+	/// <paramref name="other"/> date are on the same calendar day.
+	/// </summary>
+	public static bool IsSameDay(this DateTime actual, DateTime other) =>
+		actual.Date.IsExactly(other.Date);
+
+	/// <summary>
 	/// Checks that the given <paramref name="actual"/> date is older than the specified number of
 	/// <paramref name="years"/> relative to the reference date <paramref name="date"/> or today if not provided.
 	/// </summary>

@@ -405,6 +405,11 @@ public class Assertions
 		AssertionContext.Current?.NextFailure();
 
 		birthDate.IsOlderThan(18);
+
+		birthDate.IsSameDay(new DateTime(2007, 07, 06, 23, 11, 11));
+		birthDate.IsSameDay(checkDate);
+		AssertionContext.Current?.NextFailure();
+
 	}
 
 	[Test]
