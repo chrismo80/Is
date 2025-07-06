@@ -35,6 +35,8 @@ All assertions are implemented as extension methods.
 - __`IsUnique<T>(actual)`__: _Asserts that all elements in the sequence are unique._
 - __`IsContaining<T>(actual, expected)`__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
 - __`IsIn<T>(actual, expected)`__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
+- __`IsOrdered<T>(actual)`__: _Asserts that the sequence is ordered in ascending order._
+- __`IsOrderedDescending<T>(actual)`__: _Asserts that the sequence is ordered in descending order._
 - __`IsEquivalentTo<T>(actual, expected)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Default Equality comparer of `T`._
 - __`IsDeeplyEquivalentTo<T>(actual, expected, ignorePaths)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Deeply Equality comparer of `T`._
 - __`IsEquivalentTo<TKey, T>(actual, expected, ignoreKeys)`__: _Asserts that the `actual` dictionary matches the `expected` dictionary ignoring order. Optional predicate can be used to ignore specific keys._
@@ -77,10 +79,12 @@ All assertions are implemented as extension methods.
 - __`IsNull(actual)`__: _Asserts that an object is `null`._
 - __`IsNotNull(actual)`__: _Asserts that the object is not `null`._
 #### <u>Strings</u>
-- __`IsNotNullOrEmpty(actual)`__: _Asserts that the `actual` string is not `null` or empty._
+- __`IsBlank(actual)`__: _Asserts that the `actual` string is `null` or empty or contains only whitespaces._
+- __`IsNotBlank(actual)`__: _Asserts that the `actual` string is not `null` and not empty and does not contain only whitespaces_
 - __`IsContaining(actual, expected)`__: _Asserts that the `actual` string contains the specified `expected` substring._
 - __`IsStartingWith(actual, expected)`__: _Asserts that the `actual` string starts with the specified `expected` string._
 - __`IsEndingWith(actual, expected)`__: _Asserts that the `actual` string ends with the specified `expected` string._
+- __`IsEquivalentTo(actual, expected)`__: _Asserts that the `actual` string is equivalent to the `expected` string, ignoring case differences._
 - __`IsMatching(actual, pattern)`__: _Asserts that the `actual` string matches the specified `pattern` regular expression._
 - __`IsNotMatching(actual, pattern)`__: _Asserts that the `actual` string does not match the specified `pattern` regular expression._
 #### <u>Types</u>

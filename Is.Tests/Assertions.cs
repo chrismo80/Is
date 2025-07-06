@@ -160,18 +160,18 @@ public class Assertions
 
 	[Test]
 	[AssertionContext]
-	public void Is_NotNullOrEmpty()
+	public void Is_NotBlank()
 	{
 		string? test = null;
-		test.IsNotNullOrEmpty();
+		test.IsNotBlank();
 
 		test = "";
-		test.IsNotNullOrEmpty();
+		test.IsNotBlank();
 
 		test = " ";
-		test.IsNotNullOrEmpty();
+		test.IsNotBlank();
 
-		AssertionContext.Current?.TakeFailures(2);
+		AssertionContext.Current?.TakeFailures(3);
 	}
 
 	[Test]
@@ -351,7 +351,7 @@ public class Assertions
 	{
 		new List<int> { 1, 2, 3, 4, 5, 6 }.IsContaining(2, 4);
 
-		"hello world".IsNotNullOrEmpty();
+		"hello world".IsNotBlank();
 		"hello world".IsContaining("hello");
 		"hello world".IsStartingWith("hello");
 		"hello world".IsEndingWith("world");
@@ -369,6 +369,29 @@ public class Assertions
 
 		Action action = () => new List<int> { 1, 2, 3, 2, 5, 6 }.IsUnique();
 		action.IsThrowing<NotException>("is containing a duplicate");
+	}
+
+	[Test]
+	[AssertionContext]
+	public void IsEquivalentTo_Strings()
+	{
+		"hello".IsEquivalentTo("Hello");
+
+		"hello".IsEquivalentTo("hallo");
+		AssertionContext.Current?.NextFailure();
+
+		"AbC".IsEquivalentTo("aBc");
+	}
+
+
+	[Test]
+	[AssertionContext]
+	public void IsOrdered()
+	{
+		((List<int>)[-2, -1, 2, 3, 3, 5, 4]).IsOrdered();
+		AssertionContext.Current?.NextFailure();
+
+		((List<int>)[-1, 2, 2, 3, 3, 4, 5]).IsOrdered();
 	}
 
 	[Test]
