@@ -410,6 +410,8 @@ public class Assertions
 		birthDate.IsSameDay(checkDate);
 		AssertionContext.Current?.NextFailure();
 
+		new DateTime(2000, 2, 29).IsOlderThan(3, new DateTime(2003, 3, 1));
+		new DateTime(2001, 3, 1).IsOlderThan(2, new DateTime(2004, 2, 29));
 	}
 
 	[Test]
