@@ -1,0 +1,5 @@
+[
+  "Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException, Microsoft.VisualStudio.TestTools.UnitTesting",
+  "Xunit.Sdk.XunitException, xunit.assert",
+  "NUnit.Framework.AssertionException, nunit.framework"
+]

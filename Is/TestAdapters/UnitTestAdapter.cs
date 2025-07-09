@@ -13,13 +13,6 @@ namespace Is.TestAdapters;
 [DebuggerStepThrough]
 public class UnitTestAdapter : ITestAdapter
 {
-	private static readonly string[] typeNames =
-	[
-		"Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException, Microsoft.VisualStudio.TestTools.UnitTesting",
-		"Xunit.Sdk.XunitException, xunit.assert",
-		"NUnit.Framework.AssertionException, nunit.framework",
-	];
-
 	private static Type? _detectedType;
 
 	private static Type ExceptionType => _detectedType ??= FindType() ?? typeof(NotException);
@@ -33,6 +26,13 @@ public class UnitTestAdapter : ITestAdapter
 	private static string Combine(string message, IEnumerable<string> messages) =>
 		$"{message}\n{string.Join("\n\n", messages)}";
 
-	private static Type? FindType() => typeNames.Select(typeName => typeName.ToType())
+	private static Type? FindType() => GetTypeNames().Select(typeName => typeName.ToType())
 		.FirstOrDefault(type => type is not null);
+
+	private static string[] GetTypeNames() => "is.unittestadapter.json".LoadJson<string[]>() ??
+	[
+		"Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException, Microsoft.VisualStudio.TestTools.UnitTesting",
+		"Xunit.Sdk.XunitException, xunit.assert",
+		"NUnit.Framework.AssertionException, nunit.framework"
+	];
 }
