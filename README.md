@@ -1,5 +1,5 @@
 ![plot](Docs/Is.png)
-# Minimalistic Assertion Extensions for .NET
+# Simple .NET Code Validation. Powerful Diagnostics.
 
 **Simple. Readable. Opinionated.**
 
@@ -40,7 +40,7 @@
 
 ## Why use Is?
 
-`Is` is a powerful, highly configurable .NET validation and diagnostic tool that prioritizes clear, rich, and shareable failure reporting, designed to seamlessly integrate into various development workflows, including but not limited to traditional unit testing.
+`Is` is a powerful, highly configurable .NET code validation tool that prioritizes clear, rich, and shareable failure reporting, seamlessly integrating into various development workflows from unit testing to production-grade guard clauses. It provides a unified, highly diagnostic approach to ensuring correctness throughout your application.
 
 - Concise: One word. One assertion.
 - Opinionated: Prioritizes clarity over fluent DSL chaining.
