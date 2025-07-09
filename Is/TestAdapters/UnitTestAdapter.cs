@@ -24,15 +24,11 @@ public class UnitTestAdapter : ITestAdapter
 
 	private static Type ExceptionType => _detectedType ??= FindType() ?? typeof(NotException);
 
-
 	public void ReportFailure(Failure failure) =>
-		ThrowException(failure.Message, failure.CustomExceptionType ?? ExceptionType);
+		throw failure.Message.ToException(failure.CustomExceptionType ?? ExceptionType);
 
 	public void ReportFailures(string message, List<Failure> failures) =>
-		ThrowException(Combine(message, failures.Select(f => f.Message)), ExceptionType);
-
-	private static void ThrowException(string message, Type type) =>
-		throw type.ToInstance<Exception>(message) ?? new NotException(message);
+		throw Combine(message, failures.Select(f => f.Message)).ToException(ExceptionType);
 
 	private static string Combine(string message, IEnumerable<string> messages) =>
 		$"{message}\n{string.Join("\n\n", messages)}";

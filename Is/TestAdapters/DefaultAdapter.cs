@@ -1,6 +1,7 @@
 using Is.Core;
-using System.Diagnostics;
 using Is.Core.Interfaces;
+using Is.Tools;
+using System.Diagnostics;
 
 namespace Is.TestAdapters;
 
@@ -11,16 +12,9 @@ namespace Is.TestAdapters;
 [DebuggerStepThrough]
 public class DefaultAdapter : ITestAdapter
 {
-	public void ReportFailure(Failure failure) => throw CreateException(failure);
+	public void ReportFailure(Failure failure) =>
+		throw failure.ToException();
 
 	public void ReportFailures(string message, List<Failure> failures) =>
-		throw new AggregateException(message, failures.Select(CreateException));
-
-	private static Exception CreateException(Failure failure)
-	{
-		if(failure.CustomExceptionType is { } type && Activator.CreateInstance(type, failure.Message) is { } ex)
-			return (Exception)ex;
-
-		return new NotException(failure.Message);
-	}
+		throw new AggregateException(message, failures.Select(f => f.ToException()));
 }
