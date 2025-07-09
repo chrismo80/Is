@@ -21,10 +21,7 @@ public class UnitTestAdapter : ITestAdapter
 		throw failure.Message.ToException(failure.CustomExceptionType ?? ExceptionType);
 
 	public void ReportFailures(string message, List<Failure> failures) =>
-		throw Combine(message, failures.Select(f => f.Message)).ToException(ExceptionType);
-
-	private static string Combine(string message, IEnumerable<string> messages) =>
-		$"{message}\n{string.Join("\n\n", messages)}";
+		throw message.With(failures.Select(f => f.Message)).ToException(ExceptionType);
 
 	private static Type? FindType() => GetTypeNames().Select(typeName => typeName.ToType())
 		.FirstOrDefault(type => type is not null);

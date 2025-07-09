@@ -12,6 +12,9 @@ internal static partial class MessageExtensions
 	const int RIGHT = 32;
 	const int WRONG = 91;
 
+	internal static string With(this string message, IEnumerable<string> messages) =>
+		$"{message}\n{string.Join("\n\n", messages)}";
+
 	internal static string Simply(this object? actual, string equality, object? expected) =>
 		actual?.GetType() == expected?.GetType() ?
 			actual.FormatValue().Color(WRONG) + " " + equality + " " + expected.FormatValue().Color(RIGHT) :
