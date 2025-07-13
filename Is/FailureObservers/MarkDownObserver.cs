@@ -14,17 +14,16 @@ namespace Is.FailureObservers;
 [DebuggerStepThrough]
 public class MarkDownObserver : IFailureObserver
 {
+	private const string FILENAME = "FailureReport.md";
 	private static readonly object sync = new();
 
-	public string Filename { get; set; } = "FailureReport.md";
-
-	public MarkDownObserver() => File.Delete(Filename);
+	static MarkDownObserver() => File.Delete(FILENAME);
 
 	public void OnFailure(Failure failure)
 	{
 		lock (sync)
 		{
-			File.AppendAllText(Filename, failure.ToMarkDown());
+			File.AppendAllText(FILENAME, failure.ToMarkDown());
 		}
 	}
 }
