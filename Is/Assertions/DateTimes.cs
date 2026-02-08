@@ -1,10 +1,30 @@
-﻿using System.Diagnostics;
+﻿using Is.Core;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Is.Assertions;
 
 [DebuggerStepThrough]
 public static class DateTimes
 {
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> date/time is in the past 
+	/// (i.e., before <see cref="DateTime.Now"/>).
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsExpired(this DateTime actual) => Check
+		.That(actual < DateTime.Now)
+		.Unless(actual, "is not expired (is in the future or now)");
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> date/time is in the future 
+	/// (i.e., on or after <see cref="DateTime.Now"/>).
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsNotExpired(this DateTime actual) => Check
+		.That(actual >= DateTime.Now)
+		.Unless(actual, "is expired (is in the past)");
+
 	/// <summary>
 	/// Asserts that the difference between two <see cref="DateTime"/>
 	/// is within the specified <paramref name="tolerance"/>.

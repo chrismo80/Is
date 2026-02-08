@@ -582,6 +582,25 @@ public class Assertions
 	}
 
 	[Test]
+	[AssertionContext]
+	public void IsExpired_IsNotExpired()
+	{
+		var pastDate = DateTime.Now.AddSeconds(-10);
+		var futureDate = DateTime.Now.AddSeconds(10);
+
+		pastDate.IsExpired();
+
+		futureDate.IsNotExpired();
+
+		// Test failure cases
+		futureDate.IsExpired();
+		AssertionContext.Current?.NextFailure();
+
+		pastDate.IsNotExpired();
+		AssertionContext.Current?.NextFailure();
+	}
+
+	[Test]
 	public void IsIn()
 	{
 		new List<int> { 1 }.IsIn(1, 2, 3, 4);
