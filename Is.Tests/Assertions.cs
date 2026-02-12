@@ -925,6 +925,32 @@ public class Assertions
 	}
 }
 
+	[Test]
+	public void IsAnyOf_Enum()
+	{
+		TestEnum.A.IsAnyOf(TestEnum.A, TestEnum.B);
+		TestEnum.B.IsAnyOf(TestEnum.A, TestEnum.B, TestEnum.C);
+		TestEnum.C.IsAnyOf(TestEnum.C);
+	}
+
+	[Test]
+	public void IsAnyOf_Enum_Fails()
+	{
+		Action action1 = () => TestEnum.A.IsAnyOf(TestEnum.B, TestEnum.C);
+		Action action2 = () => TestEnum.C.IsAnyOf(TestEnum.A, TestEnum.B);
+
+		action1.IsThrowing<NotException>("is not in");
+		action2.IsThrowing<NotException>("is not in");
+	}
+
+	private enum TestEnum
+	{
+		A,
+		B,
+		C
+	}
+}
+
 [IsAssertions]
 public static class CustomAssertions
 {
