@@ -923,6 +923,28 @@ public class Assertions
 
 		AssertionContext.Current?.NextFailure().SaveJson("custom.json");
 	}
+
+	[Test]
+	public void Files_IsExisting()
+	{
+		var tempFile = Path.GetTempFileName();
+		var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+		Directory.CreateDirectory(tempDir);
+
+		try
+		{
+			tempFile.IsExisting();
+			tempDir.IsExisting();
+
+			Action action = () => "/nonexistent/path".IsExisting();
+			action.IsThrowing<NotException>("does not exist");
+		}
+		finally
+		{
+			File.Delete(tempFile);
+			Directory.Delete(tempDir);
+		}
+	}
 }
 
 [IsAssertions]
