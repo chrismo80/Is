@@ -116,4 +116,13 @@ public static class Comparisons
 	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T> => Check
 		.That(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
 		.Unless(actual, $"is in range of {min} and {max}");
+
+	/// <summary>
+	/// Asserts that the <paramref name="number"/> is divisible by <paramref name="divisor"/>.
+	/// </summary>
+	/// <typeparam name="T">A type that implements <see cref="INumber{TSelf}"/>.</typeparam>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool IsDivisibleBy<T>(this T number, T divisor) where T : INumber<T> => Check
+		.That(number % divisor == T.Zero)
+		.Unless(number, "is not divisible by", divisor);
 }
