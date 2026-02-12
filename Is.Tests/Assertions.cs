@@ -936,7 +936,7 @@ public class Assertions
 			tempFile.IsExisting();
 			tempDir.IsExisting();
 
-			Action action = () => "/nonexistent/path".IsExisting();
+			Action action = () => "/nonexistent/path/that/does/not/exist".IsExisting();
 			action.IsThrowing<NotException>("does not exist");
 		}
 		finally
