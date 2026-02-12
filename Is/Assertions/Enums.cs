@@ -8,10 +8,10 @@ namespace Is.Assertions;
 public static class Enums
 {
 	/// <summary>
-	/// Asserts that the enum value is one of the expected values.
+	/// Asserts that the enum value is a defined value of the enum type.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAnyOf<T>(this T enumValue, params T[] expectedValues) where T : struct, Enum => Check
-		.That(expectedValues.Contains(enumValue))
-		.Unless(enumValue, "is not in", expectedValues);
+	public static bool IsAnyOf<T>(this T enumValue) where T : struct, Enum => Check
+		.That(Enum.IsDefined(typeof(T), enumValue))
+		.Unless(enumValue, "is not a defined value of", typeof(T).Name);
 }

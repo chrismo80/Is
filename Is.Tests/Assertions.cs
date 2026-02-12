@@ -928,19 +928,19 @@ public class Assertions
 	[Test]
 	public void IsAnyOf_Enum()
 	{
-		TestEnum.A.IsAnyOf(TestEnum.A, TestEnum.B);
-		TestEnum.B.IsAnyOf(TestEnum.A, TestEnum.B, TestEnum.C);
-		TestEnum.C.IsAnyOf(TestEnum.C);
+		TestEnum.A.IsAnyOf<TestEnum>();
+		TestEnum.B.IsAnyOf<TestEnum>();
+		TestEnum.C.IsAnyOf<TestEnum>();
 	}
 
 	[Test]
 	public void IsAnyOf_Enum_Fails()
 	{
-		Action action1 = () => TestEnum.A.IsAnyOf(TestEnum.B, TestEnum.C);
-		Action action2 = () => TestEnum.C.IsAnyOf(TestEnum.A, TestEnum.B);
+		var undefinedValue = (TestEnum)999;
 
-		action1.IsThrowing<NotException>("is not in");
-		action2.IsThrowing<NotException>("is not in");
+		Action action = () => undefinedValue.IsAnyOf<TestEnum>();
+
+		action.IsThrowing<NotException>("is not a defined value of");
 	}
 
 	private enum TestEnum
