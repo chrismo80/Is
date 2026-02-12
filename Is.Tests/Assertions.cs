@@ -564,6 +564,24 @@ public class Assertions
 	}
 
 	[Test]
+	public void IsDivisibleBy()
+	{
+		10.IsDivisibleBy(5);
+		10.IsDivisibleBy(2);
+		10.IsDivisibleBy(1);
+		10.IsDivisibleBy(10);
+		12.IsDivisibleBy(3);
+		12.IsDivisibleBy(4);
+		15.IsDivisibleBy(5);
+
+		Action action1 = () => 10.IsDivisibleBy(3);
+		action1.IsThrowing<NotException>("is not divisible by");
+
+		Action action2 = () => 7.IsDivisibleBy(2);
+		action2.IsThrowing<NotException>("is not divisible by");
+	}
+
+	[Test]
 	public void IsThrowing_WithInnerException()
 	{
 		Action action = () => throw new InvalidOperationException("invalid", new ArgumentException("arg"));
