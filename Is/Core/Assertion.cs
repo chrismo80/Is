@@ -13,10 +13,7 @@ internal static class Assertion
 
 	internal static T Passed<T>(T result)
 	{
-		var listener = Configuration.Active.AssertionListener;
-
-		if (listener is not null)
-			listener.OnAssertion(CreatePassedEvent());
+		Configuration.Active.AssertionListener?.OnAssertion(CreatePassedEvent());
 
 		return result;
 	}
