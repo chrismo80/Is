@@ -1,4 +1,4 @@
-﻿using Is.Core;
+using Is.Core;
 using Is.Core.Interfaces;
 using Is.Tools;
 using Is.FailureObservers;
@@ -20,6 +20,7 @@ namespace Is;
 /// {
 ///	"FailureObserver": "Is.FailureObservers.MarkDownObserver, Is",
 ///	"TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
+///	"AssertionListener": null,
 ///	"AppendCodeLine": true,
 ///	"ColorizeMessages": true,
 ///	"FloatingPointComparisonPrecision": 1E-06,
@@ -52,6 +53,14 @@ public class Configuration
 	/// </summary>
 	[JsonConverter(typeof(TypeConverter<ITestAdapter, DefaultAdapter>))]
 	public ITestAdapter? TestAdapter { get; set; } = new DefaultAdapter();
+
+	/// <summary>
+	/// Observes all assertion evaluations — both passed and failed.
+	/// Unlike <see cref="FailureObserver"/> which only sees failures,
+	/// this listener is notified of every assertion. Default is null (disabled).
+	/// </summary>
+	[JsonConverter(typeof(NullableTypeConverter<IAssertionListener>))]
+	public IAssertionListener? AssertionListener { get; set; }
 
 	/// <summary>
 	/// Makes code line info in <see cref="Failure"/> optional.
@@ -97,6 +106,7 @@ public class Configuration
 	{
 		FailureObserver = FailureObserver,
 		TestAdapter = TestAdapter,
+		AssertionListener = AssertionListener,
 		AppendCodeLine = AppendCodeLine,
 		ColorizeMessages = ColorizeMessages,
 		FloatingPointComparisonPrecision = FloatingPointComparisonPrecision,
@@ -111,6 +121,16 @@ file class TypeConverter<TInterface, T> : JsonConverter<TInterface>
 {
 	public override TInterface Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
 		reader.GetString()?.ToType()?.ToInstance<TInterface>() ?? new T();
+
+	public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
+		writer.WriteStringValue(value.GetType().AssemblyQualifiedName);
+}
+
+file class NullableTypeConverter<TInterface> : JsonConverter<TInterface>
+	where TInterface : class
+{
+	public override TInterface? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+		reader.GetString()?.ToType()?.ToInstance<TInterface>();
 
 	public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) =>
 		writer.WriteStringValue(value.GetType().AssemblyQualifiedName);
