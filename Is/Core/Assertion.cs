@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Reflection;
 using Is.Tools;
 
 namespace Is.Core;
@@ -7,8 +6,6 @@ namespace Is.Core;
 [DebuggerStepThrough]
 internal static class Assertion
 {
-	private static readonly Assembly Mine = Assembly.GetExecutingAssembly();
-
 	internal static bool Passed() => Passed(true);
 
 	internal static T Passed<T>(T result)
@@ -41,15 +38,8 @@ internal static class Assertion
 	private static AssertionEvent CreatePassedEvent()
 	{
 		var frames = new StackTrace(true).GetFrames();
-
-		var assertionFrame = frames.FirstOrDefault(f =>
-			f.GetMethod()?.DeclaringType?.Assembly == Mine &&
-			f.GetMethod()?.DeclaringType != typeof(Assertion) &&
-			f.GetMethod()?.DeclaringType != typeof(Check));
-
-		var codeFrame = frames.FirstOrDefault(f =>
-			f.GetMethod()?.DeclaringType?.Assembly != Mine &&
-			f.GetFileName() != null);
+		var codeFrame = frames.FindFrame();
+		var assertionFrame = codeFrame != null ? frames[Array.IndexOf(frames, codeFrame) - 1] : null;
 
 		return new AssertionEvent(
 			true,
