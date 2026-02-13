@@ -23,6 +23,9 @@ public sealed class AssertionEvent
 	/// <summary>The caller's line number, if available.</summary>
 	public int? Line { get; }
 
+	/// <summary>The source code line content, if available.</summary>
+	public string? Code { get; }
+
 	/// <summary>The timestamp when the assertion was evaluated.</summary>
 	public DateTime Timestamp { get; } = DateTime.Now;
 
@@ -44,11 +47,12 @@ public sealed class AssertionEvent
 		}
 	}
 
-	internal AssertionEvent(bool passed, string? assertion, string? file, int? line)
+	internal AssertionEvent(bool passed, string? assertion, string? file, int? line, string? code = null)
 	{
 		Passed = passed;
 		Assertion = assertion;
 		File = file;
 		Line = line;
+		Code = code;
 	}
 }

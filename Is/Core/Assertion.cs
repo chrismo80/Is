@@ -41,10 +41,14 @@ internal static class Assertion
 		var codeFrame = frames.FindFrame();
 		var assertionFrame = codeFrame != null ? frames[Array.IndexOf(frames, codeFrame) - 1] : null;
 
+		var fileName = codeFrame?.GetFileName();
+		var lineNumber = codeFrame?.GetFileLineNumber();
+
 		return new AssertionEvent(
 			true,
 			assertionFrame?.GetMethod()?.Name,
-			codeFrame?.GetFileName(),
-			codeFrame?.GetFileLineNumber());
+			fileName,
+			lineNumber,
+			fileName != null && lineNumber.HasValue ? fileName.GetLine(lineNumber.Value) : null);
 	}
 }
