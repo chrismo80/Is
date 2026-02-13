@@ -98,7 +98,7 @@ public static class Equality
 		if (values.Length == expected.Length)
 			return Enumerable.Range(0, expected.Length).All(i => values[i].Is(expected[i]));
 
-		return Assertion.Failed<bool>(values, "are not", expected);
+		return Assertion.Failed<bool>("are not", values, expected);
 	}
 
 	private static bool IsEqualTo<T>(this T? actual, T? expected)
@@ -109,7 +109,7 @@ public static class Equality
 		if(actual.IsCloseTo(expected))
 			return Assertion.Passed();
 
-		return Assertion.Failed<bool>(actual, "is not", expected);
+		return Assertion.Failed<bool>("is not", actual, expected);
 	}
 
 	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>

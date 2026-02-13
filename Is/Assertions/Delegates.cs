@@ -14,7 +14,7 @@ public static class Delegates
 	/// <returns>The thrown exception of type <typeparamref name="T" />.</returns>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static T? IsThrowing<T>(this Action action) where T : Exception =>
-		action.CatchException()?.Is<T>() ?? Assertion.Failed<T>(typeof(T), "is not thrown");
+		action.CatchException()?.Is<T>() ?? Assertion.Failed<T>("is not thrown", typeof(T));
 
 	/// <summary>
 	/// Asserts that the given <paramref name="action" /> does not throw

@@ -26,7 +26,7 @@ public class ConfigurationTests
 	[AssertionContext]
 	public void JsonObserver()
 	{
-		Configuration.Active.FailureObserver = new JsonObserver();
+		Configuration.Active.AssertionObserver = new JsonObserver();
 
 		var t = Parallel.For(1, 20, i =>
 		{

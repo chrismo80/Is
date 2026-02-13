@@ -7,12 +7,12 @@ namespace Is.TestAdapters;
 /// <see cref="ITestAdapter"/> that allows throwing a custom exception type
 /// <typeparamref name="TException"/> when test failures are reported.
 /// </summary>
-public class CustomExceptionAdapter<TException>(Func<Failure, TException> exceptionFactory) : ITestAdapter
+public class CustomExceptionAdapter<TException>(Func<AssertionEvent, TException> exceptionFactory) : ITestAdapter
 	where TException : Exception
 {
-	public void ReportFailure(Failure failure) =>
-		throw exceptionFactory(failure);
+	public void ReportFailure(AssertionEvent assertionEvent) =>
+		throw exceptionFactory(assertionEvent);
 
-	public void ReportFailures(string message, List<Failure> failures) =>
-		throw new AggregateException(message, failures.Select(exceptionFactory));
+	public void ReportFailures(string message, List<AssertionEvent> assertionEvents) =>
+		throw new AggregateException(message, assertionEvents.Select(exceptionFactory));
 }
