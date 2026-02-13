@@ -129,6 +129,7 @@ public class AssertionObserverTests
 	public void StatisticsObserver_Reset_ClearsAll()
 	{
 		var stats = new StatisticsObserver();
+
 		Configuration.Default.AssertionObserver = stats;
 
 		true.IsTrue();

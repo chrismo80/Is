@@ -4,7 +4,7 @@ using Is.Tools;
 using System.Diagnostics;
 using System.Text;
 
-namespace Is.FailureObservers;
+namespace Is.AssertionObservers;
 
 /// <summary>
 /// <see cref="IAssertionObserver"/> that writes all assertions into
@@ -15,6 +15,7 @@ public class MarkDownObserver : IAssertionObserver, IDisposable
 {
 	private const string FILENAME = "FailureReport.md";
 	private static readonly object sync = new();
+
 	private static int totalCount;
 	private static int passedCount;
 	private static int failedCount;
@@ -26,6 +27,7 @@ public class MarkDownObserver : IAssertionObserver, IDisposable
 		lock (sync)
 		{
 			totalCount++;
+
 			if (assertionEvent.Passed)
 				passedCount++;
 			else

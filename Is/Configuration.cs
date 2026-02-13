@@ -1,7 +1,6 @@
 using Is.Core;
 using Is.Core.Interfaces;
 using Is.Tools;
-using Is.FailureObservers;
 using Is.TestAdapters;
 using System.Diagnostics;
 using System.Reflection;

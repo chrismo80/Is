@@ -1,6 +1,5 @@
 using Is.Assertions;
 using Is.Core;
-using Is.FailureObservers;
 using Is.TestAdapters;
 
 namespace Is.Tests.Assertions;

@@ -3,7 +3,7 @@ using Is.Tools;
 using Is.Core.Interfaces;
 using System.Diagnostics;
 
-namespace Is.FailureObservers;
+namespace Is.AssertionObservers;
 
 /// <summary>
 /// <see cref="IAssertionObserver"/> that writes all failed assertions directly to the Console.
