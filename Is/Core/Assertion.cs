@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+using System.Diagnostics;
 using Is.Tools;
 
 namespace Is.Core;
@@ -9,10 +8,17 @@ internal static class Assertion
 {
 	internal static bool Passed() => Passed(true);
 
-	internal static T Passed<T>(T result) => result;
+	internal static T Passed<T>(T result)
+	{
+		Configuration.Active.AssertionListener?.OnAssertion(CreatePassedEvent());
+
+		return result;
+	}
 
 	internal static T? Failed<T>(Failure failure)
 	{
+		Configuration.Active.AssertionListener?.OnAssertion(new AssertionEvent(false, failure));
+
 		Configuration.Active.FailureObserver?.OnFailure(failure);
 
 		if (AssertionContext.IsActive)
@@ -28,4 +34,21 @@ internal static class Assertion
 
 	internal static T? Failed<T>(object? actual, string equality) =>
 		Failed<T>(new Failure(actual.Actually(equality), actual));
+
+	private static AssertionEvent CreatePassedEvent()
+	{
+		var frames = new StackTrace(true).GetFrames();
+		var codeFrame = frames.FindFrame();
+		var assertionFrame = codeFrame != null ? frames[Array.IndexOf(frames, codeFrame) - 1] : null;
+
+		var fileName = codeFrame?.GetFileName();
+		var lineNumber = codeFrame?.GetFileLineNumber();
+
+		return new AssertionEvent(
+			true,
+			assertionFrame?.GetMethod()?.Name,
+			fileName,
+			lineNumber,
+			fileName != null && lineNumber.HasValue ? fileName.GetLine(lineNumber.Value) : null);
+	}
 }

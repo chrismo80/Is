@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using System.Collections.Concurrent;
 using Is.Tools;
 
 namespace Is.Core;
@@ -98,40 +97,4 @@ public class Failure
 
 		return (codeFrame, frames[Array.IndexOf(frames, codeFrame) - 1]);
 	}
-}
-
-[DebuggerStepThrough]
-file static class StackFrameExtensions
-{
-	private static readonly Assembly Mine = Assembly.GetExecutingAssembly();
-
-	internal static StackFrame? FindFrame(this StackFrame[] frames) =>
-		frames.FirstOrDefault(f => f.IsExtensionCall() && f.GetFileName() != null);
-
-	private static bool IsExtensionCall(this StackFrame frame) =>
-		(frame.GetMethod()?.IsForeignAssembly() ?? false) && (frame.GetMethod()?.HasNotAttribute() ?? false);
-
-	private static bool IsForeignAssembly(this MethodBase method) =>
-		method.DeclaringType?.Assembly != Mine && !Attribute.IsDefined(method, typeof(IsAssertionAttribute));
-
-	private static bool HasNotAttribute(this MethodBase method) =>
-		!Attribute.IsDefined(method, typeof(IsAssertionAttribute)) && !Attribute.IsDefined(method.DeclaringType, typeof(IsAssertionsAttribute));
-}
-
-[DebuggerStepThrough]
-file static class CodeLineExtensions
-{
-	private static readonly ConcurrentDictionary<string, string[]> SourceCache = new();
-
-	internal static string AppendCodeLine(this string text, StackFrame? frame) =>
-		Configuration.Active.AppendCodeLine ? "\n" + text + "\n" + frame?.CodeLine() + "\n" : text;
-
-	private static string CodeLine(this StackFrame frame) =>
-		"in " + frame.GetMethod()?.DeclaringType.Color(1) + frame.GetFileName()?.CreateLine(frame.GetFileLineNumber());
-
-	private static string CreateLine(this string fileName, int lineNumber) =>
-		" in line " + lineNumber.Color(1) + ": " + fileName.GetLine(lineNumber).Color(93);
-
-	internal static string GetLine(this string fileName, int lineNumber) =>
-		SourceCache.GetOrAdd(fileName, File.ReadAllLines)[lineNumber - 1].Trim();
 }
