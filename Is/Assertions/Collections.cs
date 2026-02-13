@@ -138,8 +138,13 @@ public static class Collections
 	{
 		var failures = actual.Diffs(expected, ignoreKeys);
 
-		return failures.Count == 0 ? Assertion.Passed() :
-			Assertion.Failed<bool>(new Failure($"{failures.Count} mismatches", null, null, failures.ToList()));
+		if (failures.Count == 0)
+			return Assertion.Passed();
+
+		var innerEvents = failures.Select(f => AssertionEvent.CreateFailed(
+			f.Message ?? "Assertion failed", f.Actual, f.Expected, f.Assertion, f.Method, f.File, f.Line, f.Code)).ToList();
+
+		return Assertion.Failed<bool>($"{failures.Count} mismatches", innerEvents: innerEvents);
 	}
 
 	private static (bool Yes, T? Duplicate) HasDuplicate<T>(this IEnumerable<T> items)
@@ -155,7 +160,7 @@ public static class Collections
 		return (false, default);
 	}
 
-	internal static List<Failure> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
+	internal static List<AssertionEvent> Diffs<TKey, T>(this IDictionary<TKey, T> actual, IDictionary<TKey, T> expected, Func<TKey, bool>? ignoreKeys = null)
 		where TKey : notnull
 	{
 		if (ignoreKeys is not null)
@@ -169,14 +174,17 @@ public static class Collections
 		var (missing, unexpected) = actual.Where(kvp => !unexpectedKeys.Contains(kvp.Key))
 			.Diff(expected.Where(kvp => !missingKeys.Contains(kvp.Key)));
 
-		var diffs = missing.Zip(unexpected, (m, u) => new Failure($"{u.Key}: {u.Value.Simply("is not", m.Value)}", u.Value, m.Value, null, true)).ToList();
+		var diffs = missing.Zip(unexpected, (m, u) => AssertionEvent.CreateFailed(
+			$"{u.Key}: {u.Value.Simply("is not", m.Value)}", u.Value, m.Value, null, null, null, null, null)).ToList();
 
 		if (missingKeys.Length == 0 && unexpectedKeys.Length == 0 && diffs.Count == 0)
 			return [];
 
 		var failures = diffs
-			.Concat(missingKeys.Select(k => new Failure($"{k.Color(100)}: missing", null, expected[k], null, true)))
-			.Concat(unexpectedKeys.Select(k => new Failure($"{k.Color(100)}: unexpected", actual[k], null, null, true)));
+			.Concat(missingKeys.Select(k => AssertionEvent.CreateFailed(
+				$"{k.Color(100)}: missing", null, expected[k], null, null, null, null, null)))
+			.Concat(unexpectedKeys.Select(k => AssertionEvent.CreateFailed(
+				$"{k.Color(100)}: unexpected", actual[k], null, null, null, null, null, null)));
 
 		return failures.ToList();
 	}

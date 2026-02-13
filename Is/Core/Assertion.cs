@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using Is.Tools;
 
 namespace Is.Core;
@@ -10,30 +11,25 @@ internal static class Assertion
 
 	internal static T Passed<T>(T result)
 	{
-		Configuration.Active.AssertionListener?.OnAssertion(CreatePassedEvent());
-
+		var assertionEvent = CreatePassedEvent();
+		Configuration.Active.AssertionObserver?.OnAssertion(assertionEvent);
 		return result;
 	}
 
-	internal static T? Failed<T>(Failure failure)
+	internal static T? Failed<T>(string message, object? actual = null, object? expected = null, 
+		Type? customExceptionType = null, List<AssertionEvent>? innerEvents = null)
 	{
-		Configuration.Active.AssertionListener?.OnAssertion(new AssertionEvent(false, failure));
-
-		Configuration.Active.FailureObserver?.OnFailure(failure);
+		var assertionEvent = CreateFailedEvent(message, actual, expected, customExceptionType, innerEvents);
+		
+		Configuration.Active.AssertionObserver?.OnAssertion(assertionEvent);
 
 		if (AssertionContext.IsActive)
-			AssertionContext.Current?.AddFailure(failure);
+			AssertionContext.Current?.AddFailure(assertionEvent);
 		else
-			Configuration.Active.TestAdapter?.ReportFailure(failure);
+			Configuration.Active.TestAdapter?.ReportFailure(assertionEvent);
 
 		return default;
 	}
-
-	internal static T? Failed<T>(object? actual, string equality, object? expected) =>
-		Failed<T>(new Failure(actual.Actually(equality, expected), actual, expected));
-
-	internal static T? Failed<T>(object? actual, string equality) =>
-		Failed<T>(new Failure(actual.Actually(equality), actual));
 
 	private static AssertionEvent CreatePassedEvent()
 	{
@@ -44,11 +40,35 @@ internal static class Assertion
 		var fileName = codeFrame?.GetFileName();
 		var lineNumber = codeFrame?.GetFileLineNumber();
 
-		return new AssertionEvent(
-			true,
+		return AssertionEvent.CreatePassed(
 			assertionFrame?.GetMethod()?.Name,
 			fileName,
 			lineNumber,
 			fileName != null && lineNumber.HasValue ? fileName.GetLine(lineNumber.Value) : null);
+	}
+
+	private static AssertionEvent CreateFailedEvent(string message, object? actual, object? expected,
+		Type? customExceptionType = null, List<AssertionEvent>? innerEvents = null)
+	{
+		var frames = new StackTrace(true).GetFrames();
+		var codeFrame = frames.FindFrame();
+		var assertionFrame = codeFrame != null ? frames[Array.IndexOf(frames, codeFrame) - 1] : null;
+
+		var fileName = codeFrame?.GetFileName();
+		var lineNumber = codeFrame?.GetFileLineNumber();
+		var code = fileName != null && lineNumber.HasValue ? fileName.GetLine(lineNumber.Value) : null;
+
+		return new AssertionEvent(
+			false,
+			message.AppendCodeLine(codeFrame),
+			actual,
+			expected,
+			assertionFrame?.GetMethod()?.Name,
+			codeFrame?.GetMethod()?.Name,
+			fileName,
+			lineNumber,
+			code,
+			customExceptionType,
+			innerEvents);
 	}
 }

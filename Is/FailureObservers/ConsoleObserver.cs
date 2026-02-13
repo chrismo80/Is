@@ -6,11 +6,14 @@ using System.Diagnostics;
 namespace Is.FailureObservers;
 
 /// <summary>
-/// <see cref="IFailureObserver"/> that writes all failures directly to the Console.
+/// <see cref="IAssertionObserver"/> that writes all failed assertions directly to the Console.
 /// </summary>
 [DebuggerStepThrough]
-public class ConsoleObserver : IFailureObserver
+public class ConsoleObserver : IAssertionObserver
 {
-	public void OnFailure(Failure failure) =>
-		Console.WriteLine(failure.Message.RemoveLineBreaks());
+	public void OnAssertion(AssertionEvent assertionEvent)
+	{
+		if (!assertionEvent.Passed)
+			Console.WriteLine(assertionEvent.Message?.RemoveLineBreaks());
+	}
 }

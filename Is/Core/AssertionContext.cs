@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 namespace Is.Core;
 
 /// <summary>
-/// Represents a scoped context that captures all assertion failures within its lifetime and
+/// Represents a scoped context that captures all failed assertion events within its lifetime and
 /// reports the collection upon disposal if any failures occurred.
 /// </summary>
 /// <remarks>
@@ -30,7 +30,7 @@ public sealed class AssertionContext : IDisposable
 {
 	private static readonly AsyncLocal<AssertionContext?> current = new();
 
-	private readonly Queue<Failure> _failures = [];
+	private readonly Queue<AssertionEvent> _failures = [];
 
 	private string? _caller;
 
@@ -62,7 +62,7 @@ public sealed class AssertionContext : IDisposable
 	}
 
 	/// <summary>
-	/// Ends the assertion context and reports all collected failures to the <see cref="ITestAdapter"/>
+	/// Ends the assertion context and reports all collected failed assertions to the <see cref="ITestAdapter"/>
 	/// </summary>
 	public void Dispose()
 	{
@@ -81,18 +81,18 @@ public sealed class AssertionContext : IDisposable
 	}
 
 	/// <summary>
-	/// Dequeues an <see cref="Failure"/> from the queue to not be reported at the end of the context.
+	/// Dequeues a failed <see cref="AssertionEvent"/> from the queue to not be reported at the end of the context.
 	/// </summary>
-	public Failure NextFailure() => _failures.Dequeue();
+	public AssertionEvent NextFailure() => _failures.Dequeue();
 
 	/// <summary>
-	/// Dequeues as many <see cref="Failure"/>s specified in <paramref name="count"/> from the queue.
+	/// Dequeues as many failed <see cref="AssertionEvent"/>s specified in <paramref name="count"/> from the queue.
 	/// </summary>
-	public List<Failure> TakeFailures(int count) => Take(count).ToList();
+	public List<AssertionEvent> TakeFailures(int count) => Take(count).ToList();
 
-	internal void AddFailure(Failure failure) => _failures.Enqueue(failure);
+	internal void AddFailure(AssertionEvent assertionEvent) => _failures.Enqueue(assertionEvent);
 
-	private IEnumerable<Failure> Take(int count)
+	private IEnumerable<AssertionEvent> Take(int count)
 	{
 		while(count-- > 0)
 			yield return _failures.Dequeue();

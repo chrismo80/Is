@@ -7,9 +7,9 @@ namespace Is.Core.Interfaces;
 /// </summary>
 public interface ITestAdapter
 {
-	/// <summary>Reports a failed test result to the configured test adapter.</summary>
-	void ReportFailure(Failure failure);
+	/// <summary>Reports a failed assertion to the configured test adapter.</summary>
+	void ReportFailure(AssertionEvent assertionEvent);
 
-	/// <summary>Reports multiple test failures to the configured test adapter.</summary>
-	void ReportFailures(string message, List<Failure> failures);
+	/// <summary>Reports multiple failed assertions to the configured test adapter.</summary>
+	void ReportFailures(string message, List<AssertionEvent> assertionEvents);
 }

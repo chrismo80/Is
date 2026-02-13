@@ -17,11 +17,11 @@ public class UnitTestAdapter : ITestAdapter
 
 	private static Type ExceptionType => _detectedType ??= FindType() ?? typeof(NotException);
 
-	public void ReportFailure(Failure failure) =>
-		throw failure.Message.ToException(failure.CustomExceptionType ?? ExceptionType);
+	public void ReportFailure(AssertionEvent assertionEvent) =>
+		throw (assertionEvent.Message ?? "Assertion failed").ToException(assertionEvent.CustomExceptionType ?? ExceptionType);
 
-	public void ReportFailures(string message, List<Failure> failures) =>
-		throw message.With(failures.Select(f => f.Message)).ToException(ExceptionType);
+	public void ReportFailures(string message, List<AssertionEvent> assertionEvents) =>
+		throw message.With(assertionEvents.Select(a => a.Message ?? "Assertion failed")).ToException(ExceptionType);
 
 	private static Type? FindType() => GetTypeNames().Select(typeName => typeName.ToType())
 		.FirstOrDefault(type => type is not null);

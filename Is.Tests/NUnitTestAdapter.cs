@@ -5,12 +5,12 @@ namespace Is.Tests;
 
 public class NUnitTestAdapter : ITestAdapter
 {
-	public void ReportFailure(Failure failure) =>
-		throw new AssertionException(failure.Message);
+	public void ReportFailure(AssertionEvent assertionEvent) =>
+		throw new AssertionException(assertionEvent.Message ?? "Assertion failed");
 
-	public void ReportFailures(string message, List<Failure> failures)
+	public void ReportFailures(string message, List<AssertionEvent> assertionEvents)
 	{
-		var messages = string.Join("\n\n", failures.Select(f => f.Message));
+		var messages = string.Join("\n\n", assertionEvents.Select(a => a.Message));
 
 		throw new AssertionException($"{message}\n{messages}");
 	}

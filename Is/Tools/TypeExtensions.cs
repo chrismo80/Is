@@ -18,6 +18,7 @@ internal static class TypeExtensions
 	internal static Exception ToException(this string message, Type type) =>
 		type.ToInstance<Exception>(message) ?? new NotException(message);
 
-	internal static Exception ToException(this Failure failure) =>
-		failure.CustomExceptionType?.ToInstance<Exception>(failure.Message) ?? new NotException(failure.Message);
+	internal static Exception ToException(this AssertionEvent assertionEvent) =>
+		assertionEvent.CustomExceptionType?.ToInstance<Exception>(assertionEvent.Message ?? "Assertion failed")
+		?? new NotException(assertionEvent.Message ?? "Assertion failed");
 }

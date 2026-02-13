@@ -6,23 +6,26 @@ using System.Diagnostics;
 namespace Is.FailureObservers;
 
 /// <summary>
-/// <see cref="IFailureObserver"/> that writes all failures into
+/// <see cref="IAssertionObserver"/> that writes all failed assertions into
 /// one FailureReport JSON file.
 /// </summary>
 [DebuggerStepThrough]
-public class JsonObserver : IFailureObserver
+public class JsonObserver : IAssertionObserver
 {
-	private static readonly List<Failure> failures = [];
+	private static readonly List<AssertionEvent> failedEvents = [];
 	private static readonly object sync = new();
 
 	public string Filename { get; set; } = "FailureReport.json";
 
-	public void OnFailure(Failure failure)
+	public void OnAssertion(AssertionEvent assertionEvent)
 	{
+		if (assertionEvent.Passed)
+			return;
+
 		lock (sync)
 		{
-			failures.Add(failure);
-			failures.SaveJson(Filename);
+			failedEvents.Add(assertionEvent);
+			failedEvents.SaveJson(Filename);
 		}
 	}
 }

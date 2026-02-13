@@ -18,9 +18,8 @@ namespace Is;
 /// Can be set via <c>is.configuration.json</c>:
 /// <code>
 /// {
-///	"FailureObserver": "Is.FailureObservers.MarkDownObserver, Is",
+///	"AssertionObserver": "Is.FailureObservers.MarkDownObserver, Is",
 ///	"TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
-///	"AssertionListener": null,
 ///	"AppendCodeLine": true,
 ///	"ColorizeMessages": true,
 ///	"FloatingPointComparisonPrecision": 1E-06,
@@ -38,15 +37,6 @@ public class Configuration
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
 	/// <summary>
-	/// Determines the observer responsible for handling failure events during assertions.
-	/// The observer implements logic for capturing, processing, or reporting failures,
-	/// enabling customisation of diagnostic or reporting mechanisms.
-	/// Default is <see cref="MarkDownObserver"/>.
-	/// </summary>
-	[JsonConverter(typeof(TypeConverter<IFailureObserver, MarkDownObserver>))]
-	public IFailureObserver? FailureObserver { get; set; } = new MarkDownObserver();
-
-	/// <summary>
 	/// Specifies the adapter responsible for integrating the assertion framework with external testing frameworks.
 	/// Default is <see cref="DefaultAdapter"/>that is throwing <see cref="NotException"/> for single failures
 	/// and a <see cref="AggregateException"/> for multiple failures.
@@ -56,11 +46,11 @@ public class Configuration
 
 	/// <summary>
 	/// Observes all assertion evaluations — both passed and failed.
-	/// Unlike <see cref="FailureObserver"/> which only sees failures,
-	/// this listener is notified of every assertion. Default is null (disabled).
+	/// Unlike <see cref="IAssertionObserver"/> which receives all assertions,
+	/// individual observers can filter by the Passed property. Default is null (disabled).
 	/// </summary>
-	[JsonConverter(typeof(NullableTypeConverter<IAssertionListener>))]
-	public IAssertionListener? AssertionListener { get; set; }
+	[JsonConverter(typeof(NullableTypeConverter<IAssertionObserver>))]
+	public IAssertionObserver? AssertionObserver { get; set; }
 
 	/// <summary>
 	/// Makes code line info in <see cref="Failure"/> optional.
@@ -104,9 +94,8 @@ public class Configuration
 
 	internal Configuration Clone() => new()
 	{
-		FailureObserver = FailureObserver,
 		TestAdapter = TestAdapter,
-		AssertionListener = AssertionListener,
+		AssertionObserver = AssertionObserver,
 		AppendCodeLine = AppendCodeLine,
 		ColorizeMessages = ColorizeMessages,
 		FloatingPointComparisonPrecision = FloatingPointComparisonPrecision,
