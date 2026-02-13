@@ -66,6 +66,9 @@ public sealed class AssertionContext : IDisposable
 	/// </summary>
 	public void Dispose()
 	{
+		if(Configuration.Active.AssertionObserver is IDisposable disposableObserver)
+			disposableObserver.Dispose();
+
 		var testAdapter = Configuration.Active.TestAdapter;
 
 		current.Value = null;
