@@ -1,5 +1,5 @@
 # Public API
-Lines of code < 1000
+Lines of code < 1100
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour.
@@ -9,6 +9,7 @@ Global configurations that control assertion behaviour.
  {
  	"FailureObserver": "Is.FailureObservers.MarkDownObserver, Is",
  	"TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
+ 	"AssertionListener": null,
  	"AppendCodeLine": true,
  	"ColorizeMessages": true,
  	"FloatingPointComparisonPrecision": 1E-06,
@@ -18,12 +19,30 @@ Global configurations that control assertion behaviour.
  ```
 - __`FailureObserver`__: _Determines the observer responsible for handling failure events during assertions. The observer implements logic for capturing, processing, or reporting failures, enabling customisation of diagnostic or reporting mechanisms. Default is `MarkDownObserver`._
 - __`TestAdapter`__: _Specifies the adapter responsible for integrating the assertion framework with external testing frameworks. Default is `DefaultAdapter`that is throwing `NotException` for single failures and a `AggregateException` for multiple failures._
+- __`AssertionListener`__: _Observes all assertion evaluations — both passed and failed. Unlike `FailureObserver` which only sees failures, this listener is notified of every assertion. Default is null (disabled)._
 - __`AppendCodeLine`__: _Makes code line info in `Failure` optional._
 - __`ColorizeMessages`__: _Controls whether messages produced by assertions are colorized when displayed. Default is true, enabling colorization for better readability and visual distinction._
 - __`FloatingPointComparisonPrecision`__: _Comparison precision used for floating point comparisons if not specified specifically. Default is 1e-6 (0.000001)._
 - __`MaxRecursionDepth`__: _Controls the maximum depth of recursion when parsing deeply nested objects. Default is 20._
 - __`ParsingFlags`__: _Controls the binding flags to use when parsing deeply nested objects. Default is public | non-public | instance._
 - __`JsonSerializerOptions`__: _These options dictate aspects such as how JSON properties are written, ignored, or formatted, enabling fine-grained control over the serialization processes._
+## Is.AssertionListeners
+#### <u>ConsoleAssertionListener</u>
+`IAssertionListener` that logs every assertion outcome to the Console. Useful for debugging and understanding assertion flow.
+#### <u>StatisticsListener</u>
+`IAssertionListener` that collects statistics about all assertion evaluations. Thread-safe. Query `Total`, `TotalPassed`, `TotalFailed` and `Summary` at any time.
+- __`Total`__: _Total number of assertions evaluated._
+- __`TotalPassed`__: _Total number of passed assertions._
+- __`TotalFailed`__: _Total number of failed assertions._
+- __`PassRate`__: _Pass rate as a value between 0.0 and 1.0._
+- __`PerAssertion`__: _Statistics per assertion type._
+- __`Summary()`__: _Returns a formatted summary of all assertion statistics._
+- __`Reset()`__: _Resets all collected statistics._
+#### <u>AssertionStats</u>
+Pass/fail counters for a single assertion type.
+- __`Passed`__: _Number of times this assertion passed._
+- __`Failed`__: _Number of times this assertion failed._
+- __`Total`__: _Total evaluations of this assertion._
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
@@ -57,7 +76,10 @@ All assertions are implemented as extension methods.
 - __`IsInRange<T>(actual, min, max)`__: _Asserts that the `actual` value is between `min` and `max` inclusive bounds._
 - __`IsNotBetween<T>(actual, min, max)`__: _Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds._
 - __`IsOutOfRange<T>(actual, min, max)`__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
+- __`IsDivisibleBy<T>(number, divisor)`__: _Asserts that the `number` is divisible by `divisor`._
 #### <u>DateTimes</u>
+- __`IsExpired(actual)`__: _Asserts that the `actual` date/time is in the past (i.e., before `Now`)._
+- __`IsNotExpired(actual)`__: _Asserts that the `actual` date/time is in the future (i.e., on or after `Now`)._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `TimeSpan` is within the specified `tolerance`._
 - __`IsSameDay(actual, other)`__: _Determines whether the specified `actual` date and `other` date are on the same calendar day._
@@ -74,6 +96,8 @@ All assertions are implemented as extension methods.
 - __`IsCompletingWithin(function, timespan)`__: _Asserts that the given async `function` did complete within a specific `timespan`._
 - __`IsAllocatingAtMost(action, kiloBytes)`__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
 - __`IsAllocatingAtMost(function, kiloBytes)`__: _Asserts that the given async `function` is allocating not more than `kiloBytes`._
+#### <u>Enums</u>
+- __`IsAnyOf<T>(enumValue)`__: _Asserts that the enum value is a defined value of the enum type._
 #### <u>Equality</u>
 - __`IsExactly<T>(actual, expected)`__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
 - __`Is(actual, expected)`__: _Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)_
@@ -83,6 +107,8 @@ All assertions are implemented as extension methods.
 - __`IsSatisfying<T>(actual, predicate)`__: _Asserts that the `actual` object satisfies the specified `predicate`._
 - __`IsMatchingSnapshot(actual, expected, ignorePaths, options)`__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality. Optional predicate can be used to ignore specific paths._
 - __`IsMatching(actual, other, ignorePaths)`__: _Asserts that the given `actual` object matches the `other` by running a deep reflection-based object comparison on their properties and fields for equality. Optional predicate can be used to ignore specific paths._
+#### <u>Files</u>
+- __`IsExisting(path)`__: _Asserts that the specified `path` exists as a file or directory._
 #### <u>Null</u>
 - __`IsNull(actual)`__: _Asserts that an object is `null`._
 - __`IsNotNull(actual)`__: _Asserts that the object is not `null`._
@@ -126,6 +152,17 @@ Represents a scoped context that captures all assertion failures within its life
 - __`Dispose()`__: _Ends the assertion context and reports all collected failures to the `!:ITestAdapter`_
 - __`NextFailure()`__: _Dequeues an `Failure` from the queue to not be reported at the end of the context._
 - __`TakeFailures(count)`__: _Dequeues as many `Failure`s specified in `count` from the queue._
+#### <u>AssertionEvent</u>
+Represents the outcome of a single assertion evaluation.
+- __`Passed`__: _Whether the assertion passed._
+- __`Assertion`__: _The name of the assertion method (e.g. "Is", "IsGreaterThan")._
+- __`Actual`__: _The actual value that was asserted._
+- __`Expected`__: _The expected value, if applicable._
+- __`File`__: _The caller's source file, if available._
+- __`Line`__: _The caller's line number, if available._
+- __`Code`__: _The source code line content, if available._
+- __`Timestamp`__: _The timestamp when the assertion was evaluated._
+- __`Failure`__: _The associated `Failure`, if the assertion failed._
 #### <u>Check</u>
 Offers a fluent API to assert conditions and create return values and error messages. Can be used for custom assertions
 - __`That(condition)`__: _Evaluates a boolean condition._
@@ -155,6 +192,9 @@ Mark custom assertion methods with this attribute to enable proper code line det
 #### <u>IsAssertionsAttribute</u>
 Mark a custom assertions class with this attribute to enable proper code line detection.
 ## Is.Core.Interfaces
+#### <u>IAssertionListener</u>
+Interface for observing all assertion outcomes — both passed and failed. Unlike `IFailureObserver` which only sees failures, an `IAssertionListener` is notified of every assertion evaluation. Can be set via Configuration.AssertionListener.
+- __`OnAssertion(assertionEvent)`__: _Called after every assertion evaluation, regardless of outcome._
 #### <u>IFailureObserver</u>
 Interface providing a mechanism to observe failures. Can be set via Configuration.FailureObserver.
 - __`OnFailure(failure)`__: _This method is invoked when a failure occurs during an assertion. Observer can perform custom logic on that failure such as logging or reporting._

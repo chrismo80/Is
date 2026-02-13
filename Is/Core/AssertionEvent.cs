@@ -37,14 +37,14 @@ public sealed class AssertionEvent
 		Passed = passed;
 		Failure = failure;
 
-		if (failure is not null)
-		{
-			Assertion = failure.Assertion;
-			Actual = failure.Actual;
-			Expected = failure.Expected;
-			File = failure.File;
-			Line = failure.Line;
-		}
+		if (failure is null)
+			return;
+
+		Assertion = failure.Assertion;
+		Actual = failure.Actual;
+		Expected = failure.Expected;
+		File = failure.File;
+		Line = failure.Line;
 	}
 
 	internal AssertionEvent(bool passed, string? assertion, string? file, int? line, string? code = null)
