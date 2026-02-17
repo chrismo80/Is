@@ -17,11 +17,16 @@
   - [Booleans](#booleans)
   - [Collections](#collections)
   - [Comparisons](#comparisons)
+  - [DateTimes](#datetimes)
   - [Delegates](#delegates)
+  - [Enums](#enums)
   - [Equality](#equality)
+  - [Files](#files)
   - [Null](#null)
   - [Strings](#strings)
   - [Types](#types)
+
+- [Guard Clauses](#guard-clauses)
 
 - [Custom Assertions](#custom-assertions)
   - [Example with `IsAssertion(s)` attribute](#example-with-isassertions-attribute)
@@ -33,7 +38,8 @@
   - [`AssertionContext` with using statement](#assertioncontext-with-using-statement)
   - [`AssertionContext` with Test Framework Attribute](#assertioncontext-with-test-framework-attribute)
   - [Disabling `ITestAdapter`](#disabling-itestadapter)
-  - [FailureReport with `IFailureObserver` ](#failurereport-with-ifailureobserver)
+  - [Assertion Reports with `IAssertionObserver`](#assertion-reports-with-iassertionobserver)
+    - [Built-in Observers](#built-in-observers)
 
 
 
@@ -121,6 +127,15 @@ Enumerable.Range(1, 3).IsUnique(); // ✅
 Enumerable.Range(1, 3).IsEmpty(); // ❌
 Enumerable.Range(1, 3).IsIn(0, 1, 2, 3, 4); // ✅
 Enumerable.Range(1, 3).IsEquivalentTo(Enumerable.Range(1, 3).Reverse()); // ✅
+
+// Order checking
+new[] { 1, 2, 3 }.IsOrdered(); // ✅
+new[] { 3, 2, 1 }.IsOrderedDescending(); // ✅
+
+// Deep equivalence (compares elements by value, not reference)
+var list1 = new[] { new { Name = "A" }, new { Name = "B" } };
+var list2 = new[] { new { Name = "A" }, new { Name = "B" } };
+list1.IsDeeplyEquivalentTo(list2); // ✅
 ```
 
 ### Comparisons
@@ -135,6 +150,16 @@ Enumerable.Range(1, 3).IsEquivalentTo(Enumerable.Range(1, 3).Reverse()); // ✅
 
 TimeSpan.Parse("1:23").IsApproximately(TimeSpan.Parse("1:24"), TimeSpan.FromMinutes(1)); // ✅
 TimeSpan.Parse("1:23").IsApproximately(TimeSpan.Parse("1:25"), TimeSpan.FromMinutes(1)); // ❌
+```
+
+### DateTimes
+```csharp
+var now = DateTime.Now;
+
+now.IsExpired(TimeSpan.FromHours(1)); // ❌ (not expired yet)
+now.IsSameDay(DateTime.Today); // ✅
+now.IsOlderThan(TimeSpan.FromMinutes(5)); // ❌
+now.IsYoungerThan(TimeSpan.FromMinutes(5)); // ✅
 ```
 
 ### Delegates
@@ -152,6 +177,12 @@ action.IsAllocatingAtMost(10_300); // ✅
 action.IsAllocatingAtMost(10_200); // ❌
 ```
 
+### Enums
+```csharp
+StatusCode.Pending.IsAnyOf(StatusCode.Pending, StatusCode.Processing); // ✅
+StatusCode.Completed.IsNoneOf(StatusCode.Pending, StatusCode.Processing); // ✅
+```
+
 ### Equality
 ```csharp
 (0.1 + 0.2).IsExactly(0.3); // ❌
@@ -162,6 +193,29 @@ action.IsAllocatingAtMost(10_200); // ❌
 Enumerable.Range(1, 4).Is(1, 2, 3, 4); // ✅
 Enumerable.Range(1, 4).Where(x => x % 2 == 0).Is(2, 4); // ✅
 Enumerable.Range(1, 4).Where(x => x % 3 == 0).Is(3); // ✅
+
+// Reference equality
+var obj = new object();
+obj.IsSameAs(obj); // ✅
+obj.IsSameAs(new object()); // ❌
+
+// Predicate-based assertion
+42.IsSatisfying(x => x > 0 && x < 100); // ✅
+
+// Deep object comparison
+var person1 = new { Name = "John", Age = 30 };
+var person2 = new { Name = "John", Age = 30 };
+person1.IsMatching(person2); // ✅ (compares all properties)
+
+// JSON Snapshot testing
+var data = new { Name = "Test", Value = 42 };
+data.IsMatchingSnapshot(); // Creates/validates against snapshot file
+```
+
+### Files
+```csharp
+"/path/to/file.txt".IsExisting(); // ✅ if file exists
+"/path/to/dir".IsExisting(); // ✅ if directory exists
 ```
 
 ### Null
@@ -193,6 +247,32 @@ groups[2].Value.Is("world"); // ✅
 
 
 
+
+## Guard Clauses
+
+`Is` provides convenient guard clause helpers for argument and operation validation, throwing standard .NET exception types:
+
+```csharp
+using static Is.Core.Check;
+
+// Argument validation - throws ArgumentException
+public void ProcessData(string data)
+{
+    Arg(!string.IsNullOrEmpty(data), "data cannot be null or empty");
+    // Process data...
+}
+
+// Operation validation - throws InvalidOperationException
+public void Connect()
+{
+    Op(!_isConnected, "Already connected");
+    // Connect...
+}
+```
+
+These are shorthand for:
+- `Arg(condition, message)` → `Check.That(condition).Unless<ArgumentException>(message)`
+- `Op(condition, message)` → `Check.That(condition).Unless<InvalidOperationException>(message)`
 
 
 ## Custom Assertions
@@ -248,14 +328,16 @@ If you do not want exception to be thrown at all, you can set this `ITestAdapter
 ### ITestAdapter example for NUnit
 
 ```csharp
+using Is.Core;
+
 public class NUnitTestAdapter : ITestAdapter
 {
-    public void ReportFailure(Failure failure) =>
-        throw new AssertionException(failure.Message);
+    public void ReportFailure(AssertionEvent assertionEvent) =>
+        throw new AssertionException(assertionEvent.Failure.Message);
 
-    public void ReportFailures(string message, List<Failure> failures)
+    public void ReportFailures(string message, List<AssertionEvent> assertionEvents)
     {
-        var messages = string.Join("\n\n", failures.Select(f => f.Message));
+        var messages = string.Join("\n\n", assertionEvents.Select(e => e.Failure.Message));
 
         throw new AssertionException($"{message}\n{messages}");
     }
@@ -292,8 +374,8 @@ using var ctx = AssertionContext.Begin();
 42.Is(0); // ❌
 true.IsTrue(); // ✅
 
-Failure fail1 = ctx.NextFailure(); // Dequeues first failure
-Failure fail2 = ctx.NextFailure(); // Dequeues second failure
+AssertionEvent event1 = ctx.NextFailure(); // Dequeues first failure
+AssertionEvent event2 = ctx.NextFailure(); // Dequeues second failure
 // At this point, the context is empty. No AggregateException will be thrown on Dispose.
 
 try
@@ -367,14 +449,27 @@ public void ContextTest_WithAttribute()
 If you don't want to throw exceptions at all, you can use the `ITestAdapter` instance in `Configuration.Active.TestAdapter` to disable any reporting failures to test runners by setting this instance to null.
 
 
-## FailureReport with `IFailureObserver` 
+## Assertion Reports with `IAssertionObserver` 
 
-If you prefer failure summaries over exception, `Is` comes with a `MarkDownObserver`, that exports every observed `Failure` by creating one report that includes all failures.
+If you prefer failure summaries over exceptions, `Is` comes with a `MarkDownObserver` that exports every observed assertion by creating one report that includes all failures.
 
 ```csharp
-public interface IFailureObserver
+using Is.Core;
+
+public interface IAssertionObserver
 {
-    void OnFailure(Failure failure);
+    void OnAssertion(AssertionEvent assertionEvent);
+}
+```
+
+An assertion event contains detailed information about the failure:
+
+```csharp
+public class AssertionEvent
+{
+    public Failure Failure { get; }           // The failure details
+    public string Caller { get; }             // The test/caller name
+    public DateTime Timestamp { get; }        // When it occurred
 }
 ```
 
@@ -384,7 +479,15 @@ A failure from an object graph comparison for example looks like this.
 
 Rich, Human-Readable Reports: Imagine CI/CD pipelines generating beautiful Markdown failure reports that are easy to read directly in GitHub/GitLab, Confluence, or even just a text editor. This is immensely valuable for teams, QA, and even non-technical stakeholders to understand failures without diving into raw log files or test runner UIs.
 
-Of course, you can even create your own `IFailureObserver` to redirect any failures to your favourite reporting or logging system.
+Of course, you can even create your own `IAssertionObserver` to redirect any failures to your favourite reporting or logging system.
+
+### Built-in Observers
+
+`Is` provides several built-in observers:
+
+- **MarkDownObserver**: Creates beautiful Markdown reports
+- **JsonObserver**: Exports failures as JSON
+- **ConsoleObserver**: Writes failures to the console
 
 
 

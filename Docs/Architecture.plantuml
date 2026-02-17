@@ -5,7 +5,7 @@
 !theme materia
 
 Component_Ext(ca, "Custom assertions", "extension methods", "user can add own assertions")
-Component_Ext(cfo, "Custom FailureObserver", "IFailureObserver", "user can plug in custom failure observer to create log entries, data exports, reports")
+Component_Ext(cfo, "Custom AssertionObserver", "IAssertionObserver", "user can plug in custom observer to create log entries, data exports, reports")
 Component_Ext(cta, "Custom TestAdapter", "ITestAdapter", "user can plug in custom test adapter to throw framework exception types ")
 
 Container_Boundary(Is, "Is") {
@@ -20,7 +20,7 @@ Container_Boundary(Is, "Is") {
         Component(ctx, "AssertionContext", "Assertion scope", "collects (failed) assertions without throwing on first")
         
         Container_Boundary(Interfaces, "Interfaces") {
-            Component(ifo, "IFailureObserver", "receives individual failures", "notifies external loggers, data exporters, or reporting systems")
+            Component(ifo, "IAssertionObserver", "receives individual assertion events", "notifies external loggers, data exporters, or reporting systems")
             Component(ita, "ITestAdapter", "throws exceptions", "integrates with test frameworks/runners by throwing exceptions")
         }
     }
@@ -28,7 +28,7 @@ Container_Boundary(Is, "Is") {
 
 
 Rel_R(ass, ctx, "adds failure to")
-Rel(ass, ifo, "notifies on failure")
+Rel(ass, ifo, "notifies on assertion")
 Rel(ass, ita, "sends single failure to")
 
 Rel_R(ext, check, "uses")
