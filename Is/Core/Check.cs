@@ -51,13 +51,13 @@ public readonly struct Failable<TResult>(bool condition, TResult? result)
 	public TResult? Unless(object? actual, string message, object? other, [CallerArgumentExpression("actual")] string? expression = null) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(actual.Actually(message, other), actual, other)
+		false => Assertion.Failed<TResult>(actual.Actually(message, other).WithExpression(expression), actual, other)
 	};
 
 	public TResult? Unless(object? actual, string message, [CallerArgumentExpression("actual")] string? expression = null) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(actual.Actually(message), actual)
+		false => Assertion.Failed<TResult>(actual.Actually(message).WithExpression(expression), actual)
 	};
 
 	public TResult? Unless(string message) => condition switch

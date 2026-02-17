@@ -1,4 +1,4 @@
-﻿using Is.Core;
+using Is.Core;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Numerics;
@@ -45,9 +45,10 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsGreaterThan<T>(this T actual, T other) where T : IComparable<T> => Check
+	public static bool IsGreaterThan<T>(this T actual, T other,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IComparable<T> => Check
 		.That(actual.CompareTo(other) > 0)
-		.Unless(actual, "is not greater than", other);
+		.Unless(actual, "is not greater than", other, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is smaller

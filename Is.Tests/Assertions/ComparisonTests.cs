@@ -42,8 +42,8 @@ public class ComparisonTests
 	[TestCase(0, 5)]
 	public void IsGreaterThan_IsSmallerThan<T>(T actual, T expected) where T : IComparable<T>
 	{
-		actual.IsSmallerThan(expected);
 		expected.IsGreaterThan(actual);
+		actual.IsSmallerThan(expected);
 
 		Action action1 = () => expected.IsSmallerThan(actual);
 		action1.IsThrowing<NotException>("is not smaller than");

@@ -28,6 +28,9 @@ internal static partial class MessageExtensions
 	internal static string Actually(this object? actual, string equality) =>
 		CreateMessage(actual.Format().Color(WRONG), equality);
 
+	internal static string WithExpression(this string message, string? expression) =>
+		expression is null ? message : $"{expression} = {message}";
+
 	internal static IEnumerable<string> Truncate(this List<string> text, int max) =>
 		text.Count() > max ? text.Take(max).Append("...") : text;
 
