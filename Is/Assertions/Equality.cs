@@ -1,4 +1,4 @@
-﻿using Is.Core;
+using Is.Core;
 using Is.Tools;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
@@ -26,7 +26,21 @@ public static class Equality
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Is(this object? actual, params object?[]? expected) =>
-		actual.ShouldBe(expected?.Unwrap());
+		actual.ShouldBe(expected?.Unwrap(), null);
+
+	/// <summary>
+	/// Asserts that the <paramref name="actual"/> object matches the <paramref name="expected"/> value.
+	/// (array unwrapping, approximately for floating points)
+	/// </summary>
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool Is<T>(this T actual, T expected,
+		[CallerArgumentExpression("actual")] string? expression = null)
+	{
+		if (actual is IEnumerable and not string && expected is IEnumerable and not string)
+			return actual.ToArray().Are(expected.ToArray());
+
+		return (actual as object).ShouldBe(new object?[] { expected }.Unwrap(), expression);
+	}
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is not equal to the <paramref name="expected"/> value.
@@ -77,11 +91,11 @@ public static class Equality
 	public static bool IsMatching(this object actual, object other, Func<string, bool>? ignorePaths = null) =>
 		actual.Parse().IsEquivalentTo(other.Parse(), ignorePaths);
 
-	private static bool ShouldBe(this object? actual, object?[]? expected) =>
+	private static bool ShouldBe(this object? actual, object?[]? expected, string? expression) =>
 		expected?.Length switch
 		{
-			null => actual.IsEqualTo(null),
-			1 when !actual.IsEnumerable() => actual.IsEqualTo(expected[0]),
+			null => actual.IsEqualTo(null, expression),
+			1 when !actual.IsEnumerable() => actual.IsEqualTo(expected[0], expression),
 			_ => actual.ToArray().Are(expected)
 		};
 
@@ -101,7 +115,7 @@ public static class Equality
 		return Assertion.Failed<bool>("are not", values, expected);
 	}
 
-	private static bool IsEqualTo<T>(this T? actual, T? expected)
+	private static bool IsEqualTo<T>(this T? actual, T? expected, string? expression = null)
 	{
 		if (actual.IsExactlyEqualTo(expected))
 			return Assertion.Passed();
@@ -109,7 +123,7 @@ public static class Equality
 		if(actual.IsCloseTo(expected))
 			return Assertion.Passed();
 
-		return Assertion.Failed<bool>("is not", actual, expected);
+		return Assertion.Failed<bool>(actual.Actually("is not", expected).WithExpression(expression), actual, expected);
 	}
 
 	private static bool IsExactlyEqualTo<T>(this T? actual, T? expected) =>
