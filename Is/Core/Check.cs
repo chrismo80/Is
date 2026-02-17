@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Is.Tools;
 
 namespace Is.Core;
@@ -47,16 +48,16 @@ public readonly struct Failable<TResult>(bool condition, TResult? result)
 	/// <summary>
 	/// Returns the result if the condition is true; otherwise, triggers a failure with a message.
 	/// </summary>
-	public TResult? Unless(object? actual, string message, object? other) => condition switch
+	public TResult? Unless(object? actual, string message, object? other, [CallerArgumentExpression("actual")] string? expression = null) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(message, actual, other)
+		false => Assertion.Failed<TResult>(actual.Actually(message, other), actual, other)
 	};
 
-	public TResult? Unless(object? actual, string message) => condition switch
+	public TResult? Unless(object? actual, string message, [CallerArgumentExpression("actual")] string? expression = null) => condition switch
 	{
 		true => Assertion.Passed(result),
-		false => Assertion.Failed<TResult>(message, actual),
+		false => Assertion.Failed<TResult>(actual.Actually(message), actual)
 	};
 
 	public TResult? Unless(string message) => condition switch
