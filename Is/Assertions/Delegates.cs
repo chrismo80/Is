@@ -1,4 +1,4 @@
-﻿using Is.Core;
+using Is.Core;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
@@ -66,9 +66,10 @@ public static class Delegates
 	/// within a specific <paramref name="timespan" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsCompletingWithin(this Action action, TimeSpan timespan) => Check
+	public static bool IsCompletingWithin(this Action action, TimeSpan timespan,
+		[CallerArgumentExpression("action")] string? expression = null) => Check
 		.That(Task.Run(action).Wait(timespan))
-		.Unless(action, "is not completing within", timespan);
+		.Unless(action, "is not completing within", timespan, expression);
 
 	/// <summary>
 	/// Asserts that the given async <paramref name="function" /> did complete

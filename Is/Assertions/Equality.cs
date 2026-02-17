@@ -16,9 +16,10 @@ public static class Equality
 	/// (no array unwrapping, exact match for floating points)
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsExactly<T>(this T actual, T expected) => Check
+	public static bool IsExactly<T>(this T actual, T expected,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(actual.IsExactlyEqualTo(expected))
-		.Unless(actual, "is not", expected);
+		.Unless(actual, "is not", expected, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object matches the <paramref name="expected"/> value(s).
@@ -46,17 +47,19 @@ public static class Equality
 	/// Asserts that the <paramref name="actual"/> value is not equal to the <paramref name="expected"/> value.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNot<T>(this T actual, T expected)=> Check
+	public static bool IsNot<T>(this T actual, T expected,
+		[CallerArgumentExpression("actual")] string? expression = null)=> Check
 		.That(!actual.IsExactlyEqualTo(expected))
-		.Unless(actual, "is", expected);
+		.Unless(actual, "is", expected, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> object is the same instance as the <paramref name="expected"/> object.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSameAs<T>(this T actual, T expected) where T : class? => Check
+	public static bool IsSameAs<T>(this T actual, T expected,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : class? => Check
 		.That(ReferenceEquals(actual, expected))
-		.Unless(actual, "is not the same instance as", expected);
+		.Unless(actual, "is not the same instance as", expected, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is the default value of its type.
@@ -69,9 +72,10 @@ public static class Equality
 	/// Asserts that the <paramref name="actual"/> object satisfies the specified <paramref name="predicate"/>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate) => Check
+	public static bool IsSatisfying<T>(this T actual, Expression<Func<T, bool>> predicate,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(predicate.Compile()(actual))
-		.Unless(actual, "is not satisfying", predicate.Body);
+		.Unless(actual, "is not satisfying", predicate.Body, expression);
 
 	/// <summary>
 	/// Asserts that the given <paramref name="actual" /> object matches the

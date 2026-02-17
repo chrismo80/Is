@@ -1,4 +1,4 @@
-﻿using Is.Core;
+using Is.Core;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -12,18 +12,20 @@ public static class DateTimes
 	/// (i.e., before <see cref="DateTime.Now"/>).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsExpired(this DateTime actual) => Check
+	public static bool IsExpired(this DateTime actual,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(actual < DateTime.Now)
-		.Unless(actual, "is not expired (is in the future or now)");
+		.Unless(actual, "is not expired (is in the future or now)", expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> date/time is in the future 
 	/// (i.e., on or after <see cref="DateTime.Now"/>).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotExpired(this DateTime actual) => Check
+	public static bool IsNotExpired(this DateTime actual,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(actual >= DateTime.Now)
-		.Unless(actual, "is expired (is in the past)");
+		.Unless(actual, "is expired (is in the past)", expression);
 
 	/// <summary>
 	/// Asserts that the difference between two <see cref="DateTime"/>

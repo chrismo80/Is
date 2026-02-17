@@ -14,9 +14,10 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IFloatingPoint{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsApproximately<T>(this T actual, T expected, T precision) where T : IFloatingPoint<T> => Check
+	public static bool IsApproximately<T>(this T actual, T expected, T precision,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IFloatingPoint<T> => Check
 		.That(T.Abs(actual - expected) <= precision * T.Max(T.One, T.Abs(expected)))
-		.Unless(actual, "is not approximately", expected);
+		.Unless(actual, "is not approximately", expected, expression);
 
 	/// <summary>
 	/// Uses default precision from configuration
@@ -56,9 +57,10 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsSmallerThan<T>(this T actual, T other) where T : IComparable<T> => Check
+	public static bool IsSmallerThan<T>(this T actual, T other,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IComparable<T> => Check
 		.That(actual.CompareTo(other) < 0)
-		.Unless(actual, "is not smaller than", other);
+		.Unless(actual, "is not smaller than", other, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is greater or equal
@@ -66,9 +68,10 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAtLeast<T>(this T actual, T other) where T : IComparable<T> => Check
+	public static bool IsAtLeast<T>(this T actual, T other,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IComparable<T> => Check
 		.That(actual.CompareTo(other) >= 0)
-		.Unless(actual, "is smaller than", other);
+		.Unless(actual, "is smaller than", other, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value is smaller or equal
@@ -76,9 +79,10 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsAtMost<T>(this T actual, T other) where T : IComparable<T> => Check
+	public static bool IsAtMost<T>(this T actual, T other,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IComparable<T> => Check
 		.That(actual.CompareTo(other) <= 0)
-		.Unless(actual, "is greater than", other);
+		.Unless(actual, "is greater than", other, expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value
@@ -104,9 +108,10 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotBetween<T>(this T actual, T min, T max) where T : IComparable<T> => Check
+	public static bool IsNotBetween<T>(this T actual, T min, T max,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IComparable<T> => Check
 		.That(max.IsAtLeast(min) && (actual.CompareTo(min) <= 0 || actual.CompareTo(max) >= 0))
-		.Unless(actual, $"is between {min} and {max}");
+		.Unless(actual, $"is between {min} and {max}", expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="actual"/> value
@@ -114,16 +119,18 @@ public static class Comparisons
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="IComparable"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsOutOfRange<T>(this T actual, T min, T max) where T : IComparable<T> => Check
+	public static bool IsOutOfRange<T>(this T actual, T min, T max,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : IComparable<T> => Check
 		.That(max.IsAtLeast(min) && (actual.CompareTo(min) < 0 || actual.CompareTo(max) > 0))
-		.Unless(actual, $"is in range of {min} and {max}");
+		.Unless(actual, $"is in range of {min} and {max}", expression);
 
 	/// <summary>
 	/// Asserts that the <paramref name="number"/> is divisible by <paramref name="divisor"/>.
 	/// </summary>
 	/// <typeparam name="T">A type that implements <see cref="INumber{TSelf}"/>.</typeparam>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsDivisibleBy<T>(this T number, T divisor) where T : INumber<T> => Check
+	public static bool IsDivisibleBy<T>(this T number, T divisor,
+		[CallerArgumentExpression("number")] string? expression = null) where T : INumber<T> => Check
 		.That(number % divisor == T.Zero)
-		.Unless(number, "is not divisible by", divisor);
+		.Unless(number, "is not divisible by", divisor, expression);
 }

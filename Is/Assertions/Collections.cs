@@ -1,4 +1,4 @@
-﻿using Is.Core;
+using Is.Core;
 using Is.Tools;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
@@ -12,29 +12,32 @@ public static class Collections
 	/// Asserts that the sequence is empty.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEmpty<T>(this IEnumerable<T> actual) => Check
+	public static bool IsEmpty<T>(this IEnumerable<T> actual,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(!actual.Any())
-		.Unless(actual, "is not empty");
+		.Unless(actual, "is not empty", expression);
 
 	/// <summary>
 	/// Asserts that the sequence is not empty.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotEmpty<T>(this IEnumerable<T> actual) => Check
+	public static bool IsNotEmpty<T>(this IEnumerable<T> actual,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(actual.Any())
-		.Unless(actual, "is empty");
+		.Unless(actual, "is empty", expression);
 
 	/// <summary>
 	/// Asserts that all elements in the sequence are unique.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsUnique<T>(this IEnumerable<T> actual)
+	public static bool IsUnique<T>(this IEnumerable<T> actual,
+		[CallerArgumentExpression("actual")] string? expression = null)
 	{
 		var (yes, duplicate) = actual.HasDuplicate();
 
 		return Check
 			.That(!yes)
-			.Unless(actual, "is containing a duplicate", duplicate);
+			.Unless(actual, "is containing a duplicate", duplicate, expression);
 	}
 
 	/// <summary>
@@ -53,15 +56,17 @@ public static class Collections
 
 	/// <summary>Asserts that the sequence contains the specified elements.</summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsContaining<T>(this IEnumerable<T> actual, T expected) => Check
+	public static bool IsContaining<T>(this IEnumerable<T> actual, T expected,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(actual.Contains(expected))
-		.Unless(actual, "is not containing", expected);
+		.Unless(actual, "is not containing", expected, expression);
 
 	/// <summary>Asserts that the sequence does not contain the specified elements.</summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotContaining<T>(this IEnumerable<T> actual, T expected) => Check
+	public static bool IsNotContaining<T>(this IEnumerable<T> actual, T expected,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(!actual.Contains(expected))
-		.Unless(actual, "is containing", expected);
+		.Unless(actual, "is containing", expected, expression);
 
 	/// <summary>
 	/// Asserts that all elements in the <paramref name="actual"/> collection
@@ -79,15 +84,17 @@ public static class Collections
 
 	/// <summary>Checks that the specified element is contained within the given sequence.</summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsIn<T>(this T actual, IEnumerable<T> expected) => Check
+	public static bool IsIn<T>(this T actual, IEnumerable<T> expected,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(expected.Contains(actual))
-		.Unless(actual, "is not in", expected);
+		.Unless(actual, "is not in", expected, expression);
 
 	/// <summary>Checks that the specified element is not contained within the given sequence.</summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsNotIn<T>(this T actual, IEnumerable<T> expected) => Check
+	public static bool IsNotIn<T>(this T actual, IEnumerable<T> expected,
+		[CallerArgumentExpression("actual")] string? expression = null) => Check
 		.That(!expected.Contains(actual))
-		.Unless(actual, "is in", expected);
+		.Unless(actual, "is in", expected, expression);
 
 	/// <summary>Asserts that the sequence is ordered in ascending order.</summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -104,13 +111,14 @@ public static class Collections
 	/// the <paramref name="expected"/> sequence ignoring item order by using Default Equality comparer of <typeparamref name="T" />.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected) where T : notnull
+	public static bool IsEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : notnull
 	{
 		var (missing, unexpected) = actual.Diff(expected);
 
 		return Check
 			.That(missing.Length == 0 && unexpected.Length == 0)
-			.Unless(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
+			.Unless(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}", expression);
 	}
 
 	/// <summary>
@@ -119,13 +127,14 @@ public static class Collections
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool IsDeeplyEquivalentTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected,
-		Func<string, bool>? ignorePaths = null) where T : notnull
+		Func<string, bool>? ignorePaths = null,
+		[CallerArgumentExpression("actual")] string? expression = null) where T : notnull
 	{
 		var (missing, unexpected) = actual.Diff(expected, new DeepEqualityComparer<T>(ignorePaths));
 
 		return Check
 			.That(missing.Length == 0 && unexpected.Length == 0)
-			.Unless(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}");
+			.Unless(actual, $"is missing {missing.FormatValue()} and having {unexpected.FormatValue()}", expression);
 	}
 
 	/// <summary>
