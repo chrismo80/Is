@@ -12,10 +12,12 @@ namespace Is.AssertionObservers;
 [DebuggerStepThrough]
 public class JsonObserver : IAssertionObserver
 {
+	private const string FILENAME = "FailureReport.json";
+	
 	private static readonly List<AssertionEvent> failedEvents = [];
 	private static readonly object sync = new();
 
-	public string Filename { get; set; } = "FailureReport.json";
+	static JsonObserver() => Reset();
 
 	public void OnAssertion(AssertionEvent assertionEvent)
 	{
@@ -25,7 +27,15 @@ public class JsonObserver : IAssertionObserver
 		lock (sync)
 		{
 			failedEvents.Add(assertionEvent);
-			failedEvents.SaveJson(Filename);
+			failedEvents.SaveJson(FILENAME);
+		}
+	}
+	
+	public static void Reset()
+	{
+		lock (sync)
+		{
+			File.Delete(FILENAME);
 		}
 	}
 }
