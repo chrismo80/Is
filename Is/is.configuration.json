@@ -1,5 +1,4 @@
 {
-  "AssertionListener": "Is.AssertionListeners.ConsoleAssertionListener, Is",
   "AssertionObserver": "Is.AssertionObservers.MarkDownObserver, Is",
   "TestAdapter": "Is.TestAdapters.DefaultAdapter, Is",
   "AppendCodeLine": true,
