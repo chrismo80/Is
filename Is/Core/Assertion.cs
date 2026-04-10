@@ -11,22 +11,24 @@ internal static class Assertion
 
 	internal static T Passed<T>(T result)
 	{
+		var configuration = AssertionContext.Current?.Configuration ?? Configuration.Default;
 		var assertionEvent = CreatePassedEvent();
-		Configuration.Active.AssertionObserver?.OnAssertion(assertionEvent);
+		configuration.AssertionObserver?.OnAssertion(assertionEvent);
 		return result;
 	}
 
 	internal static T? Failed<T>(string message, object? actual = null, object? expected = null, 
 		Type? customExceptionType = null, List<AssertionEvent>? innerEvents = null)
 	{
+		var configuration = AssertionContext.Current?.Configuration ?? Configuration.Default;
 		var assertionEvent = CreateFailedEvent(message, actual, expected, customExceptionType, innerEvents);
 		
-		Configuration.Active.AssertionObserver?.OnAssertion(assertionEvent);
+		configuration.AssertionObserver?.OnAssertion(assertionEvent);
 
 		if (AssertionContext.IsActive)
 			AssertionContext.Current?.AddFailure(assertionEvent);
 		else
-			Configuration.Active.TestAdapter?.ReportFailure(assertionEvent);
+			configuration.TestAdapter?.ReportFailure(assertionEvent);
 
 		return default;
 	}

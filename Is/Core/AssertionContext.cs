@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Is.Core;
@@ -34,8 +36,8 @@ public sealed class AssertionContext : IDisposable
 
 	private string? _caller;
 
-	/// <summary>Local configuration settings (copy of global <see cref="Configuration"/>) only active during the <see cref="AssertionContext"/>.</summary>
-	internal Configuration Configuration { get; } = Configuration.Default.Clone();
+	/// <summary>Local configuration settings (copy of resolved assembly <see cref="Configuration"/>) only active during the <see cref="AssertionContext"/>.</summary>
+	internal Configuration Configuration { get; }
 
 	/// <summary>
 	/// The current active <see cref="AssertionContext"/> for the asynchronous operation, or null if no context is active.
@@ -44,8 +46,10 @@ public sealed class AssertionContext : IDisposable
 
 	internal static bool IsActive => current.Value is not null;
 
-	private AssertionContext()
-	{ }
+	private AssertionContext(Configuration configuration)
+	{
+		Configuration = configuration;
+	}
 
 	/// <summary>
 	/// Starts a new <see cref="AssertionContext"/> on the current thread.
@@ -56,9 +60,26 @@ public sealed class AssertionContext : IDisposable
 		if (IsActive)
 			throw new InvalidOperationException("AssertionContext already active on this async context.");
 
-		current.Value = new AssertionContext { _caller = method };
+		current.Value = new AssertionContext(Configuration.ResolveFor(CallerAssembly()).Clone()) { _caller = method };
 
 		return current.Value;
+	}
+
+	private static Assembly CallerAssembly()
+	{
+		var frames = new StackTrace().GetFrames() ?? [];
+
+		foreach (var frame in frames)
+		{
+			var assembly = frame.GetMethod()?.DeclaringType?.Assembly;
+
+			if (assembly is null || assembly == typeof(AssertionContext).Assembly)
+				continue;
+
+			return assembly;
+		}
+
+		return Assembly.GetCallingAssembly();
 	}
 
 	/// <summary>
@@ -66,10 +87,10 @@ public sealed class AssertionContext : IDisposable
 	/// </summary>
 	public void Dispose()
 	{
-		if(Configuration.Active.AssertionObserver is IDisposable disposableObserver)
+		if (Configuration is { AssertionObserver: IDisposable disposableObserver })
 			disposableObserver.Dispose();
 
-		var testAdapter = Configuration.Active.TestAdapter;
+		var testAdapter = Configuration.TestAdapter;
 
 		current.Value = null;
 

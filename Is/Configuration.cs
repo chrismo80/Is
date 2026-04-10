@@ -2,6 +2,7 @@ using Is.Core;
 using Is.Core.Interfaces;
 using Is.Tools;
 using Is.TestAdapters;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
@@ -14,7 +15,7 @@ namespace Is;
 /// </summary>
 /// <remarks>
 ///
-/// Can be set via <c>is.configuration.json</c>:
+/// Can be set via <c>is.configuration.json</c> or <c>&lt;AssemblyName&gt;.is.configuration.json</c>:
 /// <code>
 /// {
 ///	"AssertionObserver": "Is.FailureObservers.MarkDownObserver, Is",
@@ -30,8 +31,14 @@ namespace Is;
 [DebuggerStepThrough]
 public class Configuration
 {
-	const string ConfigFile = "is.configuration.json";
-	internal static Configuration Default { get; } = ConfigFile.LoadJson<Configuration>() ?? new Configuration();
+	const string GlobalConfigFile = "is.configuration.json";
+	const string LocalConfigSuffix = ".is.configuration.json";
+
+	private static readonly ConcurrentDictionary<string, Configuration> cacheByAssembly = new(StringComparer.Ordinal);
+	private static readonly Configuration builtInDefaults = new();
+	private static readonly Configuration global = LoadGlobal();
+
+	internal static Configuration Default => global;
 
 	public static Configuration Active => AssertionContext.Current?.Configuration ?? Default;
 
@@ -91,6 +98,17 @@ public class Configuration
 		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 	};
 
+	internal static Configuration ResolveFor(Assembly assembly)
+	{
+		var key = CacheKey(assembly);
+		return cacheByAssembly.GetOrAdd(key, _ => CreateFor(assembly));
+	}
+
+	internal static void ResetCache()
+	{
+		cacheByAssembly.Clear();
+	}
+
 	internal Configuration Clone() => new()
 	{
 		TestAdapter = TestAdapter,
@@ -102,6 +120,66 @@ public class Configuration
 		ParsingFlags = ParsingFlags,
 		JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerOptions),
 	};
+
+	private static Configuration LoadGlobal()
+	{
+		var configuration = builtInDefaults.Clone();
+		configuration.Apply(GlobalConfigFile.LoadJson<ConfigurationOverrides>());
+		return configuration;
+	}
+
+	private static Configuration CreateFor(Assembly assembly)
+	{
+		var configuration = global.Clone();
+		configuration.Apply(LoadOverrides(assembly));
+		return configuration;
+	}
+
+	private static ConfigurationOverrides? LoadOverrides(Assembly assembly)
+	{
+		var location = assembly.Location;
+		if (string.IsNullOrWhiteSpace(location))
+			return null;
+
+		var directory = Path.GetDirectoryName(location);
+		var assemblyName = assembly.GetName().Name;
+
+		if (string.IsNullOrWhiteSpace(directory) || string.IsNullOrWhiteSpace(assemblyName))
+			return null;
+
+		var file = Path.Combine(directory, assemblyName + LocalConfigSuffix);
+		return file.LoadJson<ConfigurationOverrides>();
+	}
+
+	private void Apply(ConfigurationOverrides? overrides)
+	{
+		if (overrides is null)
+			return;
+
+		TestAdapter = overrides.TestAdapter?.ToType()?.ToInstance<ITestAdapter>() ?? TestAdapter;
+		AssertionObserver = overrides.AssertionObserver?.ToType()?.ToInstance<IAssertionObserver>() ?? AssertionObserver;
+		AppendCodeLine = overrides.AppendCodeLine ?? AppendCodeLine;
+		ColorizeMessages = overrides.ColorizeMessages ?? ColorizeMessages;
+		FloatingPointComparisonPrecision = overrides.FloatingPointComparisonPrecision ?? FloatingPointComparisonPrecision;
+		MaxRecursionDepth = overrides.MaxRecursionDepth ?? MaxRecursionDepth;
+		ParsingFlags = overrides.ParsingFlags ?? ParsingFlags;
+	}
+
+	private static string CacheKey(Assembly assembly) =>
+		string.IsNullOrWhiteSpace(assembly.Location)
+			? assembly.FullName ?? assembly.GetName().Name ?? "unknown"
+			: assembly.Location;
+}
+
+internal sealed class ConfigurationOverrides
+{
+	public string? TestAdapter { get; set; }
+	public string? AssertionObserver { get; set; }
+	public bool? AppendCodeLine { get; set; }
+	public bool? ColorizeMessages { get; set; }
+	public double? FloatingPointComparisonPrecision { get; set; }
+	public int? MaxRecursionDepth { get; set; }
+	public BindingFlags? ParsingFlags { get; set; }
 }
 
 file class TypeConverter<TInterface, T> : JsonConverter<TInterface>
