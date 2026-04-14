@@ -36,11 +36,11 @@ Global configurations that control assertion behaviour.
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
-Boolean assertion extensions. Import with: using static Is.Assertions.Booleans;
+Boolean assertion extensions. Import with: using static Is.Assertions;
 - __`IsTrue(actual)`__: _Asserts that a boolean value is `true`._
 - __`IsFalse(actual)`__: _Asserts that a boolean value is `false`._
 #### <u>Collections</u>
-Collections assertion extensions. Import with: using static Is.Assertions.Collections;
+Collections assertion extensions. Import with: using static Is.Assertions;
 - __`IsEmpty<T>(actual, expression)`__: _Asserts that the sequence is empty._
 - __`IsNotEmpty<T>(actual, expression)`__: _Asserts that the sequence is not empty._
 - __`IsUnique<T>(actual, expression)`__: _Asserts that all elements in the sequence are unique._
@@ -56,7 +56,7 @@ Collections assertion extensions. Import with: using static Is.Assertions.Collec
 - __`IsDeeplyEquivalentTo<T>(actual, expected, ignorePaths, expression)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Deeply Equality comparer of `T`._
 - __`IsEquivalentTo<TKey, T>(actual, expected, ignoreKeys)`__: _Asserts that the `actual` dictionary matches the `expected` dictionary ignoring order. Optional predicate can be used to ignore specific keys._
 #### <u>Comparisons</u>
-Comparisons assertion extensions. Import with: using static Is.Assertions.Comparisons;
+Comparisons assertion extensions. Import with: using static Is.Assertions;
 - __`IsApproximately<T>(actual, expected, precision, expression)`__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `precision`._
 - __`IsApproximately<T>(actual, expected)`__: _Uses default precision from configuration_
 - __`IsPositive<T>(actual)`__: _Asserts that the `actual` numeric value is positive (greater than zero)._
@@ -71,7 +71,7 @@ Comparisons assertion extensions. Import with: using static Is.Assertions.Compar
 - __`IsOutOfRange<T>(actual, min, max, expression)`__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
 - __`IsDivisibleBy<T>(number, divisor, expression)`__: _Asserts that the `number` is divisible by `divisor`._
 #### <u>DateTimes</u>
-DateTimes assertion extensions. Import with: using static Is.Assertions.DateTimes;
+DateTimes assertion extensions. Import with: using static Is.Assertions;
 - __`IsExpired(actual, expression)`__: _Asserts that the `actual` date/time is in the past (i.e., before `Now`)._
 - __`IsNotExpired(actual, expression)`__: _Asserts that the `actual` date/time is in the future (i.e., on or after `Now`)._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
@@ -80,7 +80,7 @@ DateTimes assertion extensions. Import with: using static Is.Assertions.DateTime
 - __`IsOlderThan(actual, years, date)`__: _Checks that the given `actual` date is older than the specified number of `years` relative to the reference date `date` or today if not provided._
 - __`IsOlderThan(actual, years)`__: _Checks that the given `actual` date is older than the specified number of `years`._
 #### <u>Delegates</u>
-Delegates assertion extensions. Import with: using static Is.Assertions.Delegates;
+Delegates assertion extensions. Import with: using static Is.Assertions;
 - __`IsThrowing<T>(action)`__: _Asserts that the given `action` throws an exception of type `T`._
 - __`IsNotThrowing<T>(action)`__: _Asserts that the given `action` does not throw an exception of type `T`._
 - __`IsThrowing<T>(action, message)`__: _Asserts that the given synchronous `action` throws an exception of type `T` and that the exception message contains the specified `message` substring._
@@ -92,10 +92,10 @@ Delegates assertion extensions. Import with: using static Is.Assertions.Delegate
 - __`IsAllocatingAtMost(action, kiloBytes)`__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
 - __`IsAllocatingAtMost(function, kiloBytes)`__: _Asserts that the given async `function` is allocating not more than `kiloBytes`._
 #### <u>Enums</u>
-Enums assertion extensions. Import with: using static Is.Assertions.Enums;
+Enums assertion extensions. Import with: using static Is.Assertions;
 - __`IsAnyOf<T>(enumValue, expression)`__: _Asserts that the enum value is a defined value of the enum type._
 #### <u>Equality</u>
-Equality assertion extensions. Import with: using static Is.Assertions.Equality;
+Equality assertion extensions. Import with: using static Is.Assertions;
 - __`IsExactly<T>(actual, expected, expression)`__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
 - __`Is(actual, expected)`__: _Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)_
 - __`Is<T>(actual, expected, expression)`__: _Asserts that the `actual` object matches the `expected` value. (array unwrapping, approximately for floating points)_
@@ -106,14 +106,14 @@ Equality assertion extensions. Import with: using static Is.Assertions.Equality;
 - __`IsMatchingSnapshot(actual, expected, ignorePaths, options)`__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality. Optional predicate can be used to ignore specific paths._
 - __`IsMatching(actual, other, ignorePaths)`__: _Asserts that the given `actual` object matches the `other` by running a deep reflection-based object comparison on their properties and fields for equality. Optional predicate can be used to ignore specific paths._
 #### <u>Files</u>
-Files assertion extensions. Import with: using static Is.Assertions.Files;
+Files assertion extensions. Import with: using static Is.Assertions;
 - __`IsExisting(path, expression)`__: _Asserts that the specified `path` exists as a file or directory._
 #### <u>Null</u>
-Null assertion extensions. Import with: using static Is.Assertions.Null;
+Null assertion extensions. Import with: using static Is.Assertions;
 - __`IsNull(actual)`__: _Asserts that an object is `null`._
 - __`IsNotNull(actual)`__: _Asserts that the object is not `null`._
 #### <u>Strings</u>
-Strings assertion extensions. Import with: using static Is.Assertions.Strings;
+Strings assertion extensions. Import with: using static Is.Assertions;
 - __`IsBlank(actual, expression)`__: _Asserts that the `actual` string is `null` or empty or contains only whitespaces._
 - __`IsNotBlank(actual, expression)`__: _Asserts that the `actual` string is not `null` and not empty and does not contain only whitespaces_
 - __`IsContaining(actual, expected, expression)`__: _Asserts that the `actual` string contains the specified `expected` substring._
@@ -124,7 +124,7 @@ Strings assertion extensions. Import with: using static Is.Assertions.Strings;
 - __`IsNotMatching(actual, pattern, expression)`__: _Asserts that the `actual` string does not match the specified `pattern` regular expression._
 - __`IsEmail(actual, expression)`__: _Determines whether the `actual` string is a valid email address._
 #### <u>Types</u>
-Types assertion extensions. Import with: using static Is.Assertions.Types;
+Types assertion extensions. Import with: using static Is.Assertions;
 - __`Is<T>(actual, expression)`__: _Asserts that the actual object is of type `T`._
 - __`IsNot<T>(actual, expression)`__: _Asserts that the actual object is not of type `T`._
 ## Is.Core
