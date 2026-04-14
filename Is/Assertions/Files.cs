@@ -7,7 +7,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Files assertion extensions.
-/// Import with: using static Is.Assertions.Files;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Files

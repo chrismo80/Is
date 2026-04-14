@@ -8,7 +8,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Strings assertion extensions.
-/// Import with: using static Is.Assertions.Strings;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Strings

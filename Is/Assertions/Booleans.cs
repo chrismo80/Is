@@ -5,7 +5,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Boolean assertion extensions.
-/// Import with: using static Is.Assertions.Booleans;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Booleans

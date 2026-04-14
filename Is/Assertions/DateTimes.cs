@@ -6,13 +6,13 @@ namespace Is.Assertions;
 
 /// <summary>
 /// DateTimes assertion extensions.
-/// Import with: using static Is.Assertions.DateTimes;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class DateTimes
 {
 	/// <summary>
-	/// Asserts that the <paramref name="actual"/> date/time is in the past 
+	/// Asserts that the <paramref name="actual"/> date/time is in the past
 	/// (i.e., before <see cref="DateTime.Now"/>).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -22,7 +22,7 @@ public static class DateTimes
 		.Unless(actual, "is not expired (is in the future or now)", expression);
 
 	/// <summary>
-	/// Asserts that the <paramref name="actual"/> date/time is in the future 
+	/// Asserts that the <paramref name="actual"/> date/time is in the future
 	/// (i.e., on or after <see cref="DateTime.Now"/>).
 	/// </summary>
 	[MethodImpl(MethodImplOptions.NoInlining)]

@@ -6,7 +6,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Delegates assertion extensions.
-/// Import with: using static Is.Assertions.Delegates;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Delegates

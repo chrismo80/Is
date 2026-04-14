@@ -10,7 +10,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Equality assertion extensions.
-/// Import with: using static Is.Assertions.Equality;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Equality

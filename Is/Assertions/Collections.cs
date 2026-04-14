@@ -7,7 +7,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Collections assertion extensions.
-/// Import with: using static Is.Assertions.Collections;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Collections

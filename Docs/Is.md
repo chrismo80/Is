@@ -1,5 +1,5 @@
 # Public API
-Lines of code < 1100
+Lines of code < 1200
 ## Is
 #### <u>Configuration</u>
 Global configurations that control assertion behaviour.
@@ -36,85 +36,97 @@ Global configurations that control assertion behaviour.
 ## Is.Assertions
 All assertions are implemented as extension methods.
 #### <u>Booleans</u>
+Boolean assertion extensions. Import with: using static Is.Assertions.Booleans;
 - __`IsTrue(actual)`__: _Asserts that a boolean value is `true`._
 - __`IsFalse(actual)`__: _Asserts that a boolean value is `false`._
 #### <u>Collections</u>
-- __`IsEmpty<T>(actual)`__: _Asserts that the sequence is empty._
-- __`IsNotEmpty<T>(actual)`__: _Asserts that the sequence is not empty._
-- __`IsUnique<T>(actual)`__: _Asserts that all elements in the sequence are unique._
+Collections assertion extensions. Import with: using static Is.Assertions.Collections;
+- __`IsEmpty<T>(actual, expression)`__: _Asserts that the sequence is empty._
+- __`IsNotEmpty<T>(actual, expression)`__: _Asserts that the sequence is not empty._
+- __`IsUnique<T>(actual, expression)`__: _Asserts that all elements in the sequence are unique._
 - __`IsContaining<T>(actual, expected)`__: _Asserts that the `actual` sequence contains all the specified `expected` elements._
-- __`IsContaining<T>(actual, expected)`__: _Asserts that the sequence contains the specified elements._
-- __`IsNotContaining<T>(actual, expected)`__: _Asserts that the sequence does not contain the specified elements._
+- __`IsContaining<T>(actual, expected, expression)`__: _Asserts that the sequence contains the specified elements._
+- __`IsNotContaining<T>(actual, expected, expression)`__: _Asserts that the sequence does not contain the specified elements._
 - __`IsIn<T>(actual, expected)`__: _Asserts that all elements in the `actual` collection are present in the `expected` collection._
-- __`IsIn<T>(actual, expected)`__: _Checks that the specified element is contained within the given sequence._
-- __`IsNotIn<T>(actual, expected)`__: _Checks that the specified element is not contained within the given sequence._
+- __`IsIn<T>(actual, expected, expression)`__: _Checks that the specified element is contained within the given sequence._
+- __`IsNotIn<T>(actual, expected, expression)`__: _Checks that the specified element is not contained within the given sequence._
 - __`IsOrdered<T>(actual)`__: _Asserts that the sequence is ordered in ascending order._
 - __`IsOrderedDescending<T>(actual)`__: _Asserts that the sequence is ordered in descending order._
-- __`IsEquivalentTo<T>(actual, expected)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Default Equality comparer of `T`._
-- __`IsDeeplyEquivalentTo<T>(actual, expected, ignorePaths)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Deeply Equality comparer of `T`._
+- __`IsEquivalentTo<T>(actual, expected, expression)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Default Equality comparer of `T`._
+- __`IsDeeplyEquivalentTo<T>(actual, expected, ignorePaths, expression)`__: _Asserts that the `actual` sequence matches the `expected` sequence ignoring item order by using Deeply Equality comparer of `T`._
 - __`IsEquivalentTo<TKey, T>(actual, expected, ignoreKeys)`__: _Asserts that the `actual` dictionary matches the `expected` dictionary ignoring order. Optional predicate can be used to ignore specific keys._
 #### <u>Comparisons</u>
-- __`IsApproximately<T>(actual, expected, precision)`__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `precision`._
+Comparisons assertion extensions. Import with: using static Is.Assertions.Comparisons;
+- __`IsApproximately<T>(actual, expected, precision, expression)`__: _Asserts that the `actual` floating point is approximately equal to `expected` considering an `precision`._
 - __`IsApproximately<T>(actual, expected)`__: _Uses default precision from configuration_
 - __`IsPositive<T>(actual)`__: _Asserts that the `actual` numeric value is positive (greater than zero)._
 - __`IsNegative<T>(actual)`__: _Asserts that the `actual` numeric value is negative (less than zero)._
-- __`IsGreaterThan<T>(actual, other)`__: _Asserts that the `actual` value is greater than the given `other` value._
-- __`IsSmallerThan<T>(actual, other)`__: _Asserts that the `actual` value is smaller than the given `other` value._
-- __`IsAtLeast<T>(actual, other)`__: _Asserts that the `actual` value is greater or equal the given `other` value._
-- __`IsAtMost<T>(actual, other)`__: _Asserts that the `actual` value is smaller or equal the given `other` value._
+- __`IsGreaterThan<T>(actual, other, expression)`__: _Asserts that the `actual` value is greater than the given `other` value._
+- __`IsSmallerThan<T>(actual, other, expression)`__: _Asserts that the `actual` value is smaller than the given `other` value._
+- __`IsAtLeast<T>(actual, other, expression)`__: _Asserts that the `actual` value is greater or equal the given `other` value._
+- __`IsAtMost<T>(actual, other, expression)`__: _Asserts that the `actual` value is smaller or equal the given `other` value._
 - __`IsBetween<T>(actual, min, max)`__: _Asserts that the `actual` value is between `min` and `max` exclusive bounds._
 - __`IsInRange<T>(actual, min, max)`__: _Asserts that the `actual` value is between `min` and `max` inclusive bounds._
-- __`IsNotBetween<T>(actual, min, max)`__: _Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds._
-- __`IsOutOfRange<T>(actual, min, max)`__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
-- __`IsDivisibleBy<T>(number, divisor)`__: _Asserts that the `number` is divisible by `divisor`._
+- __`IsNotBetween<T>(actual, min, max, expression)`__: _Asserts that the `actual` value is not between the specified `min` and `max` exclusive bounds._
+- __`IsOutOfRange<T>(actual, min, max, expression)`__: _Asserts that the `actual` value is smaller than `min` or greater than `max`._
+- __`IsDivisibleBy<T>(number, divisor, expression)`__: _Asserts that the `number` is divisible by `divisor`._
 #### <u>DateTimes</u>
-- __`IsExpired(actual)`__: _Asserts that the `actual` date/time is in the past (i.e., before `Now`)._
-- __`IsNotExpired(actual)`__: _Asserts that the `actual` date/time is in the future (i.e., on or after `Now`)._
+DateTimes assertion extensions. Import with: using static Is.Assertions.DateTimes;
+- __`IsExpired(actual, expression)`__: _Asserts that the `actual` date/time is in the past (i.e., before `Now`)._
+- __`IsNotExpired(actual, expression)`__: _Asserts that the `actual` date/time is in the future (i.e., on or after `Now`)._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `DateTime` is within the specified `tolerance`._
 - __`IsApproximately(actual, expected, tolerance)`__: _Asserts that the difference between two `TimeSpan` is within the specified `tolerance`._
 - __`IsSameDay(actual, other)`__: _Determines whether the specified `actual` date and `other` date are on the same calendar day._
 - __`IsOlderThan(actual, years, date)`__: _Checks that the given `actual` date is older than the specified number of `years` relative to the reference date `date` or today if not provided._
 - __`IsOlderThan(actual, years)`__: _Checks that the given `actual` date is older than the specified number of `years`._
 #### <u>Delegates</u>
+Delegates assertion extensions. Import with: using static Is.Assertions.Delegates;
 - __`IsThrowing<T>(action)`__: _Asserts that the given `action` throws an exception of type `T`._
 - __`IsNotThrowing<T>(action)`__: _Asserts that the given `action` does not throw an exception of type `T`._
 - __`IsThrowing<T>(action, message)`__: _Asserts that the given synchronous `action` throws an exception of type `T` and that the exception message contains the specified `message` substring._
 - __`IsThrowing<T>(function)`__: _Asserts that the given async `function` throws an exception of type `T`._
 - __`IsNotThrowing<T>(function)`__: _Asserts that the given async `function` does not throw an exception of type `T`._
 - __`IsThrowing<T>(function, message)`__: _Asserts that the given asynchronous `function` throws an exception of type `T` and that the exception message contains the specified `message` substring._
-- __`IsCompletingWithin(action, timespan)`__: _Asserts that the given `action` did complete within a specific `timespan`._
+- __`IsCompletingWithin(action, timespan, expression)`__: _Asserts that the given `action` did complete within a specific `timespan`._
 - __`IsCompletingWithin(function, timespan)`__: _Asserts that the given async `function` did complete within a specific `timespan`._
 - __`IsAllocatingAtMost(action, kiloBytes)`__: _Asserts that the given `action` is allocating not more than `kiloBytes`._
 - __`IsAllocatingAtMost(function, kiloBytes)`__: _Asserts that the given async `function` is allocating not more than `kiloBytes`._
 #### <u>Enums</u>
-- __`IsAnyOf<T>(enumValue)`__: _Asserts that the enum value is a defined value of the enum type._
+Enums assertion extensions. Import with: using static Is.Assertions.Enums;
+- __`IsAnyOf<T>(enumValue, expression)`__: _Asserts that the enum value is a defined value of the enum type._
 #### <u>Equality</u>
-- __`IsExactly<T>(actual, expected)`__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
+Equality assertion extensions. Import with: using static Is.Assertions.Equality;
+- __`IsExactly<T>(actual, expected, expression)`__: _Asserts that the `actual` object is equal to the `expected` value. (no array unwrapping, exact match for floating points)_
 - __`Is(actual, expected)`__: _Asserts that the `actual` object matches the `expected` value(s). (array unwrapping, approximately for floating points)_
-- __`IsNot<T>(actual, expected)`__: _Asserts that the `actual` value is not equal to the `expected` value._
-- __`IsSameAs<T>(actual, expected)`__: _Asserts that the `actual` object is the same instance as the `expected` object._
+- __`Is<T>(actual, expected, expression)`__: _Asserts that the `actual` object matches the `expected` value. (array unwrapping, approximately for floating points)_
+- __`IsNot<T>(actual, expected, expression)`__: _Asserts that the `actual` value is not equal to the `expected` value._
+- __`IsSameAs<T>(actual, expected, expression)`__: _Asserts that the `actual` object is the same instance as the `expected` object._
 - __`IsDefault<T>(actual)`__: _Asserts that the `actual` value is the default value of its type._
-- __`IsSatisfying<T>(actual, predicate)`__: _Asserts that the `actual` object satisfies the specified `predicate`._
+- __`IsSatisfying<T>(actual, predicate, expression)`__: _Asserts that the `actual` object satisfies the specified `predicate`._
 - __`IsMatchingSnapshot(actual, expected, ignorePaths, options)`__: _Asserts that the given `actual` object matches the `expected` by comparing their serialized JSON strings for equality. Optional predicate can be used to ignore specific paths._
 - __`IsMatching(actual, other, ignorePaths)`__: _Asserts that the given `actual` object matches the `other` by running a deep reflection-based object comparison on their properties and fields for equality. Optional predicate can be used to ignore specific paths._
 #### <u>Files</u>
-- __`IsExisting(path)`__: _Asserts that the specified `path` exists as a file or directory._
+Files assertion extensions. Import with: using static Is.Assertions.Files;
+- __`IsExisting(path, expression)`__: _Asserts that the specified `path` exists as a file or directory._
 #### <u>Null</u>
+Null assertion extensions. Import with: using static Is.Assertions.Null;
 - __`IsNull(actual)`__: _Asserts that an object is `null`._
 - __`IsNotNull(actual)`__: _Asserts that the object is not `null`._
 #### <u>Strings</u>
-- __`IsBlank(actual)`__: _Asserts that the `actual` string is `null` or empty or contains only whitespaces._
-- __`IsNotBlank(actual)`__: _Asserts that the `actual` string is not `null` and not empty and does not contain only whitespaces_
-- __`IsContaining(actual, expected)`__: _Asserts that the `actual` string contains the specified `expected` substring._
-- __`IsStartingWith(actual, expected)`__: _Asserts that the `actual` string starts with the specified `expected` string._
-- __`IsEndingWith(actual, expected)`__: _Asserts that the `actual` string ends with the specified `expected` string._
-- __`IsEquivalentTo(actual, expected)`__: _Asserts that the `actual` string is equivalent to the `expected` string, ignoring case differences._
-- __`IsMatching(actual, pattern)`__: _Asserts that the `actual` string matches the specified `pattern` regular expression._
-- __`IsNotMatching(actual, pattern)`__: _Asserts that the `actual` string does not match the specified `pattern` regular expression._
-- __`IsEmail(actual)`__: _Determines whether the `actual` string is a valid email address._
+Strings assertion extensions. Import with: using static Is.Assertions.Strings;
+- __`IsBlank(actual, expression)`__: _Asserts that the `actual` string is `null` or empty or contains only whitespaces._
+- __`IsNotBlank(actual, expression)`__: _Asserts that the `actual` string is not `null` and not empty and does not contain only whitespaces_
+- __`IsContaining(actual, expected, expression)`__: _Asserts that the `actual` string contains the specified `expected` substring._
+- __`IsStartingWith(actual, expected, expression)`__: _Asserts that the `actual` string starts with the specified `expected` string._
+- __`IsEndingWith(actual, expected, expression)`__: _Asserts that the `actual` string ends with the specified `expected` string._
+- __`IsEquivalentTo(actual, expected, expression)`__: _Asserts that the `actual` string is equivalent to the `expected` string, ignoring case differences._
+- __`IsMatching(actual, pattern, expression)`__: _Asserts that the `actual` string matches the specified `pattern` regular expression._
+- __`IsNotMatching(actual, pattern, expression)`__: _Asserts that the `actual` string does not match the specified `pattern` regular expression._
+- __`IsEmail(actual, expression)`__: _Determines whether the `actual` string is a valid email address._
 #### <u>Types</u>
-- __`Is<T>(actual)`__: _Asserts that the actual object is of type `T`._
-- __`IsNot<T>(actual)`__: _Asserts that the actual object is not of type `T`._
+Types assertion extensions. Import with: using static Is.Assertions.Types;
+- __`Is<T>(actual, expression)`__: _Asserts that the actual object is of type `T`._
+- __`IsNot<T>(actual, expression)`__: _Asserts that the actual object is not of type `T`._
 ## Is.Core
 #### <u>AssertionContext</u>
 Represents a scoped context that captures all failed assertion events within its lifetime and reports the collection upon disposal if any failures occurred.
@@ -163,7 +175,7 @@ Offers a fluent API to assert conditions and create return values and error mess
 - __`Arg(condition, message)`__: _Guard clause for argument checks, throws `ArgumentException`_
 - __`Op(condition, message)`__: _Guard clause for operation checks, throws `InvalidOperationException`_
 - __`Yields<TResult>(result)`__: _Projects a result from the original value if the initial predicate condition was true._
-- __`Unless(actual, message, other)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
+- __`Unless(actual, message, other, expression)`__: _Returns the result if the condition is true; otherwise, triggers a failure with a message._
 #### <u>Failure</u>
 Represents a failure encountered during an assertion or test execution. Contains detailed information about the failure, including message, actual and expected values, assertion details, and location in source code.
 - __`Created`__: _The date and time when the failure instance was created._

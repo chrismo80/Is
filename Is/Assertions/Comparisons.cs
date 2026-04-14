@@ -7,7 +7,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Comparisons assertion extensions.
-/// Import with: using static Is.Assertions.Comparisons;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Comparisons

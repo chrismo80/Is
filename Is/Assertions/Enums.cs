@@ -6,7 +6,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Enums assertion extensions.
-/// Import with: using static Is.Assertions.Enums;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Enums

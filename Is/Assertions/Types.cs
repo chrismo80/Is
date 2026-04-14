@@ -6,7 +6,7 @@ namespace Is.Assertions;
 
 /// <summary>
 /// Types assertion extensions.
-/// Import with: using static Is.Assertions.Types;
+/// Import with: using static Is.Assertions;
 /// </summary>
 [DebuggerStepThrough]
 public static class Types
