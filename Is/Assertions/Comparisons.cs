@@ -5,6 +5,10 @@ using System.Numerics;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Comparisons assertion extensions.
+/// Import with: using static Is.Assertions.Comparisons;
+/// </summary>
 [DebuggerStepThrough]
 public static class Comparisons
 {

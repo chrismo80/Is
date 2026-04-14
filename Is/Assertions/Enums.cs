@@ -4,6 +4,10 @@ using System.Diagnostics;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Enums assertion extensions.
+/// Import with: using static Is.Assertions.Enums;
+/// </summary>
 [DebuggerStepThrough]
 public static class Enums
 {

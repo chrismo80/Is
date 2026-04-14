@@ -3,6 +3,10 @@ using System.Diagnostics;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Null assertion extensions.
+/// Import with: using static Is.Assertions.Null;
+/// </summary>
 [DebuggerStepThrough]
 public static class Null
 {

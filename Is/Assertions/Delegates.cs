@@ -4,6 +4,10 @@ using System.Diagnostics;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Delegates assertion extensions.
+/// Import with: using static Is.Assertions.Delegates;
+/// </summary>
 [DebuggerStepThrough]
 public static class Delegates
 {

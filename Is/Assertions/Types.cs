@@ -4,6 +4,10 @@ using System.Diagnostics;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Types assertion extensions.
+/// Import with: using static Is.Assertions.Types;
+/// </summary>
 [DebuggerStepThrough]
 public static class Types
 {

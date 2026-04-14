@@ -6,6 +6,10 @@ using System.Text.RegularExpressions;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Strings assertion extensions.
+/// Import with: using static Is.Assertions.Strings;
+/// </summary>
 [DebuggerStepThrough]
 public static class Strings
 {

@@ -8,6 +8,10 @@ using System.Text.Json;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Equality assertion extensions.
+/// Import with: using static Is.Assertions.Equality;
+/// </summary>
 [DebuggerStepThrough]
 public static class Equality
 {

@@ -4,6 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// DateTimes assertion extensions.
+/// Import with: using static Is.Assertions.DateTimes;
+/// </summary>
 [DebuggerStepThrough]
 public static class DateTimes
 {

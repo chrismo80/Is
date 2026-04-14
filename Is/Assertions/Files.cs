@@ -5,6 +5,10 @@ using System.IO;
 
 namespace Is.Assertions;
 
+/// <summary>
+/// Files assertion extensions.
+/// Import with: using static Is.Assertions.Files;
+/// </summary>
 [DebuggerStepThrough]
 public static class Files
 {
