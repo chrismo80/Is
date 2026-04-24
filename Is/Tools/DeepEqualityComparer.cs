@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using Is.Assertions;
 
 namespace Is.Tools;
@@ -44,14 +45,30 @@ internal static class ReflectionParser
 		if (IsSimple(Nullable.GetUnderlyingType(type) ?? type))
 			return result.AddItem(path, me);
 
-		foreach (var prop in type.GetProperties(Configuration.Active.ParsingFlags).Where(p => p.GetIndexParameters().Length == 0 && p.CanRead))
+		foreach (var prop in type.GetProperties(Configuration.Active.ParsingFlags).Where(ShouldParse))
 			prop.GetValue(me).Parse(visited, result, path.Deeper(prop.Name), depth + 1);
 
-		foreach (var field in type.GetFields(Configuration.Active.ParsingFlags).Where(f => !f.Name.StartsWith('<')))
+		foreach (var field in type.GetFields(Configuration.Active.ParsingFlags).Where(ShouldParse))
 			field.GetValue(me).Parse(visited, result, path.Deeper(field.Name), depth + 1);
 
 		return result;
 	}
+
+	private static bool ShouldParse(PropertyInfo property) =>
+		property.GetIndexParameters().Length == 0 &&
+		property.CanRead &&
+		property.GetMethod is { IsStatic: false } &&
+		!property.IsRecordInfrastructure();
+
+	private static bool ShouldParse(FieldInfo field) =>
+		!field.IsStatic &&
+		!field.IsSpecialName &&
+		!field.Name.StartsWith('<');
+
+	private static bool IsRecordInfrastructure(this PropertyInfo property) =>
+		property.Name == "EqualityContract" &&
+		property.PropertyType == typeof(Type) &&
+		property.GetMethod?.IsPublic == false;
 
 	private static Dictionary<string, object?> ParseEnumerable(IEnumerable enumerable, HashSet<object> visited, Dictionary<string, object?> result, string path, int depth)
 	{
@@ -81,5 +98,5 @@ internal static class ReflectionParser
 		path == "" ? next : $"{path}.{next}";
 
 	private static bool IsSimple(this Type type) =>
-		Type.GetTypeCode(type) != TypeCode.Object || type.IsEnum;
+		Type.GetTypeCode(type) != TypeCode.Object || type.IsEnum || type == typeof(Type);
 }

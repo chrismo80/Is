@@ -6,6 +6,11 @@ namespace Is.Tests.Assertions;
 [TestFixture]
 public class MatchingTests
 {
+	private sealed record MatchingRoot(string Name, MatchingChild Child);
+	private sealed record MatchingChild(int Value, string[] Tags);
+	private readonly record struct MatchingPoint(int X, int Y);
+	private sealed record MatchingStructRoot(string Name, MatchingPoint Point);
+
 	[Test]
 	[AssertionContext]
 	public void Matching()
@@ -69,5 +74,35 @@ public class MatchingTests
 
 		AssertionContext.Current?.NextFailure();
 		AssertionContext.Current?.NextFailure();
+	}
+
+	[Test]
+	public void IsMatching_RecordGraph_ReportsDifferencesInsteadOfThrowingReflectionExceptions()
+	{
+		var expected = new MatchingRoot("Root", new MatchingChild(1, ["A", "B"]));
+		var matching = expected with { };
+		var actual = new MatchingRoot("Root", new MatchingChild(2, ["A", "B"]));
+
+		matching.IsMatching(expected);
+
+		var exception = ((Action)(() => actual.IsMatching(expected))).IsThrowing<NotException>();
+
+		exception.Message.Contains("TargetInvocationException").IsFalse();
+		exception.Message.Contains("Invalid handle").IsFalse();
+	}
+
+	[Test]
+	public void IsMatching_ReadonlyRecordStructGraph_ReportsDifferencesInsteadOfThrowingReflectionExceptions()
+	{
+		var expected = new MatchingStructRoot("Root", new MatchingPoint(1, 2));
+		var matching = expected with { };
+		var actual = new MatchingStructRoot("Root", new MatchingPoint(1, 3));
+
+		matching.IsMatching(expected);
+
+		var exception = ((Action)(() => actual.IsMatching(expected))).IsThrowing<NotException>();
+
+		exception.Message.Contains("TargetInvocationException").IsFalse();
+		exception.Message.Contains("Invalid handle").IsFalse();
 	}
 }
